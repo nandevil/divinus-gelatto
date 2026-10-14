@@ -1,0 +1,1537 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Divinus Gelatto | Peça seu açaí em Araruama</title>
+<meta name="description" content="Monte seu açaí no copo ou na garrafa e peça pelo site. Retirada no trailer ou entrega em Araruama, RJ.">
+<meta name="theme-color" content="#4A2E22">
+<link rel="icon" href="img/logo.jpg">
+<link rel="apple-touch-icon" href="img/logo.jpg">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Divinus Gelatto">
+<meta property="og:title" content="Divinus Gelatto | Monte seu açaí">
+<meta property="og:description" content="Gelato que encanta, momentos que ficam! Monte seu açaí e peça pelo site. Araruama, RJ.">
+<!-- Depois de publicar, troque pelo endereço completo, ex.: https://divinusgelatto.com.br/img/logo.jpg -->
+<meta property="og:image" content="https://divinusgelatto.pages.dev/img/trailer.jpg">
+<meta property="og:url" content="https://divinusgelatto.pages.dev/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "IceCreamShop",
+  "name": "Divinus Gelatto",
+  "image": "img/logo.jpg",
+  "telephone": "+55-22-97403-5793",
+  "servesCuisine": ["Açaí", "Sorvete", "Milkshake"],
+  "priceRange": "R$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Rua Oscar Clark, em frente ao Mercado Esperança",
+    "addressLocality": "Araruama",
+    "addressRegion": "RJ",
+    "postalCode": "28979-717",
+    "addressCountry": "BR"
+  },
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+    "opens": "10:00",
+    "closes": "18:00"
+  }],
+  "sameAs": ["https://instagram.com/divinusgelatto"]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --creme:#F2EBD9; --creme-2:#EADFC6; --papel:#FBF7EC;
+  --choco:#4A2E22; --choco-2:#6B4A3A;
+  --ouro:#C9922E; --ouro-esc:#A87414;
+  --rosa:#F2A58E; --acai:#5B2A86; --acai-esc:#3E1A5E;
+  --erro:#A3321F; --ok:#2F6B3B;
+  --raio:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--creme);color:var(--choco);font-family:'Figtree',system-ui,sans-serif;font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:'Alfa Slab One',Georgia,serif;font-weight:400;line-height:1.1;margin:0;letter-spacing:.2px}
+a{color:inherit}
+img{max-width:100%}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+:focus-visible{outline:3px solid var(--ouro-esc);outline-offset:2px;border-radius:6px}
+button{font:inherit;cursor:pointer}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.pular{position:absolute;left:8px;top:-60px;background:var(--choco);color:var(--creme);padding:10px 14px;border-radius:10px;z-index:50}
+.pular:focus{top:8px}
+
+/* faixas de aviso */
+.faixa{padding:9px 16px;text-align:center;font-weight:600;font-size:15px}
+.faixa.previa{background:var(--acai);color:#fff}
+.faixa.fechado{background:var(--choco);color:var(--creme)}
+.faixa.aviso{background:var(--ouro);color:var(--choco)}
+
+/* topo */
+.topo{padding:18px 0 6px}
+.topo .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.marca{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+.marca img{width:64px;height:64px;border-radius:50%;object-fit:cover;flex:none}
+.marca b{font-family:'Alfa Slab One',serif;font-weight:400;font-size:21px;display:block;line-height:1}
+.marca span{font-size:13px;color:var(--choco-2)}
+.btn-carrinho{display:flex;align-items:center;gap:8px;background:var(--choco);color:var(--creme);border:0;border-radius:999px;padding:10px 16px;font-weight:700;flex:none}
+.btn-carrinho .n{background:var(--rosa);color:var(--choco);border-radius:999px;min-width:24px;height:24px;display:inline-grid;place-items:center;font-size:14px;padding:0 6px}
+
+/* foto do trailer: proporção fixa para a página não pular quando a imagem carrega */
+/* fotos do topo: trailer em destaque + 3 produtos. Proporções fixas: a página não pula ao carregar */
+.galeria{margin-top:8px;display:grid;gap:10px}
+.foto{position:relative;margin:0;border:2px solid var(--choco);border-radius:var(--raio);overflow:hidden;background:var(--creme-2)}
+.foto.principal{aspect-ratio:16/9}
+.fotos-produtos{display:flex;gap:10px}
+.fotos-produtos .foto{flex:1 1 0;min-width:0;aspect-ratio:4/3;border-radius:12px}
+@media(min-width:760px){.foto.principal{aspect-ratio:2/1}.fotos-produtos .foto{aspect-ratio:4/3}}
+.foto img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.foto.ok img{cursor:zoom-in}
+.foto.ok img:focus-visible{outline:3px solid var(--ouro-esc);outline-offset:-3px}
+.foto-vazia{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;color:var(--choco-2);border:2px dashed var(--choco-2);border-radius:calc(var(--raio) - 4px);margin:10px;font-weight:600;padding:12px}
+.foto-vazia small{font-weight:400;font-size:14px}
+.fotos-produtos .foto-vazia{margin:6px;padding:4px;gap:2px;font-size:13px;line-height:1.25;border-radius:8px}
+.fotos-produtos .foto-vazia svg{width:26px;height:26px}
+.fotos-produtos .foto-vazia small{font-size:11.5px;word-break:break-all}
+@media(max-width:480px){.fotos-produtos .foto-vazia small{display:none}}
+/* foto ampliada */
+.zoom{padding:0;border:0;background:transparent;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow:visible}
+.zoom::backdrop{background:rgba(30,18,12,.85)}
+.zoom img{display:block;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);border-radius:12px;border:3px solid var(--creme)}
+.zoom-fechar{position:absolute;top:-14px;right:-10px;width:40px;height:40px;border-radius:50%;border:2px solid var(--choco);background:var(--creme);color:var(--choco);font-size:24px;line-height:1;font-weight:700}
+
+/* hero: tudo centralizado */
+.hero{padding:30px 0 40px;text-align:center}
+.hero .wrap{display:flex;flex-direction:column;align-items:center}
+.hero h1{font-size:clamp(34px,7vw,56px);color:var(--choco);max-width:16ch}
+.hero p.lead{font-size:19px;color:var(--choco-2);margin:14px auto 22px;max-width:34ch}
+.cta{display:inline-block;background:var(--ouro);color:var(--choco);border:2px solid var(--choco);border-radius:999px;padding:13px 28px;font-weight:700;text-decoration:none;box-shadow:0 4px 0 var(--choco)}
+.cta:active{transform:translateY(3px);box-shadow:0 1px 0 var(--choco)}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:22px 0 0;padding:0;list-style:none}
+.chips li{background:var(--papel);border:2px solid var(--creme-2);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.chips li.aberto{border-color:var(--ok);color:var(--ok)}
+.chips li.fechado{border-color:var(--erro);color:var(--erro)}
+
+/* montagem: uma coluna central, sempre com o mesmo desenho */
+.monte{max-width:760px;margin:0 auto}
+.copo-box{width:170px;margin:0 auto 18px;text-align:center}
+.copo-box svg{width:150px;height:auto;display:block;margin:0 auto;overflow:visible}
+#copoG{transform-origin:100px 244px;transition:transform .45s cubic-bezier(.3,1.3,.5,1)}
+@media(prefers-reduced-motion:reduce){#copoG{transition:none}}
+.copo-legenda{font-size:14px;color:var(--choco-2);line-height:1.4;margin-top:6px;height:40px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+@media(min-width:760px){.copo-box{width:300px}.copo-box svg{width:170px}}
+
+/* seções */
+section.bloco{padding:34px 0;border-top:2px solid var(--creme-2)}
+.bloco h2{font-size:clamp(26px,4.4vw,34px);margin-bottom:6px;text-align:center}
+.bloco .sub{color:var(--choco-2);margin:0 auto 22px;text-align:center;max-width:46ch}
+.passo{background:var(--papel);border:2px solid var(--choco);border-radius:var(--raio);padding:18px;margin-bottom:16px}
+.monte .passo{text-align:center}
+.passo h3{font-size:21px;margin-bottom:4px}
+.passo .dica{font-size:14.5px;color:var(--choco-2);margin:0 0 14px;min-height:22px}
+.passo .num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--acai);color:#fff;font-family:'Figtree';font-weight:700;font-size:15px;margin-right:8px;vertical-align:2px}
+/* grades centralizadas: a última linha incompleta fica no meio */
+.grade{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.grade>.opc{flex:1 1 128px;max-width:190px}
+.grade>p{flex-basis:100%;text-align:center;margin:4px 0}
+.sel-entrega .opc,.grade-pag>.opc{max-width:none}
+@media(max-width:359px){.grade>.opc{flex-basis:110px}.opc label{padding:10px}}
+.sabores{display:flex;flex-direction:column;gap:10px;align-items:center}
+.sabor{display:flex;align-items:center;gap:12px;width:100%;max-width:420px;text-align:left;border:2px solid var(--acai-esc);background:var(--acai);color:#fff;border-radius:12px;padding:10px}
+.sabor .sabor-foto{flex:none;width:64px;height:64px;border-radius:10px;overflow:hidden;background:var(--creme-2);border:2px dashed var(--choco-2);display:grid;place-items:center;color:var(--choco-2)}
+.sabor .sabor-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.sabor .sabor-foto.com-foto{border:0}
+.sabor b{display:block;font-size:16px}
+.sabor small{display:block;color:#E9DDF5;font-size:14px;margin-top:2px}
+.opc{position:relative}
+.opc input{position:absolute;opacity:0;inset:0;cursor:pointer;width:100%;height:100%;margin:0;z-index:1}
+.opc label{display:flex;flex-direction:column;justify-content:center;gap:2px;border:2px solid var(--choco-2);background:#fff;border-radius:12px;padding:12px;min-height:64px;height:100%;transition:background .15s,border-color .15s}
+.monte .opc label,.grade-pag .opc label,.sel-entrega .opc label{align-items:center;text-align:center}
+.opc label b{font-weight:700}
+.opc label small{color:var(--choco-2);font-size:14px}
+.opc label .valor{font-weight:700;font-size:15px}
+.opc label .foto{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;margin-bottom:8px;background:var(--creme-2)}
+.opc input:checked+label{background:var(--acai);border-color:var(--acai-esc);color:#fff}
+.opc input:checked+label small{color:#E9DDF5}
+.opc input:focus-visible+label{outline:3px solid var(--ouro-esc);outline-offset:2px}
+.opc input:disabled+label{opacity:.45}
+.opc input:disabled{cursor:not-allowed}
+.esgotado{display:inline-block;background:var(--choco);color:var(--creme);border-radius:999px;font-size:12px;font-weight:700;padding:1px 8px;margin-top:4px}
+.contador{font-weight:700;color:var(--acai)}
+.contador.cheio{color:var(--ok)}
+.add-linha{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;margin-top:8px}
+.add-linha .btn{margin-top:8px;min-width:240px}
+.preco-item{font-size:22px;font-weight:700}
+.btn{border:2px solid var(--choco);background:var(--ouro);color:var(--choco);border-radius:999px;padding:12px 22px;font-weight:700;box-shadow:0 3px 0 var(--choco)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--choco)}
+.btn[disabled]{opacity:.5;cursor:not-allowed;box-shadow:none;transform:none}
+.msg-erro{color:var(--erro);font-weight:600;font-size:15px;min-height:20px;margin:6px 0 0}
+.msg-info{color:var(--choco-2);font-size:15px;min-height:20px;margin:6px 0 0}
+.vazio{color:var(--choco-2);font-style:italic}
+.carregando{color:var(--choco-2);font-style:italic;padding:8px 0}
+.falha{background:var(--papel);border:2px solid var(--erro);border-radius:var(--raio);padding:18px}
+.falha p{margin:0 0 12px;font-weight:600}
+.falha a{text-decoration:none;display:inline-block}
+
+/* pedido */
+.pedido{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:900px){.pedido{grid-template-columns:1.1fr .9fr;align-items:start}.resumo{position:sticky;top:16px}}
+.item{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 0;border-bottom:1px dashed var(--choco-2)}
+.item:last-child{border-bottom:0}
+.item b{display:block}
+.item .det{font-size:14.5px;color:var(--choco-2)}
+.item .acoes{display:flex;align-items:center;gap:8px;grid-column:1/-1}
+.qtd{display:inline-flex;align-items:center;border:2px solid var(--choco);border-radius:999px;overflow:hidden;background:#fff}
+.qtd button{border:0;background:transparent;width:40px;height:36px;font-size:18px;font-weight:700;color:var(--choco)}
+.qtd span{min-width:28px;text-align:center;font-weight:700}
+.link{background:none;border:0;color:var(--erro);text-decoration:underline;font-size:14px;padding:8px}
+.campo{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.campo label{font-weight:600;font-size:15px}
+.campo input,.campo select,.campo textarea{font:inherit;border:2px solid var(--choco-2);border-radius:10px;padding:11px 12px;background:#fff;color:var(--choco);width:100%}
+.campo .ajuda{font-size:13.5px;color:var(--choco-2)}
+.duas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.resumo{background:var(--choco);color:var(--creme);border-radius:var(--raio);padding:18px}
+.resumo .lin{display:flex;justify-content:space-between;gap:12px;padding:5px 0}
+.selo-pix{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:#1f7a3d;color:#fff;font-size:11px;font-weight:700;vertical-align:middle}
+.resumo .total{border-top:1px solid rgba(242,235,217,.35);margin-top:6px;padding-top:10px;font-size:22px;font-weight:700}
+.resumo .nota{font-size:13.5px;color:#D9CDB4;margin:8px 0 0}
+.resumo .btn{width:100%;margin-top:12px;background:var(--ouro);border-color:var(--creme);box-shadow:0 3px 0 var(--creme)}
+.resumo .msg-erro{color:#FFB4A4}
+.sel-entrega{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.status-frete{font-size:15px;font-weight:600;min-height:22px;margin:0 0 10px}
+.status-frete.ok{color:var(--ok)}.status-frete.ruim{color:var(--erro)}
+
+/* botões iFood e 99 */
+.apps{margin-top:20px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.apps-titulo{font-size:14.5px;color:var(--choco-2);font-weight:600}
+.apps-botoes{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.btn-app{display:inline-flex;align-items:center;gap:10px;border-radius:999px;padding:8px 18px 8px 8px;font-weight:700;text-decoration:none;border:2px solid var(--choco);min-height:48px;box-shadow:0 3px 0 var(--choco)}
+.btn-app:active{transform:translateY(2px);box-shadow:0 1px 0 var(--choco)}
+.btn-app .logo-app{display:inline-grid;place-items:center;height:32px;min-width:32px;padding:0 8px;border-radius:999px;font-weight:800;font-size:14px;letter-spacing:-.3px}
+.btn-app.ifood{background:#EA1D2C;color:#fff}
+.btn-app.ifood .logo-app{background:#fff;color:#EA1D2C}
+.btn-app.app99{background:#FFDD00;color:#1A1A1A}
+.btn-app.app99 .logo-app{background:#1A1A1A;color:#FFDD00}
+
+/* faixa de acompanhamento do pedido */
+.faixa-pedido{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;width:100%;border:0;background:var(--acai);color:#fff;padding:10px 16px;font-weight:600;font-size:15px;text-align:center}
+.faixa-pedido b{background:#fff;color:var(--acai);border-radius:999px;padding:3px 12px;font-size:14px}
+
+/* confirmação do pedido */
+.zap-alt{display:block;text-align:center;margin-top:10px;color:var(--ouro);font-weight:700}
+.confirma{border:3px solid var(--choco);border-radius:var(--raio);background:var(--papel);color:var(--choco);padding:24px 20px;width:min(440px,calc(100vw - 32px));text-align:center;box-shadow:0 8px 0 var(--choco)}
+.confirma::backdrop{background:rgba(74,46,34,.55)}
+.conf-ok{display:block;margin:0 auto 10px}
+.confirma h2{font-size:28px;margin-bottom:10px}
+.conf-codigo{margin:0;color:var(--choco-2);font-size:15px}
+.conf-codigo b{display:block;font-family:'Alfa Slab One',Georgia,serif;font-weight:400;font-size:34px;color:var(--acai);letter-spacing:2px;line-height:1.2}
+.conf-total{font-weight:700;margin:6px 0 0}
+.conf-status{margin:12px 0 0;padding:8px 12px;border-radius:10px;font-weight:700;font-size:15px}
+.conf-status.espera{background:#FFF1CC;color:#7A5300}
+.conf-status.ok{background:#DDF0E0;color:var(--ok)}
+.conf-status.cancelado{background:#F6DCD6;color:var(--erro)}
+.conf-pag{margin-top:14px;padding:16px;border:2px solid var(--choco);border-radius:12px;background:#fff}
+.conf-pag h3{font-size:20px;margin-bottom:6px}
+.ajuda-pag{font-size:14px;color:var(--choco-2);margin:0 0 10px}
+.ajuda-pag:empty{display:none}
+.pix-qr{width:min(220px,70vw);aspect-ratio:1;margin:4px auto 10px;display:grid;place-items:center}
+.pix-qr svg{width:100%;height:100%;display:block}
+.pix-codigo{width:100%;font:13px/1.35 ui-monospace,Consolas,monospace;border:2px solid var(--creme-2);border-radius:10px;padding:8px;resize:none;background:var(--papel);color:var(--choco);word-break:break-all;margin-bottom:10px}
+.confirma{max-height:calc(100dvh - 24px);overflow-y:auto}
+.confirma .btn+.btn,.confirma .btn+.conf-opcional+.btn{margin-top:4px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.conf-previa{background:var(--acai);color:#fff;border-radius:8px;padding:6px 10px;font-size:14px;font-weight:600;margin:10px 0 0}
+.conf-passos{text-align:left;margin:16px 0;padding:14px 14px 14px 32px;background:#fff;border:2px solid var(--creme-2);border-radius:12px;font-size:15.5px}
+.conf-passos li+li{margin-top:6px}
+.confirma .btn{display:block;width:100%;text-decoration:none}
+.conf-opcional{display:block;font-size:13px;color:var(--choco-2);margin:6px 0 12px}
+.btn.sec{background:transparent;box-shadow:none}
+
+/* duas telas: cardápio e finalizar */
+.voltar{display:inline-block;margin-bottom:12px;font-weight:700;text-decoration:none;color:var(--choco-2)}
+.voltar:hover{color:var(--choco)}
+#viewFinalizar{min-height:70vh}
+.acoes-carrinho{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.acoes-carrinho .btn{flex:1 1 170px;text-align:center;text-decoration:none;display:inline-block}
+
+/* trailer */
+.trailer{background:var(--creme-2)}
+.cats{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.trailer .wrap{text-align:center}
+.cat{text-align:left;background:var(--papel);border:2px solid var(--choco);border-radius:var(--raio);padding:16px}
+.cat h3{font-size:19px;margin-bottom:8px;text-align:center}
+.cat ul{list-style:none;margin:0;padding:0}
+.cat li.li-sabores{display:block;text-align:center;padding:2px 0 10px}
+.cat li.li-sabores small{display:block;font-size:13px;color:var(--choco-2);margin-bottom:4px}
+.cat li.li-sabores .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:5px}
+.cat li.li-sabores .chip{background:#fff;border:1.5px solid var(--choco-2);border-radius:999px;padding:2px 9px;font-size:13px;font-weight:400}
+.sabores-trailer{margin-top:12px;padding-top:10px;border-top:2px solid var(--choco-2);text-align:center}
+.sabores-trailer b{display:block;font-size:15px;margin-bottom:8px}
+.sabores-trailer .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.sabores-trailer .chip{background:#fff;border:1.5px solid var(--choco-2);border-radius:999px;padding:3px 10px;font-size:13.5px}
+.cat li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dotted var(--choco-2)}
+.cat li:last-child{border-bottom:0}
+.cat li span:last-child{font-weight:700;white-space:nowrap}
+/* aviso grande: sorvete e milkshake não são vendidos online */
+.aviso-trailer{display:flex;flex-direction:column;align-items:center;gap:10px;max-width:640px;margin:14px auto 24px;background:var(--choco);color:var(--creme);border:3px solid var(--ouro);border-radius:var(--raio);padding:20px 22px;text-align:center;box-shadow:0 5px 0 var(--ouro-esc)}
+.aviso-trailer svg{flex:none;color:var(--ouro);margin-top:0}
+.aviso-trailer strong{display:block;font-family:'Alfa Slab One',Georgia,serif;font-weight:400;font-size:clamp(24px,5vw,30px);line-height:1.05;color:var(--ouro);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.aviso-trailer>div>span{display:block;font-size:17px}
+.aviso-trailer b{color:#fff;text-decoration:underline;text-decoration-color:var(--ouro);text-underline-offset:3px}
+.aviso-trailer small{display:block;font-size:14px;color:#D9CDB4;margin-top:8px}
+.aviso-trailer a{display:inline-block;margin-top:10px;background:var(--ouro);color:var(--choco);border-radius:999px;padding:7px 16px;font-weight:700;font-size:15px;text-decoration:none}
+@media(max-width:480px){.aviso-trailer{flex-direction:column;align-items:center;text-align:center}}
+.cat-tag{display:block;width:max-content;margin-left:auto;margin-right:auto;background:var(--ouro);color:var(--choco);border-radius:999px;font-size:12px;font-weight:700;padding:2px 10px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
+
+footer{background:var(--choco);color:var(--creme);padding:30px 0 40px}
+footer .wrap{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));text-align:center}
+footer h3{font-size:18px;color:var(--ouro);margin-bottom:6px}
+footer p{margin:2px 0}
+footer a{color:var(--creme)}
+footer .mapa{display:inline-block;margin-top:6px;font-weight:600}
+
+/* barra fixa no celular */
+.barra-fixa{position:fixed;left:0;right:0;bottom:0;background:var(--choco);color:var(--creme);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:none;align-items:center;justify-content:space-between;gap:10px;z-index:20}
+.barra-fixa.on{display:flex}
+.barra-fixa a{background:var(--ouro);color:var(--choco);border-radius:999px;padding:9px 18px;font-weight:700;text-decoration:none}
+@media(min-width:900px){.barra-fixa{display:none!important}}
+body.com-barra{padding-bottom:64px}
+@media(min-width:900px){body.com-barra{padding-bottom:0}}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@keyframes cai{from{transform:translateY(-14px);opacity:0}to{transform:none;opacity:1}}
+.topping{animation:cai .35s ease-out both}
+</style>
+</head>
+<body>
+<a class="pular" href="#monte">Pular para o cardápio</a>
+
+<div class="faixa previa" id="faixaPrevia" hidden>Prévia com dados de exemplo. Preços de cremes e taxas de entrega ainda não são oficiais.</div>
+<div class="faixa aviso" id="faixaAviso" hidden></div>
+<div class="faixa fechado" id="faixaFechado" hidden></div>
+
+<header class="topo">
+  <div class="wrap">
+    <a class="marca" href="#topo" aria-label="Divinus Gelatto, início">
+      <img src="img/logo.jpg" alt="" width="64" height="64">
+      <span><b>Divinus</b><span>Gelatto, Araruama</span></span>
+    </a>
+    <button class="btn-carrinho" type="button" id="btnCarrinhoTopo" aria-label="Ver meu pedido">
+      Meu pedido <span class="n" id="contaCarrinho">0</span>
+    </button>
+  </div>
+</header>
+
+<button class="faixa-pedido" type="button" id="faixaPedido" hidden><span id="faixaPedidoTexto"></span><b>Ver pedido</b></button>
+
+<main id="topo">
+<div id="viewCardapio">
+<div class="wrap">
+  <div class="galeria" id="galeria">
+    <figure class="foto principal" id="fotoTrailer"></figure>
+    <div class="fotos-produtos" id="fotosProdutos"></div>
+  </div>
+</div>
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <h1>Gelato que encanta, momentos que ficam!</h1>
+      <p class="lead">Monte seu açaí do jeito que você gosta e peça aqui pelo site.</p>
+      <a class="cta" href="#monte">Montar meu açaí</a>
+      <div class="apps" id="apps" hidden>
+        <span class="apps-titulo">Prefere pedir pelo app?</span>
+        <div class="apps-botoes">
+          <a class="btn-app ifood" id="btnIfood" href="#" target="_blank" rel="noopener" hidden><span class="logo-app" aria-hidden="true">iFood</span><span>Pedir no iFood</span></a>
+          <a class="btn-app app99" id="btn99" href="#" target="_blank" rel="noopener" hidden><span class="logo-app" aria-hidden="true">99</span><span>Pedir no 99Food</span></a>
+        </div>
+      </div>
+      <ul class="chips" aria-label="Informações rápidas">
+        <li id="chipStatus" hidden></li>
+        <li>Retirada grátis no trailer</li>
+        <li>Entrega em Araruama</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="bloco" id="monte">
+  <div class="wrap">
+    <h2>Monte seu açaí</h2>
+    <p class="sub" id="subMonte">Pedidos online: apenas açaí.</p>
+
+    <div id="areaMonte" class="monte">
+      <div class="copo-box">
+        <svg id="copo" viewBox="0 0 200 250" role="img" aria-label="Copo de açaí com os complementos escolhidos">
+          <defs>
+            <clipPath id="recorte"><path d="M34 70 L166 70 L150 228 Q148 238 138 238 L62 238 Q52 238 50 228 Z"/></clipPath>
+          </defs>
+          <g id="copoG">
+          <ellipse cx="100" cy="244" rx="64" ry="6" fill="#4A2E22" opacity=".15"/>
+          <g clip-path="url(#recorte)">
+            <rect x="0" y="0" width="200" height="250" fill="#FBF7EC"/>
+            <rect id="nivelAcai" x="0" y="190" width="200" height="60" fill="#5B2A86"/>
+            <ellipse id="topoAcai" cx="100" cy="190" rx="70" ry="9" fill="#7A3FA8"/>
+          </g>
+          <g id="coberturas"></g>
+          <path d="M34 70 L166 70 L150 228 Q148 238 138 238 L62 238 Q52 238 50 228 Z" fill="none" stroke="#4A2E22" stroke-width="5" stroke-linejoin="round"/>
+          <rect x="26" y="62" width="148" height="12" rx="6" fill="#F2EBD9" stroke="#4A2E22" stroke-width="5"/>
+          <ellipse cx="100" cy="30" rx="26" ry="7" fill="none" stroke="#C9922E" stroke-width="5"/>
+          </g>
+          <g id="garrafaG" style="display:none">
+            <defs><clipPath id="recorteGarrafa"><path d="M86 62 L114 62 Q114 76 130 90 Q141 100 141 118 L141 222 Q141 237 126 238 L74 238 Q59 237 59 222 L59 118 Q59 100 70 90 Q86 76 86 62 Z"/></clipPath></defs>
+            <ellipse cx="100" cy="244" rx="46" ry="5" fill="#4A2E22" opacity=".15"/>
+            <g clip-path="url(#recorteGarrafa)">
+              <rect x="0" y="0" width="200" height="250" fill="#FBF7EC"/>
+              <rect x="0" y="82" width="200" height="170" fill="#D98BA6"/>
+              <ellipse cx="100" cy="82" rx="42" ry="6" fill="#E7A9BF"/>
+              <path d="M60 96 C78 104 70 124 88 134 C106 146 92 168 108 182 C122 196 112 214 128 238 L141 238 L141 96 Z" fill="#F7EEDF" opacity=".95"/>
+              <path d="M59 150 C72 156 74 176 66 196 C62 212 70 226 74 238 L59 238 Z" fill="#F7EEDF" opacity=".9"/>
+              <path d="M100 90 C108 106 100 122 112 140 C120 156 114 172 122 190" fill="none" stroke="#F7EEDF" stroke-width="7" stroke-linecap="round" opacity=".9"/>
+              <path d="M82 100 C90 116 84 132 94 150 C100 164 96 184 90 204" fill="none" stroke="#B9577A" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+              <path d="M126 112 C122 130 130 148 124 168 C120 186 128 204 126 224" fill="none" stroke="#B9577A" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+              <g id="garrafaExtras"></g>
+              <rect x="66" y="96" width="9" height="128" rx="4.5" fill="#fff" opacity=".28"/>
+            </g>
+            <path d="M86 62 L114 62 Q114 76 130 90 Q141 100 141 118 L141 222 Q141 237 126 238 L74 238 Q59 237 59 222 L59 118 Q59 100 70 90 Q86 76 86 62 Z" fill="none" stroke="#4A2E22" stroke-width="5" stroke-linejoin="round"/>
+            <rect x="82" y="26" width="36" height="24" rx="5" fill="#5B2A86" stroke="#4A2E22" stroke-width="4"/>
+            <path d="M89 30v16M96 30v16M104 30v16M111 30v16" stroke="#7A3FA8" stroke-width="2" stroke-linecap="round"/>
+            <rect x="84" y="50" width="32" height="6" rx="2" fill="#F2EBD9" stroke="#4A2E22" stroke-width="3"/>
+            <circle cx="100" cy="168" r="23" fill="#F2C4D6" stroke="#4A2E22" stroke-width="2"/>
+            <path d="M94.5 160 L100 175.5 L105.5 160 Z" fill="#C98A4B" stroke="#4A2E22" stroke-width="1.4" stroke-linejoin="round"/>
+            <path d="M95 160 Q94.6 151.5 100 150.8 Q105.4 151.5 105 160 Z" fill="#F7EEDF" stroke="#4A2E22" stroke-width="1.4" stroke-linejoin="round"/>
+            <ellipse cx="100" cy="147" rx="6" ry="1.6" fill="none" stroke="#C9922E" stroke-width="1.4"/>
+            <text x="100" y="185" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="5.6" fill="#4A2E22">DIVINUS</text>
+            <ellipse cx="100" cy="14" rx="20" ry="5.5" fill="none" stroke="#C9922E" stroke-width="4"/>
+          </g>
+        </svg>
+        <div class="copo-legenda" id="legendaCopo" aria-live="polite">Escolha o tamanho e veja o copo encher</div>
+      </div>
+     <div class="passos">
+      <div class="passo">
+        <h3><span class="num">1</span>Escolha seu açaí no copo</h3>
+        <div class="grade" id="gradeTamanhos"><p class="carregando">Carregando o cardápio...</p></div>
+      </div>
+
+      <div class="passo" id="passoGarrafa" hidden>
+        <h3>Açaí na garrafa</h3>
+        <div class="grade" id="gradeGarrafa"></div>
+      </div>
+
+      <div class="passo" id="passoInclusos">
+        <h3><span class="num">2</span>Escolha seus complementos</h3>
+        <p class="dica"><span id="dicaInclusos">Escolha o tamanho primeiro.</span> <span class="contador" id="contInclusos" aria-live="polite"></span></p>
+        <div class="grade" id="gradeInclusos"></div>
+      </div>
+
+      <div class="passo" id="passoExtras">
+        <h3><span class="num" id="numExtras">3</span>Quer um adicional?</h3>
+        <p class="dica" id="dicaExtras">Cobrados à parte. Pode pular.</p>
+        <div class="grade" id="gradeExtras"></div>
+      </div>
+
+      <div class="passo" id="passoSabor" hidden>
+        <h3><span class="num" id="numSabor">4</span>Sabor da garrafa</h3>
+        <p class="dica">O sabor já vem no pedido. Se quiser, acrescente Ovomaltine nos adicionais acima.</p>
+        <div class="sabores" id="gradeSabor"></div>
+      </div>
+     </div>
+
+      <div class="add-linha">
+        <div><div class="preco-item" id="precoItem">R$ 0,00</div><div class="msg-info" id="infoMontagem" aria-live="polite"></div></div>
+        <button class="btn" type="button" id="btnAdd" disabled>Adicionar ao pedido</button>
+      </div>
+    </div>
+
+    <div class="falha" id="falhaCardapio" hidden>
+      <p>Não conseguimos carregar o cardápio agora. Chame a gente no WhatsApp para pedir.</p>
+      <a class="btn" id="btnZapFalha" href="#" target="_blank" rel="noopener">Pedir pelo WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<section class="bloco trailer" id="trailer" hidden>
+  <div class="wrap">
+    <h2>Sorvetes e milkshakes</h2>
+    <div class="aviso-trailer" role="note">
+      <svg viewBox="0 0 24 24" width="44" height="44" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.6A2.6 2.6 0 1 1 12 6.4a2.6 2.6 0 0 1 0 5.2z"/></svg>
+      <div>
+        <strong>Só no trailer</strong>
+        <span>Sorvetes e milkshakes <b>não são vendidos pelo site</b>. Para comprar, venha até o trailer.</span>
+        <small>Rua Oscar Clark, em frente ao Mercado Esperança · <span id="trailerHorario">Segunda a sábado, das 10h às 18h</span></small>
+        <a href="https://www.google.com/maps/search/?api=1&query=Rua+Oscar+Clark+Parque+Mataruna+Araruama+RJ" target="_blank" rel="noopener">Como chegar</a>
+      </div>
+    </div>
+    <div class="cats" id="catsTrailer"></div>
+  </div>
+</section>
+</div>
+
+<div id="viewFinalizar" hidden>
+<section class="bloco" id="pedido">
+  <div class="wrap">
+    <a class="voltar" href="#" data-voltar>&larr; Voltar ao cardápio</a>
+    <h2>Finalizar pedido</h2>
+    <p class="sub">Confira seu pedido, informe seus dados e escolha como pagar. O pedido chega direto no trailer.</p>
+    <div class="pedido">
+      <div>
+        <div class="passo">
+          <h3>Itens</h3>
+          <div id="listaItens"><p class="vazio">Seu pedido está vazio. Volte ao cardápio para montar seu açaí.</p></div>
+          <div class="acoes-carrinho" id="acoesCarrinho">
+            <a class="btn sec" href="#" data-mais>+ Adicionar mais um açaí</a>
+            <button class="btn" type="button" id="irDados">Finalizar pedido</button>
+          </div>
+        </div>
+        <div class="passo" id="dadosCliente">
+          <h3>Seus dados</h3>
+          <div class="campo"><label for="nome">Nome</label><input id="nome" autocomplete="name"></div>
+          <div class="campo"><label for="tel">WhatsApp</label><input id="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="(22) 99999-9999"><span class="ajuda">Para confirmar o pedido e avisar quando estiver pronto.</span></div>
+          <div class="sel-entrega" role="radiogroup" aria-label="Como receber">
+            <div class="opc"><input type="radio" name="modo" id="modoRetirada" value="retirada" checked><label for="modoRetirada"><b>Retirar no trailer</b><small>Sem taxa</small></label></div>
+            <div class="opc"><input type="radio" name="modo" id="modoEntrega" value="entrega"><label for="modoEntrega"><b>Entrega</b><small>Taxa pelo bairro</small></label></div>
+          </div>
+          <div id="blocoEndereco" hidden>
+            <div class="campo"><label for="cep">CEP</label><input id="cep" inputmode="numeric" maxlength="9" placeholder="00000-000" autocomplete="postal-code"><span class="ajuda">Com o CEP, preenchemos a rua e o bairro. Não sabe o CEP? Escolha o bairro abaixo.</span></div>
+            <div class="campo"><label for="rua">Rua</label><input id="rua" autocomplete="address-line1"></div>
+            <div class="duas">
+              <div class="campo"><label for="numero">Número</label><input id="numero" inputmode="numeric"></div>
+              <div class="campo"><label for="bairroSel">Bairro</label><select id="bairroSel"></select></div>
+            </div>
+            <div class="campo" id="campoBairroOutro" hidden><label for="bairroOutro">Qual é o seu bairro?</label><input id="bairroOutro" autocomplete="address-level3"></div>
+            <p class="status-frete" id="statusFrete" aria-live="polite"></p>
+            <div class="campo"><label for="comp">Complemento ou ponto de referência</label><input id="comp"></div>
+          </div>
+          <div class="campo"><label for="obs">Observação (opcional)</label><textarea id="obs" rows="2" placeholder="Ex.: sem colher, troco para R$ 50"></textarea></div>
+        </div>
+        <div class="passo">
+          <h3>Pagamento</h3>
+          <div class="grade grade-pag" role="radiogroup" aria-label="Forma de pagamento">
+            <div class="opc"><input type="radio" name="pag" id="pagPix" value="Pix" checked><label for="pagPix"><b>Pix <span class="selo-pix">Melhor preço</span></b><small id="smallPix">QR Code na hora, sem taxa extra</small></label></div>
+            <div class="opc"><input type="radio" name="pag" id="pagOnline" value="Cartão online"><label for="pagOnline"><b>Cartão de crédito</b><small id="smallOnline">Pague online pelo Mercado Pago</small></label></div>
+            <div class="opc"><input type="radio" name="pag" id="pagMaq" value="Cartão na maquininha"><label for="pagMaq"><b>Cartão na maquininha</b><small id="smallMaq">Na retirada, no trailer</small></label></div>
+          </div>
+        </div>
+      </div>
+      <aside class="resumo" aria-label="Resumo do pedido">
+        <div class="lin"><span>Itens</span><span id="vItens">R$ 0,00</span></div>
+        <div class="lin"><span>Entrega</span><span id="vEntrega">Retirada grátis</span></div>
+        <div class="lin" id="linCartao" hidden><span id="rotCartao">Taxa do cartão</span><span id="vCartao"></span></div>
+        <div class="lin total"><span>Total</span><span id="vTotal">R$ 0,00</span></div>
+        <p class="nota" id="notaResumo"></p>
+        <div class="msg-erro" id="erroPedido" role="alert"></div>
+        <button class="btn" type="button" id="btnEnviar" disabled>Finalizar pedido</button>
+        <a class="zap-alt" id="zapAlternativo" href="#" target="_blank" rel="noopener" hidden>Enviar pelo WhatsApp</a>
+        <p class="nota">O pedido vai direto para o trailer e você recebe o número dele na hora. Seus dados são usados só para este pedido.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h3>Onde estamos</h3>
+      <p>Rua Oscar Clark, Parque Mataruna</p><p>Em frente ao Mercado Esperança</p><p>Araruama, RJ</p>
+      <a class="mapa" href="https://www.google.com/maps/search/?api=1&query=Rua+Oscar+Clark+Parque+Mataruna+Araruama+RJ" target="_blank" rel="noopener">Ver no mapa</a>
+    </div>
+    <div><h3>Horário</h3><p id="textoHorario">Segunda a sábado, das 10h às 18h</p></div>
+    <div><h3>Fale com a gente</h3><p><a id="linkZap" href="https://wa.me/5522974035793" target="_blank" rel="noopener">WhatsApp (22) 97403-5793</a></p><p><a href="https://instagram.com/divinusgelatto" target="_blank" rel="noopener">@divinusgelatto</a></p></div>
+  </div>
+</footer>
+
+<dialog class="confirma" id="dlgConfirma" aria-labelledby="confTitulo">
+  <svg class="conf-ok" viewBox="0 0 48 48" width="52" height="52" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#2F6B3B"/><path d="M14 25l7 7 13-15" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <h2 id="confTitulo">Pedido recebido!</h2>
+  <p class="conf-codigo">Número do pedido<b id="confCodigo"></b></p>
+  <p class="conf-total" id="confTotal"></p>
+  <p class="conf-status" id="confStatus" role="status" aria-live="polite"></p>
+  <p class="conf-previa" id="confPrevia" hidden>Prévia: este pedido não foi salvo e o QR Code é só de exemplo.</p>
+  <div class="conf-pag" id="confPag" hidden>
+    <div id="confPix" hidden>
+      <h3>Pague <span id="confPixValor"></span> no Pix</h3>
+      <p class="ajuda-pag">Abra o app do seu banco e leia o QR Code, ou copie o código. O valor cai direto na conta da Divinus.</p>
+      <div class="pix-qr" id="pixQr"></div>
+      <label class="sr" for="pixCodigo">Código Pix copia e cola</label>
+      <textarea id="pixCodigo" class="pix-codigo" rows="3" readonly></textarea>
+      <button class="btn" type="button" id="btnCopiarPix">Copiar código Pix</button>
+    </div>
+    <div id="confCartao" hidden>
+      <h3>Pague <span id="confCartaoValor"></span> no cartão</h3>
+      <p class="ajuda-pag">Pagamento seguro pelo Mercado Pago. Abre em outra aba; depois é só voltar aqui.</p>
+      <button class="btn" type="button" id="btnPagarCartao">Pagar com cartão</button>
+      <p class="msg-erro" id="confCartaoErro" role="alert"></p>
+    </div>
+    <p class="ajuda-pag" id="confPagTexto"></p>
+  </div>
+  <ul class="conf-passos" id="confPassos"></ul>
+  <a class="btn sec" id="confZap" href="#" target="_blank" rel="noopener">Falar no WhatsApp</a>
+  <span class="conf-opcional">Opcional. Ex.: para mandar o comprovante.</span>
+  <button class="btn sec" type="button" id="confFechar">Fechar</button>
+</dialog>
+
+<dialog class="zoom" id="dlgFoto" aria-label="Foto ampliada">
+  <img id="fotoZoom" alt="">
+  <button class="zoom-fechar" type="button" id="fecharZoom" aria-label="Fechar foto">×</button>
+</dialog>
+
+<div class="barra-fixa" id="barraFixa"><span><b id="barraQtd">0</b> no pedido · <b id="barraTotal">R$ 0,00</b></span><a href="#finalizar">Ver carrinho</a></div>
+
+<script src="config.js"></script>
+<script>
+/* ================= CONFIGURAÇÃO (é só isto que você edita) ================= */
+var CONFIG = {
+  // Supabase e Analytics ficam no config.js (vale para o site e o painel). Vazio = modo prévia.
+  SUPABASE_URL: '',
+  SUPABASE_ANON_KEY: '',
+  // WhatsApp usado se o banco não mandar outro (55 + DDD, só dígitos).
+  WHATSAPP: '5522974035793',
+  GA_ID: '',
+  // Foto do trailer abaixo do cabeçalho. Pode ser um arquivo da pasta img/ ou um link https.
+  FOTO_TRAILER: 'img/trailer.jpg',
+  // As 3 fotos de produtos abaixo da foto do trailer (arquivo da pasta img/ ou link https).
+  // Sabores da garrafa de açaí. "foto": caminho de uma imagem pequena (ex.: 'img/sabor-garrafa.jpg'); vazio mostra o espaço reservado.
+  SABORES_GARRAFA: [
+    { nome:'Leite condensado com leite em pó', descricao:'Açaí batido com leite condensado e leite em pó', foto:'img/sabor-garrafa.jpg' }
+  ],
+  // Sabores mostrados nos cartões "Só no trailer" (a chave é o nome da categoria no cardápio).
+  SABORES_TRAILER: {
+    'Milkshake': ['Morango','Ninho','Prestígio','Nutella','Oreo','Ovomaltine','KitKat','Paçoquinha','Alpino trufado','Galak com Negresco','Dois Frades'],
+    'Milkshake com polpa': ['Limão','Caramelo','Menta','Chocolate','Amora','Maracujá (com semente)','Morango','Framboesa','Abacaxi ao vinho']
+  },
+  // Sabores de itens específicos (a chave é o nome exato do item no cardápio).
+  SABORES_ITEM: {
+    'Casquinha recheada': ['Morango','Ninho','Prestígio','Nutella','Galak com Negresco']
+  },
+  FOTOS_PRODUTOS: [
+    { arquivo: 'img/produto1.jpg', descricao: 'Copo de açaí da Divinus Gelatto com morango, amendoim e confeitos coloridos' },
+    { arquivo: 'img/produto2.jpg', descricao: 'Sorvetes de casquinha da Divinus Gelatto: chocolate, baunilha e mista' },
+    { arquivo: 'img/produto3.jpg', descricao: 'Copo de maracujá da Divinus Gelatto com polpa e creme' }
+  ],
+  // Páginas da Divinus nos apps. O painel (Configurações) tem prioridade; estes valem se lá estiver vazio.
+  APPS: {
+    ifood: 'https://www.ifood.com.br/delivery/araruama-rj/divinus-gelatto-pc-bandeira/688cd4e2-0d70-45f7-a6c2-83bc451b5a56',
+    app99: ''  // copie o link no app 99Store: Loja > Compartilhar loja
+  },
+  // Usado se o banco não mandar horário.
+  HORARIO_PADRAO: { abre: '10:00', fecha: '18:00', dias: 'seg a sáb' }
+};
+(function(ext){ for(var k in ext) if(ext[k]) CONFIG[k] = ext[k]; })(window.DIVINUS_CONFIG || {});
+
+/* ================= DADOS DE PRÉVIA (exemplo, mesmo formato do feed) ================= */
+var PREVIA = {
+  inclusos: 3,
+  produtos: [
+    { id:'P001', nome:'Açaí no copo 400 ml', categoria:'Açaí no copo', preco:15, disponivel:true, online:true, foto:'' },
+    { id:'P002', nome:'Açaí no copo 500 ml', categoria:'Açaí no copo', preco:17, disponivel:true, online:true, foto:'' },
+    { id:'P003', nome:'Açaí no copo 700 ml', categoria:'Açaí no copo', preco:22, disponivel:true, online:true, foto:'' },
+    { id:'P004', nome:'Açaí no copo 1 L', categoria:'Açaí no copo', preco:28, disponivel:true, online:true, foto:'' },
+    { id:'P005', nome:'Açaí na garrafa 500 ml', categoria:'Açaí na garrafa', preco:15, disponivel:true, online:true, foto:'' },
+    { id:'P006', nome:'Casquinha (baunilha, açaí ou mista)', categoria:'Sorvete', preco:3.5, disponivel:true, online:false },
+    { id:'P007', nome:'Cascão (baunilha, açaí ou mista)', categoria:'Sorvete', preco:6, disponivel:true, online:false },
+    { id:'P008', nome:'Casquinha recheada', categoria:'Sorvete', preco:6, disponivel:true, online:false },
+    { id:'P009', nome:'Cascão recheado', categoria:'Sorvete', preco:8, disponivel:true, online:false },
+    { id:'P010', nome:'Sundae', categoria:'Sorvete', preco:7, disponivel:true, online:false },
+    { id:'P011', nome:'Milkshake 400 ml', categoria:'Milkshake', preco:14, disponivel:true, online:false },
+    { id:'P012', nome:'Milkshake 500 ml', categoria:'Milkshake', preco:15, disponivel:true, online:false },
+    { id:'P013', nome:'Milkshake 700 ml', categoria:'Milkshake', preco:18, disponivel:true, online:false },
+    { id:'P014', nome:'Milkshake com polpa 400 ml', categoria:'Milkshake com polpa', preco:12, disponivel:true, online:false },
+    { id:'P015', nome:'Milkshake com polpa 500 ml', categoria:'Milkshake com polpa', preco:13, disponivel:true, online:false },
+    { id:'P016', nome:'Milkshake com polpa 700 ml', categoria:'Milkshake com polpa', preco:16, disponivel:true, online:false },
+    { id:'EX1', nome:'EX: produto de exemplo (nunca aparece)', categoria:'Sorvete', preco:1, disponivel:true, online:true }
+  ],
+  complementos: [
+    ['Ovomaltine granulado','incluso',0],['Farofa de amendoim','incluso',0],['Delicado','incluso',0],['M&M','incluso',0],
+    ['Jujuba','incluso',0],['Amendoim granulado','incluso',0],['Granola','incluso',0],['Leite em pó','incluso',0]
+  ].map(function(c){return {nome:c[0],grupo:c[1],preco:c[2],vale:'Açaí no copo'};}).concat([
+    ['Ovomaltine',2],['Paçoquinha',2],['Prestígio',3],['Galak com Negresco',3],['Ninho',3],['KitKat',3],['Nutella',4]
+  ].map(function(c){return {nome:c[0],grupo:'opcional',preco:c[1],vale:'Açaí no copo'};})).concat([
+    {nome:'Ovomaltine (garrafa)',grupo:'opcional',preco:1.5,vale:'Açaí na garrafa'}
+  ]),
+  entrega: [
+    {bairro:'Parque Mataruna',taxa:3,minutos:15,minimo:0},
+    {bairro:'Centro',taxa:6,minutos:25,minimo:20},
+    {bairro:'Boa Perna',taxa:8,minutos:30,minimo:20},
+    {bairro:'Fazendinha',taxa:null,minutos:0,minimo:0}
+  ],
+  horario: { abre:'10:00', fecha:'18:00', dias:'seg a sáb' },
+  aviso: '',
+  apps: {}
+};
+
+/* ================= UTILITÁRIOS ================= */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function brl(v){ return 'R$ ' + (Math.round(v*100)/100).toFixed(2).replace('.',','); }
+function norm(s){ return String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim(); }
+function semParenteses(s){ return String(s).replace(/\s*\(.*?\)\s*/g,' ').trim(); }
+function el(tag, attrs, html){ var e=document.createElement(tag); if(attrs) for(var k in attrs) e.setAttribute(k,attrs[k]); if(html!==undefined) e.innerHTML=html; return e; }
+function ehExemplo(nome){ return /^\s*ex\s*:/i.test(String(nome||'')); }
+function ehTaxa(v){ return typeof v==='number' && isFinite(v) && v>=0; }
+var LS = {
+  get:function(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } },
+  set:function(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+var SS = {
+  get:function(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } },
+  set:function(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
+};
+// Link do Google Drive vira imagem direta; outros links https passam como estão.
+function fotoUrl(u){
+  u = String(u||'').trim(); if(!u) return '';
+  var m = u.match(/(?:\/d\/|[?&]id=)([\w-]{20,})/);
+  if(/drive\.google\.com/.test(u) && m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w600';
+  return /^https:\/\//.test(u) ? u : '';
+}
+
+/* ================= MEDIÇÃO (Google Analytics 4) ================= */
+function iniciarAnalytics(){
+  if(!CONFIG.GA_ID || previa) return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){ dataLayer.push(arguments); };
+  gtag('js', new Date());
+  gtag('config', CONFIG.GA_ID);
+  var s = document.createElement('script'); s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(CONFIG.GA_ID);
+  document.head.appendChild(s);
+}
+function evento(nome, params){ try{ if(window.gtag) gtag('event', nome, params||{}); }catch(e){} }
+
+/* ================= ESTADO ================= */
+var DADOS = null, previa = false, aberto = true;
+var carrinho = [];
+var montagem = { produto:null, inclusos:[], extras:[] };
+var frete = { ok:false, taxa:0, minutos:0, minimo:0, bairro:'' };
+var CHAVE_FEED = 'divinus_feed_v1', CHAVE_CARRINHO = 'divinus_carrinho_v1', CHAVE_DADOS = 'divinus_cliente_v1';
+
+// Origem do tráfego (UTM) guardada na sessão para sobreviver a recarregamentos.
+(function(){
+  var p = new URLSearchParams(location.search), o = p.get('utm_source') || p.get('origem');
+  if(o) SS.set('divinus_origem', o + (p.get('utm_campaign') ? ' / ' + p.get('utm_campaign') : ''));
+})();
+
+/* ================= CARREGAR CARDÁPIO ================= */
+function carregar(){
+  var params = new URLSearchParams(location.search);
+  previa = params.get('preview') === '1' || !CONFIG.SUPABASE_URL || !CONFIG.SUPABASE_ANON_KEY;
+  iniciarAnalytics();
+  if(previa){ iniciar(PREVIA); return; }
+
+  var cache = LS.get(CHAVE_FEED);
+  if(cache && cache.d && Date.now() - cache.t < 2*60*1000){ iniciar(cache.d); return; }
+
+  chamarApi('cardapio').then(function(d){
+    if(!d || d.erro || !Array.isArray(d.produtos)) throw new Error('feed');
+    LS.set(CHAVE_FEED, { t:Date.now(), d:d });
+    iniciar(d);
+  }).catch(function(){
+    // Sem conexão com o banco: usa a última cópia (até 3 dias) ou mostra o WhatsApp.
+    if(cache && cache.d && Date.now() - cache.t < 3*24*60*60*1000){ iniciar(cache.d); return; }
+    $('areaMonte').hidden = true; $('falhaCardapio').hidden = false;
+    $('subMonte').textContent = 'Pedidos online: apenas açaí.';
+    evento('erro_cardapio');
+  });
+}
+
+/* ================= HORÁRIO (sempre no fuso de Araruama) ================= */
+function agoraBR(){
+  try{
+    var p = {}, partes = new Intl.DateTimeFormat('en-US',{timeZone:'America/Sao_Paulo',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
+    partes.forEach(function(x){ p[x.type] = x.value; });
+    return { dia:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(p.weekday), min:(+p.hour % 24)*60 + (+p.minute) };
+  }catch(e){ var d = new Date(); return { dia:d.getDay(), min:d.getHours()*60+d.getMinutes() }; }
+}
+function diasAbertos(txt){
+  var t = norm(txt).replace('sabado','sab').replace('domingo','dom');
+  var ordem = ['dom','seg','ter','qua','qui','sex','sab'];
+  if(/todos|todo dia|diariamente/.test(t)) return [0,1,2,3,4,5,6];
+  var m = t.match(/(dom|seg|ter|qua|qui|sex|sab)\w*\s*(?:a|-|ate)\s*(dom|seg|ter|qua|qui|sex|sab)/);
+  if(!m) return [1,2,3,4,5,6];
+  var i = ordem.indexOf(m[1]), j = ordem.indexOf(m[2]), r = [];
+  for(var k=i; r.length<7; k=(k+1)%7){ r.push(k); if(k===j) break; }
+  return r;
+}
+function minutos(hhmm){ var p=String(hhmm).split(':'); return (+p[0]||0)*60 + (+p[1]||0); }
+function estaAberto(h){
+  if(h.fechado) return false;
+  var a = agoraBR();
+  return diasAbertos(h.dias).indexOf(a.dia) >= 0 && a.min >= minutos(h.abre) && a.min < minutos(h.fecha);
+}
+function hora(hhmm){ return String(hhmm).replace(/^0(\d)/,'$1').replace(':00','h').replace(/:(\d\d)/,'h$1'); }
+function textoHorario(h){
+  var d = norm(h.dias).replace('sabado','sab');
+  var dias = d.indexOf('seg a sab')===0 ? 'Segunda a sábado' : (d.indexOf('seg a sex')===0 ? 'Segunda a sexta' : h.dias.charAt(0).toUpperCase()+h.dias.slice(1));
+  return dias + ', das ' + hora(h.abre) + ' às ' + hora(h.fecha);
+}
+
+/* ================= INICIAR ================= */
+function iniciar(d){
+  // Defesa extra: nada marcado como "EX:" chega à tela, mesmo que o feed mande.
+  d.produtos = (d.produtos||[]).filter(function(p){ return p && p.nome && !ehExemplo(p.nome) && !ehExemplo(p.id); });
+  d.complementos = (d.complementos||[]).filter(function(c){ return c && c.nome && !ehExemplo(c.nome) && c.disponivel !== false; });
+  d.entrega = (d.entrega||[]).filter(function(e){ return e && e.bairro && !ehExemplo(e.bairro); });
+  d.inclusos = +d.inclusos >= 0 ? +d.inclusos : 3;
+  d.horario = d.horario && d.horario.abre ? d.horario : CONFIG.HORARIO_PADRAO;
+  d.horario.dias = d.horario.dias || CONFIG.HORARIO_PADRAO.dias;
+  DADOS = d;
+  if(/^\d{12,13}$/.test(String(d.whatsapp||''))){ CONFIG.WHATSAPP = String(d.whatsapp); atualizarZap(); }
+
+  $('faixaPrevia').hidden = !previa;
+  if(d.aviso){ $('faixaAviso').hidden = false; $('faixaAviso').textContent = d.aviso; }
+  $('textoHorario').textContent = textoHorario(d.horario);
+  $('trailerHorario').textContent = textoHorario(d.horario);
+  aberto = estaAberto(d.horario);
+  var chip = $('chipStatus'); chip.hidden = false;
+  chip.className = aberto ? 'aberto' : 'fechado';
+  chip.textContent = aberto ? 'Aberto agora · até ' + hora(d.horario.fecha) : 'Fechado agora';
+  if(!aberto){
+    $('faixaFechado').hidden = false;
+    $('faixaFechado').textContent = 'Estamos fechados agora. ' + textoHorario(d.horario) + '. Você pode montar o pedido e enviar quando abrirmos.';
+  }
+  desenharTamanhos();
+  prepararPassos();
+  desenharBairros();
+  desenharTrailer();
+  var apps = d.apps || {};
+  desenharApps({ ifood: apps.ifood || CONFIG.APPS.ifood, app99: apps.app99 || CONFIG.APPS.app99 });
+  restaurar();
+  retomarPedido();
+  atualizarCopo();
+  observarCardapio();
+}
+// Botões do iFood e da 99: só aparecem quando o link estiver no painel (Configurações).
+function desenharApps(a){
+  var ok = function(u){ return /^https:\/\//.test(String(u||'')); }, algum = false;
+  [['btnIfood', a.ifood, 'ifood'], ['btn99', a.app99, '99food']].forEach(function(x){
+    var el = $(x[0]); el.hidden = !ok(x[1]); if(!ok(x[1])) return;
+    algum = true; el.href = x[1];
+    el.onclick = function(){ evento('clique_app', {app:x[2]}); };
+  });
+  $('apps').hidden = !algum;
+}
+function linkZap(texto){ return 'https://wa.me/' + CONFIG.WHATSAPP + (texto ? '?text=' + encodeURIComponent(texto) : ''); }
+function atualizarZap(){
+  var n = CONFIG.WHATSAPP, f = n.replace(/^55(\d\d)(\d{5})(\d{4})$/,'($1) $2-$3');
+  $('linkZap').href = linkZap(); $('linkZap').textContent = 'WhatsApp ' + f;
+  $('btnZapFalha').href = linkZap('Olá! Quero fazer um pedido de açaí.');
+}
+function iniciarZap(){
+  atualizarZap();
+  [$('linkZap'), $('btnZapFalha')].forEach(function(a){ a.addEventListener('click', function(){ evento('clique_whatsapp', {local:a.id}); }); });
+}
+function observarCardapio(){
+  var visto = false;
+  function marca(){ if(!visto){ visto = true; evento('ver_cardapio'); } }
+  if(!('IntersectionObserver' in window)){ marca(); return; }
+  var o = new IntersectionObserver(function(es){ if(es.some(function(e){return e.isIntersecting;})){ marca(); o.disconnect(); } }, {threshold:.25});
+  o.observe($('monte'));
+}
+
+/* ================= TAMANHOS ================= */
+function itensOnline(){ return DADOS.produtos.filter(function(p){ return p.online && p.preco>0; }); }
+function produto(id){ return DADOS.produtos.filter(function(x){ return x.id===id; })[0]; }
+function desenharTamanhos(){
+  var g = $('gradeTamanhos'), gg = $('gradeGarrafa'); g.innerHTML = ''; gg.innerHTML = '';
+  var lista = itensOnline();
+  if(!lista.length){ g.innerHTML = '<p class="vazio">Nenhum açaí disponível para pedido online agora. Chame a gente no WhatsApp.</p>'; return; }
+  lista.forEach(function(p){
+    var d = el('div',{class:'opc'}), id = 'tam_'+p.id, foto = fotoUrl(p.foto), esgot = p.disponivel===false;
+    var nomeCurto = p.nome.replace(/^Açaí (no copo|na garrafa) /i,'');
+    d.innerHTML = '<input type="radio" name="tam" id="'+esc(id)+'" value="'+esc(p.id)+'"'+(esgot?' disabled':'')+'>'
+      + '<label for="'+esc(id)+'">'
+      + (foto ? '<img class="foto" src="'+esc(foto)+'" alt="" loading="lazy" referrerpolicy="no-referrer">' : '')
+      + '<b>'+esc(nomeCurto)+'</b><small>'+(/garrafa/i.test(p.categoria)?'Na garrafa':'No copo')+'</small><span class="valor">'+brl(p.preco)+'</span>'
+      + (esgot ? '<span class="esgotado">Esgotado hoje</span>' : '')
+      + '</label>';
+    var img = d.querySelector('img'); if(img) img.addEventListener('error', function(){ img.remove(); });
+    (/garrafa/i.test(p.categoria) ? gg : g).appendChild(d);
+    d.querySelector('input').addEventListener('change', function(){ escolherProduto(p.id); });
+  });
+  $('passoGarrafa').hidden = !gg.children.length;
+  if(!g.children.length) g.innerHTML = '<p class="vazio">Escolha a opção na garrafa abaixo.</p>';
+}
+function complementosDe(prod, grupo){
+  var cat = norm(prod.categoria);
+  return DADOS.complementos.filter(function(c){
+    if(c.grupo!==grupo) return false;
+    if(grupo==='opcional' && !(c.preco>0)) return false;
+    var v = norm(c.vale||''); return v==='' || v===cat;
+  });
+}
+function limiteInclusos(prod){ return Math.min(DADOS.inclusos, complementosDe(prod,'incluso').length); }
+// Antes de escolher o tamanho, os passos mostram as opções do copo, desativadas.
+function categoriaPadrao(){
+  var l = itensOnline(), c = l.filter(function(p){ return /copo/i.test(p.categoria); })[0] || l[0];
+  return { categoria: c ? c.categoria : '' };
+}
+// Os passos 2 e 3 só somem se não houver nenhuma opção no cardápio inteiro (decidido uma vez, ao carregar).
+var TEM_INC = true;
+function prepararPassos(){
+  var temInc = DADOS.complementos.some(function(c){ return c.grupo==='incluso'; }) && DADOS.inclusos>0;
+  var temExt = DADOS.complementos.some(function(c){ return c.grupo==='opcional' && c.preco>0; });
+  TEM_INC = temInc;
+  $('passoInclusos').hidden = !temInc;
+  $('passoExtras').hidden = !temExt;
+  desenharComplementos(null);
+}
+function desenharComplementos(p){
+  var garrafa = !!(p && /garrafa/i.test(p.categoria));
+  $('passoInclusos').hidden = !TEM_INC || garrafa;
+  // copo: 1 tamanho, 2 complementos, 3 adicional | garrafa: 1 adicional, 2 sabor
+  $('numExtras').textContent = String((garrafa ? 0 : 1) + ($('passoInclusos').hidden ? 0 : 1) + 1);
+  var base = p || categoriaPadrao(), ativo = !!p;
+  var inc = complementosDe(base,'incluso'), ext = complementosDe(base,'opcional');
+  var limite = p ? limiteInclusos(p) : Math.min(DADOS.inclusos, inc.length);
+  $('dicaInclusos').textContent = !ativo ? 'Escolha o tamanho primeiro.'
+    : (limite ? 'Até ' + limite + ' inclusos no preço.' : 'Este tamanho não leva complementos inclusos.');
+  $('dicaExtras').textContent = ativo ? 'Cobrados à parte. Pode pular.' : 'Escolha o tamanho primeiro.';
+  var g = $('gradeInclusos'); g.innerHTML = '';
+  inc.forEach(function(c,i){
+    var d = el('div',{class:'opc'}), cid='inc_'+i;
+    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"'+(ativo?'':' disabled')+'><label for="'+cid+'"><b>'+esc(c.nome)+'</b></label>';
+    g.appendChild(d);
+    d.querySelector('input').addEventListener('change', function(ev){ alternar(montagem.inclusos, c.nome, ev.target.checked, limite, ev.target); });
+  });
+  if(ativo && !inc.length) g.innerHTML = '<p class="vazio">Sem complementos inclusos para este tamanho.</p>';
+  var ge = $('gradeExtras'); ge.innerHTML = '';
+  ext.forEach(function(c,i){
+    var d = el('div',{class:'opc'}), cid='ext_'+i;
+    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"'+(ativo?'':' disabled')+'><label for="'+cid+'"><b>'+esc(c.nome)+'</b><small>+ '+brl(c.preco)+'</small></label>';
+    ge.appendChild(d);
+    d.querySelector('input').addEventListener('change', function(ev){ alternar(montagem.extras, c.nome, ev.target.checked, 99, ev.target); });
+  });
+  if(ativo && !ext.length) ge.innerHTML = '<p class="vazio">Sem adicionais para este tamanho.</p>';
+}
+function desenharSabores(p){
+  var box = $('passoSabor'), lista = CONFIG.SABORES_GARRAFA || [];
+  var garrafa = !!(p && /garrafa/i.test(p.categoria)) && lista.length > 0;
+  box.hidden = !garrafa;
+  if(!garrafa) return;
+  var temInc = !$('passoInclusos').hidden, temExt = !$('passoExtras').hidden;
+  $('numSabor').textContent = String(0 + (temInc ? 1 : 0) + (temExt ? 1 : 0) + 1);
+  var g = $('gradeSabor'); g.innerHTML = '';
+  lista.forEach(function(sb){
+    var foto = sb.foto ? '<span class="sabor-foto com-foto"><img src="'+esc(sb.foto)+'" alt="'+esc(sb.nome)+'" loading="lazy"></span>'
+      : '<span class="sabor-foto" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path fill="currentColor" d="M9 4 7.2 6H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2.2L15 4H9zm3 4.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/></svg></span>';
+    g.appendChild(el('div',{class:'sabor'}, foto + '<span><b>'+esc(sb.nome)+'</b>'+(sb.descricao ? '<small>'+esc(sb.descricao)+'</small>' : '')+'</span>'));
+  });
+}
+function escolherProduto(id){
+  var p = produto(id);
+  montagem = { produto:p, inclusos:[], extras:[] };
+  desenharComplementos(p);
+  desenharSabores(p);
+  evento('escolher_tamanho', {item_name:p.nome, value:p.preco, currency:'BRL'});
+  atualizarMontagem();
+}
+function alternar(lista, nome, marcado, limite, input){
+  var i = lista.indexOf(nome);
+  if(marcado){ if(lista.length>=limite){ input.checked=false; return; } if(i<0) lista.push(nome); }
+  else if(i>=0) lista.splice(i,1);
+  atualizarMontagem();
+}
+function precoDe(prod, extras){
+  var t = prod.preco;
+  extras.forEach(function(n){ var c = DADOS.complementos.filter(function(x){ return x.nome===n && x.grupo==='opcional'; })[0]; if(c) t += c.preco; });
+  return t;
+}
+function atualizarMontagem(){
+  var m = montagem, limite = m.produto ? limiteInclusos(m.produto) : 0;
+  $('contInclusos').textContent = '';
+  if(limite){
+    $('contInclusos').textContent = m.inclusos.length + ' de ' + limite + ' escolhidos';
+    $('contInclusos').className = 'contador' + (m.inclusos.length===limite ? ' cheio' : '');
+    document.querySelectorAll('#gradeInclusos input').forEach(function(i){ i.disabled = !i.checked && m.inclusos.length>=limite; });
+  }
+  $('precoItem').textContent = brl(m.produto ? precoDe(m.produto, m.extras) : 0);
+  var faltam = limite - m.inclusos.length;
+  $('infoMontagem').textContent = !m.produto ? 'Escolha um tamanho para começar.'
+    : (limite && faltam>0 ? 'Você ainda pode escolher ' + faltam + (faltam===1 ? ' complemento grátis.' : ' complementos grátis.') : '');
+  $('btnAdd').disabled = !m.produto;
+  atualizarCopo();
+}
+
+/* ================= COPO ================= */
+var CORES = ['#C9922E','#F2A58E','#4A2E22','#E8C547','#A3321F','#8FB573','#D9C7A0','#F7F3E8','#B9783A'];
+function atualizarCopo(){
+  var m = montagem, nivel = 190, escala = 0.8, legenda = 'Escolha o tamanho e veja o copo encher';
+  if(m.produto){
+    var ml = (m.produto.nome.match(/(\d+)\s*ml/i)||[])[1], litro = (m.produto.nome.match(/(\d+(?:[.,]\d+)?)\s*l\b/i)||[])[1];
+    var v = litro ? parseFloat(litro.replace(',','.'))*1000 : (+ml||500);
+    // o copo cresce com o volume e o açaí enche sempre a mesma proporção dele
+    escala = Math.max(0.7, Math.min(1, 0.74 + (v-400)/600*0.26));
+    nivel = 96;
+    var tudo = m.inclusos.concat(m.extras);
+    legenda = m.produto.nome + (tudo.length ? ' com ' + tudo.join(', ') : '');
+  }
+  var ehGarrafa = !!(m.produto && /garrafa/i.test(m.produto.categoria));
+  $('copoG').style.display = ehGarrafa ? 'none' : '';
+  $('garrafaG').style.display = ehGarrafa ? '' : 'none';
+  if(ehGarrafa){
+    legenda = m.produto.nome + ' · leite condensado com leite em pó';
+    var tudoG = m.inclusos.concat(m.extras);
+    if(tudoG.length) legenda += ' + ' + tudoG.join(', ');
+    var ge = $('garrafaExtras'); ge.innerHTML = '';
+    if(m.extras.some(function(n){ return /ovomaltine/i.test(n); })){
+      var NSg = 'http://www.w3.org/2000/svg';
+      for(var q=0;q<26;q++){
+        var pt = document.createElementNS(NSg,'circle');
+        pt.setAttribute('cx', 66 + ((q*37)%68)); pt.setAttribute('cy', 96 + ((q*53)%132)); pt.setAttribute('r', 1.3 + (q%3)*0.5);
+        pt.setAttribute('fill', q%2 ? '#6B3A1E' : '#8A5530');
+        ge.appendChild(pt);
+      }
+    }
+  }
+  $('copoG').style.transform = 'scale(' + escala.toFixed(3) + ')';
+  $('nivelAcai').setAttribute('y', nivel); $('nivelAcai').setAttribute('height', 250-nivel);
+  $('topoAcai').setAttribute('cy', nivel);
+  var g = $('coberturas'); g.innerHTML = '';
+  var NS = 'http://www.w3.org/2000/svg';
+  m.inclusos.concat(m.extras).forEach(function(nome, i){
+    var cor = CORES[(norm(nome).length + i) % CORES.length];
+    for(var k=0;k<6;k++){
+      var a = (i*37 + k*53) % 100, x = 62 + (a/100)*76, y = nivel - 7 + ((k*19+i*11)%13) - 4;
+      var c = document.createElementNS(NS,'circle');
+      c.setAttribute('cx',x); c.setAttribute('cy',y); c.setAttribute('r',4.2+((k+i)%3)); c.setAttribute('fill',cor);
+      c.setAttribute('stroke','#4A2E22'); c.setAttribute('stroke-width','1.2'); c.setAttribute('class','topping');
+      g.appendChild(c);
+    }
+  });
+  $('legendaCopo').textContent = legenda;
+}
+
+/* ================= CARRINHO ================= */
+function chave(it){ return it.id+'|'+it.inclusos.slice().sort().join(',')+'|'+it.extras.slice().sort().join(','); }
+$('btnAdd').addEventListener('click', function(){
+  var m = montagem; if(!m.produto) return;
+  var it = { id:m.produto.id, nome:m.produto.nome, inclusos:m.inclusos.slice(), extras:m.extras.slice(), unit:precoDe(m.produto, m.extras), qtd:1 };
+  var ja = carrinho.filter(function(x){ return chave(x)===chave(it); })[0];
+  if(ja) ja.qtd++; else carrinho.push(it);
+  evento('adicionar_item', {item_name:it.nome, value:it.unit, currency:'BRL', complementos:it.inclusos.length, adicionais:it.extras.length});
+  montagem = { produto:null, inclusos:[], extras:[] };
+  document.querySelectorAll('input[name=tam]').forEach(function(i){ i.checked=false; });
+  desenharComplementos(null);
+  desenharSabores(null);
+  atualizarMontagem(); desenharCarrinho();
+  location.hash = '#finalizar';
+});
+function desenharCarrinho(){
+  var box = $('listaItens'); box.innerHTML = '';
+  if(!carrinho.length) box.innerHTML = '<p class="vazio">Seu pedido está vazio. Volte ao cardápio para montar seu açaí.</p>';
+  carrinho.forEach(function(it, idx){
+    var d = el('div',{class:'item'}), det = [];
+    if(it.inclusos.length) det.push('Complementos: ' + it.inclusos.join(', '));
+    if(it.extras.length) det.push('Adicionais: ' + it.extras.join(', '));
+    d.innerHTML = '<div><b>'+esc(it.nome)+'</b><span class="det">'+esc(det.join(' · '))+'</span></div><div><b>'+brl(it.unit*it.qtd)+'</b></div>'
+      + '<div class="acoes"><div class="qtd"><button type="button" aria-label="Tirar um">−</button><span aria-label="Quantidade">'+it.qtd+'</span><button type="button" aria-label="Mais um">+</button></div><button type="button" class="link">Remover</button></div>';
+    var b = d.querySelectorAll('button');
+    b[0].addEventListener('click', function(){ it.qtd--; if(it.qtd<=0) carrinho.splice(idx,1); desenharCarrinho(); });
+    b[1].addEventListener('click', function(){ if(it.qtd<20) it.qtd++; desenharCarrinho(); });
+    b[2].addEventListener('click', function(){ carrinho.splice(idx,1); desenharCarrinho(); });
+    box.appendChild(d);
+  });
+  LS.set(CHAVE_CARRINHO, carrinho);
+  $('irDados').hidden = !carrinho.length;
+  atualizarResumo();
+}
+// Pedido salvo no aparelho é conferido com o cardápio atual (preço e disponibilidade).
+function revalidar(lista){
+  return (lista||[]).map(function(it){
+    var p = it && produto(it.id);
+    if(!p || !p.online || p.disponivel===false || !(p.preco>0)) return null;
+    var nomesInc = complementosDe(p,'incluso').map(function(c){return c.nome;});
+    var nomesExt = complementosDe(p,'opcional').map(function(c){return c.nome;});
+    var inc = (it.inclusos||[]).filter(function(n){ return nomesInc.indexOf(n)>=0; }).slice(0, limiteInclusos(p));
+    var ext = (it.extras||[]).filter(function(n){ return nomesExt.indexOf(n)>=0; });
+    return { id:p.id, nome:p.nome, inclusos:inc, extras:ext, unit:precoDe(p, ext), qtd:Math.max(1, Math.min(20, +it.qtd||1)) };
+  }).filter(Boolean);
+}
+function subtotal(){ return carrinho.reduce(function(s,i){ return s+i.unit*i.qtd; },0); }
+function qtdTotal(){ return carrinho.reduce(function(s,i){ return s+i.qtd; },0); }
+$('btnCarrinhoTopo').addEventListener('click', function(){ location.hash = '#finalizar'; });
+document.querySelectorAll('[data-voltar]').forEach(function(a){ a.addEventListener('click', function(ev){ ev.preventDefault(); irCardapio(false); }); });
+document.querySelectorAll('[data-mais]').forEach(function(a){ a.addEventListener('click', function(ev){ ev.preventDefault(); evento('adicionar_mais'); irCardapio(true); }); });
+$('irDados').addEventListener('click', function(){ $('dadosCliente').scrollIntoView({behavior:'smooth'}); var n = $('nome'); if(n) setTimeout(function(){ n.focus({preventScroll:true}); }, 400); });
+
+/* ================= DUAS TELAS: CARDÁPIO E FINALIZAR ================= */
+var telaAtual = '';
+function naFinalizar(){ return location.hash === '#finalizar'; }
+function irCardapio(paraMonte){
+  if(naFinalizar()) location.hash = ''; else window.scrollTo({top:0, behavior:'smooth'});
+  // "Adicionar mais um açaí": volta ao início do fluxo, direto no passo de escolher o tamanho.
+  if(paraMonte) setTimeout(function(){ $('monte').scrollIntoView({behavior:'smooth'}); }, 120);
+}
+function rota(){
+  var fin = naFinalizar(), nova = fin ? 'finalizar' : 'cardapio';
+  $('viewCardapio').hidden = fin; $('viewFinalizar').hidden = !fin;
+  document.title = fin ? 'Finalizar pedido | Divinus Gelatto' : 'Divinus Gelatto | Peça seu açaí em Araruama';
+  if(nova !== telaAtual){
+    var primeira = telaAtual === '';
+    telaAtual = nova;
+    if(!primeira) window.scrollTo(0, 0);
+    if(fin) evento('ver_carrinho', {itens:qtdTotal(), value:subtotal(), currency:'BRL'});
+  }
+  if(typeof atualizarResumo === 'function' && DADOS) atualizarResumo();
+}
+window.addEventListener('hashchange', rota);
+
+/* ================= ENTREGA ================= */
+function modo(){ return document.querySelector('input[name=modo]:checked').value; }
+document.querySelectorAll('input[name=modo]').forEach(function(r){ r.addEventListener('change', function(){ trocarModo(); salvarCliente(); }); });
+function trocarModo(){
+  var e = modo()==='entrega';
+  $('blocoEndereco').hidden = !e;
+  if(e && $('pagMaq').checked) $('pagPix').checked = true;
+  $('pagMaq').disabled = e;
+  $('smallMaq').textContent = e ? 'Só na retirada' : 'Na retirada, no trailer';
+  atualizarResumo();
+}
+function desenharBairros(){
+  var s = $('bairroSel');
+  s.innerHTML = '<option value="">Escolha seu bairro</option>' + DADOS.entrega.map(function(b,i){
+    return '<option value="'+i+'">'+esc(b.bairro)+(ehTaxa(b.taxa) ? ' · '+(b.taxa>0?brl(b.taxa):'grátis') : '')+'</option>';
+  }).join('') + '<option value="outro">Outro bairro</option>';
+  if(!DADOS.entrega.length) s.value = 'outro';
+  aplicarBairro();
+}
+function bairroDigitado(){ return $('bairroSel').value==='outro' ? $('bairroOutro').value.trim() : (DADOS.entrega[+$('bairroSel').value]||{}).bairro || ''; }
+function aplicarBairro(){
+  var v = $('bairroSel').value, st = $('statusFrete');
+  $('campoBairroOutro').hidden = v!=='outro';
+  frete = { ok:false, taxa:0, minutos:0, minimo:0, bairro:'' };
+  st.className = 'status-frete'; st.textContent = '';
+  if(v==='outro'){
+    st.className = 'status-frete ruim';
+    st.textContent = 'Ainda não calculamos entrega para esse endereço. Finalize o pedido e combinamos o valor pelo WhatsApp.';
+  } else if(v!==''){
+    var b = DADOS.entrega[+v];
+    if(ehTaxa(b.taxa)){
+      frete = { ok:true, taxa:b.taxa, minutos:+b.minutos||0, minimo:+b.minimo||0, bairro:b.bairro };
+      st.className = 'status-frete ok';
+      st.textContent = b.bairro + ': entrega ' + (b.taxa>0?brl(b.taxa):'grátis') + (frete.minutos?' · cerca de '+frete.minutos+' min':'') + (frete.minimo>0?' · pedido mínimo '+brl(frete.minimo):'');
+    } else {
+      st.className = 'status-frete ruim';
+      st.textContent = b.bairro + ': a taxa de entrega é combinada pelo WhatsApp.';
+    }
+  }
+  atualizarResumo();
+}
+$('bairroSel').addEventListener('change', function(){ aplicarBairro(); salvarCliente(); });
+$('cep').addEventListener('input', function(ev){
+  var v = ev.target.value.replace(/\D/g,'').slice(0,8);
+  ev.target.value = v.length>5 ? v.slice(0,5)+'-'+v.slice(5) : v;
+  if(v.length===8) buscarCep(v);
+});
+function buscarCep(cep){
+  var st = $('statusFrete'); st.className = 'status-frete'; st.textContent = 'Procurando seu endereço...';
+  fetch('https://viacep.com.br/ws/'+cep+'/json/').then(function(r){ return r.json(); }).then(function(d){
+    if(d.erro){ st.className='status-frete ruim'; st.textContent = 'CEP não encontrado. Confira os números ou escolha o bairro na lista.'; return; }
+    if(d.logradouro) $('rua').value = d.logradouro;
+    var b = norm(d.bairro||''), idx = -1;
+    DADOS.entrega.forEach(function(x,i){ if(idx<0 && b && (norm(x.bairro)===b || norm(semParenteses(x.bairro))===b)) idx = i; });
+    if(idx>=0) $('bairroSel').value = String(idx);
+    else if(d.bairro){ $('bairroSel').value = 'outro'; $('bairroOutro').value = d.bairro; }
+    else { $('bairroSel').value = ''; }
+    aplicarBairro(); salvarCliente();
+    if(!d.bairro && idx<0){ st.className='status-frete'; st.textContent = 'Esse CEP não informa o bairro. Escolha o seu bairro na lista.'; }
+    $('numero').focus();
+  }).catch(function(){ st.className='status-frete ruim'; st.textContent = 'Não consegui consultar o CEP agora. Escolha o bairro na lista e preencha a rua.'; });
+}
+
+/* ================= DADOS DO CLIENTE (ficam só no aparelho) ================= */
+var CAMPOS = ['nome','tel','cep','rua','numero','comp','bairroOutro'];
+function salvarCliente(){
+  var o = { modo:modo(), pag:document.querySelector('input[name=pag]:checked').value, bairro:bairroDigitado(), bairroSel:$('bairroSel').value };
+  CAMPOS.forEach(function(k){ o[k] = $(k).value; });
+  LS.set(CHAVE_DADOS, o);
+}
+CAMPOS.concat(['obs']).forEach(function(k){ $(k).addEventListener('change', salvarCliente); });
+$('bairroOutro').addEventListener('input', atualizarResumo);
+document.querySelectorAll('input[name=pag]').forEach(function(r){ r.addEventListener('change', function(){ salvarCliente(); atualizarResumo(); }); });
+function restaurar(){
+  carrinho = revalidar(LS.get(CHAVE_CARRINHO));
+  var o = LS.get(CHAVE_DADOS);
+  if(o){
+    CAMPOS.forEach(function(k){ if(typeof o[k]==='string') $(k).value = o[k]; });
+    if(o.modo==='entrega') $('modoEntrega').checked = true;
+    var p = document.querySelector('input[name=pag][value="'+String(o.pag||'').replace(/"/g,'')+'"]'); if(p) p.checked = true;
+    // Bairro é procurado pelo nome, porque a lista pode ter mudado.
+    var idx = -1; DADOS.entrega.forEach(function(x,i){ if(idx<0 && o.bairro && norm(x.bairro)===norm(o.bairro)) idx = i; });
+    if(idx>=0) $('bairroSel').value = String(idx); else if(o.bairroSel==='outro') $('bairroSel').value = 'outro';
+  }
+  trocarModo(); aplicarBairro(); desenharCarrinho();
+}
+
+/* ================= RESUMO ================= */
+function atualizarResumo(){
+  var sub = subtotal(), e = modo()==='entrega', ent = (e && frete.ok) ? frete.taxa : 0;
+  $('vItens').textContent = brl(sub);
+  $('vEntrega').textContent = !e ? 'Retirada grátis' : (frete.ok ? (ent>0?brl(ent):'Grátis') : 'A combinar');
+  var pct = DADOS && +DADOS.taxa_cartao > 0 ? +DADOS.taxa_cartao : 0;
+  var pagSel = document.querySelector('input[name=pag]:checked');
+  var tc = (pct > 0 && pagSel && pagSel.value === 'Cartão online' && !(e && !frete.ok)) ? Math.round((sub+ent)*pct)/100 : 0;
+  var pctTxt = String(pct).replace('.', ',') + '%';
+  $('linCartao').hidden = !(tc > 0);
+  if(tc > 0){ $('rotCartao').textContent = 'Taxa do cartão (' + pctTxt + ')'; $('vCartao').textContent = brl(tc); }
+  $('smallOnline').textContent = pct > 0 ? 'Pague online pelo Mercado Pago · taxa de ' + pctTxt : 'Pague online pelo Mercado Pago';
+  $('vTotal').textContent = brl(sub+ent+tc) + (e && !frete.ok ? ' + entrega' : '');
+  $('notaResumo').textContent = (e && !frete.ok) ? 'A taxa de entrega será confirmada no WhatsApp.' : (e && frete.minutos ? 'Entrega em cerca de ' + frete.minutos + ' min depois da confirmação.' : '');
+  var erro = (carrinho.length && e && frete.ok && frete.minimo>sub) ? 'Pedido mínimo para ' + frete.bairro + ': ' + brl(frete.minimo) + '.' : '';
+  $('erroPedido').textContent = erro;
+  $('btnEnviar').disabled = !carrinho.length || !!erro;
+  var q = qtdTotal();
+  $('contaCarrinho').textContent = q;
+  var mostrarBarra = q>0 && !naFinalizar();
+  $('barraFixa').classList.toggle('on', mostrarBarra); document.body.classList.toggle('com-barra', mostrarBarra);
+  $('barraQtd').textContent = q; $('barraTotal').textContent = brl(sub+ent);
+}
+
+/* ================= FINALIZAR PEDIDO ================= */
+function telDigitos(){ return $('tel').value.replace(/\D/g,''); }
+$('tel').addEventListener('input', function(ev){
+  var v = ev.target.value.replace(/\D/g,'').replace(/^55(?=\d{10,11}$)/,'').slice(0,11);
+  ev.target.value = v.length>6 ? '('+v.slice(0,2)+') '+v.slice(2, v.length-4)+'-'+v.slice(-4) : v.length>2 ? '('+v.slice(0,2)+') '+v.slice(2) : v;
+});
+// Mensagem pronta para o WhatsApp (botão opcional da confirmação e plano B se o site falhar).
+function mensagemZap(res){
+  var e = modo()==='entrega', bairro = bairroDigitado(), pag = document.querySelector('input[name=pag]:checked').value;
+  var sub = res ? res.subtotal : subtotal(), taxa = res ? res.taxa : ((e && frete.ok) ? frete.taxa : 0), comb = res ? res.a_combinar : (e && !frete.ok);
+  var linhas = ['*Pedido Divinus Gelatto*' + (res ? ' (' + res.codigo + ')' : ''), 'Nome: ' + $('nome').value.trim(), ''];
+  (res && res.itens ? res.itens : carrinho).forEach(function(it){
+    linhas.push(it.qtd + 'x ' + it.nome + ' (' + brl(it.unit*it.qtd) + ')');
+    if(it.inclusos.length) linhas.push('   Complementos: ' + it.inclusos.join(', '));
+    if(it.extras.length) linhas.push('   Adicionais: ' + it.extras.join(', '));
+  });
+  linhas.push('', 'Itens: ' + brl(sub));
+  if(e){
+    linhas.push('Entrega: ' + (comb ? 'a combinar' : (taxa>0 ? brl(taxa) : 'grátis')));
+    linhas.push('Total: ' + brl(sub+taxa) + (comb ? ' + entrega' : ''));
+    linhas.push('', 'Endereço: ' + $('rua').value.trim() + ', ' + $('numero').value.trim() + ' - ' + bairro + ($('cep').value ? ' - CEP ' + $('cep').value : ''));
+    if($('comp').value.trim()) linhas.push('Referência: ' + $('comp').value.trim());
+  } else {
+    linhas.push('Retirada no trailer', 'Total: ' + brl(sub));
+  }
+  linhas.push('Pagamento: ' + pag);
+  if($('obs').value.trim()) linhas.push('', 'Obs: ' + $('obs').value.trim());
+  return linhas.join('\n');
+}
+function cabecalhosApi(){
+  var h = { 'apikey':CONFIG.SUPABASE_ANON_KEY, 'Content-Type':'application/json' };
+  if(!/^sb_/.test(CONFIG.SUPABASE_ANON_KEY)) h.Authorization = 'Bearer ' + CONFIG.SUPABASE_ANON_KEY;
+  return h;
+}
+function chamarApi(funcao, corpo){
+  return fetch(CONFIG.SUPABASE_URL.replace(/\/+$/,'') + '/rest/v1/rpc/' + funcao, {
+    method:'POST',
+    headers: cabecalhosApi(),
+    body: JSON.stringify(corpo || {})
+  }).then(function(r){
+    return r.json().catch(function(){ return null; }).then(function(d){
+      if(r.ok) return d;
+      // Mensagens de regra (pedido mínimo, item esgotado...) vêm do banco já em português.
+      var err = new Error(d && d.code==='P0001' && d.message ? d.message : 'falha');
+      err.regra = !!(d && d.code==='P0001');
+      throw err;
+    });
+  });
+}
+$('btnEnviar').addEventListener('click', function(){
+  var nome = $('nome').value.trim(), e = modo()==='entrega', erros = [], bairro = bairroDigitado();
+  $('zapAlternativo').hidden = true;
+  if(!nome) erros.push('Informe seu nome.');
+  if(telDigitos().length < 10) erros.push('Informe seu WhatsApp com DDD.');
+  if(e){
+    if(!$('rua').value.trim() || !$('numero').value.trim()) erros.push('Informe rua e número.');
+    if(!bairro) erros.push('Informe o bairro.');
+  }
+  if(erros.length){ $('erroPedido').textContent = erros.join(' '); return; }
+  salvarCliente();
+  var pag = document.querySelector('input[name=pag]:checked').value, origem = SS.get('divinus_origem') || '';
+  var itensEnviados = carrinho.map(function(it){ return { id:it.id, nome:it.nome, qtd:it.qtd, inclusos:it.inclusos, extras:it.extras, unit:it.unit }; });
+  var payload = {
+    nome:nome, telefone:telDigitos(), modo:modo(), pagamento:pag,
+    cep:e ? $('cep').value : '', rua:e ? $('rua').value.trim() : '', numero:e ? $('numero').value.trim() : '', bairro:e ? bairro : '',
+    complemento:e ? $('comp').value.trim() : '', obs:$('obs').value.trim(), origem:origem, fora_horario:!aberto,
+    itens: itensEnviados.map(function(it){ return { id:it.id, qtd:it.qtd, inclusos:it.inclusos, extras:it.extras }; })
+  };
+  var btn = $('btnEnviar'); btn.disabled = true; btn.textContent = 'Enviando pedido...'; $('erroPedido').textContent = '';
+
+  var envio = previa
+    ? new Promise(function(ok){ setTimeout(function(){
+        var t = (e && frete.ok) ? frete.taxa : 0, cod = 'DG' + Math.random().toString(36).slice(2,7).toUpperCase(), comb = e && !frete.ok;
+        ok({ codigo:cod, status:'novo', modo:modo(), pagamento:pag, pagamento_status: pag==='Cartão na maquininha' ? 'no_trailer' : 'aguardando',
+             subtotal:subtotal(), taxa:t, total:subtotal()+t+((pag==='Cartão online' && DADOS && +DADOS.taxa_cartao>0 && !comb) ? Math.round((subtotal()+t)*(+DADOS.taxa_cartao))/100 : 0), a_combinar:comb, fora_horario:!aberto,
+             pix_copia_cola: pag==='Pix' && !comb ? 'PREVIA-EXEMPLO-SEM-VALOR-' + cod : null, teste:true });
+      }, 600); })
+    : chamarApi('criar_pedido', { p:payload });
+
+  envio.then(function(res){ return pixMercadoPago(res, pag, payload.telefone); }).then(function(res){
+    evento('enviar_pedido', {value:res.total, currency:'BRL', itens:qtdTotal(), modo:modo(), pagamento:pag, origem:origem||'direto'});
+    if(!res.teste) LS.set(CHAVE_ULTIMO, { codigo:res.codigo, tel:telDigitos(), t:Date.now() });
+    desenharAcompanhamento(res);
+    abrirConfirmacao();
+    carrinho = []; desenharCarrinho();
+    $('obs').value = '';
+  }).catch(function(err){
+    $('erroPedido').textContent = err.regra ? err.message : 'Não conseguimos registrar seu pedido agora. Tente de novo ou envie pelo WhatsApp.';
+    if(!err.regra){ $('zapAlternativo').href = linkZap(mensagemZap(null)); $('zapAlternativo').hidden = false; }
+    evento('erro_pedido', {regra:!!err.regra});
+  }).then(function(){
+    // Não chama atualizarResumo aqui: ele limparia a mensagem de erro que acabou de aparecer.
+    btn.textContent = 'Finalizar pedido'; btn.disabled = !carrinho.length;
+  });
+});
+/* ================= MERCADO PAGO: PIX COM CÓDIGO E QR CODE ================= */
+// Com o Mercado Pago ligado (painel > Configurações), o Pix sai do Mercado Pago com o valor e o número do pedido.
+// Se falhar, o cliente continua com o Pix gerado pela chave do dono: o pedido nunca trava.
+function pixMercadoPago(res, pag, tel){
+  if(previa || pag !== 'Pix' || res.a_combinar || !(DADOS && DADOS.mp)) return Promise.resolve(res);
+  var ac = ('AbortController' in window) ? new AbortController() : null;
+  var t = setTimeout(function(){ if(ac) ac.abort(); }, 9000);
+  return fetch(CONFIG.SUPABASE_URL.replace(/\/+$/, '') + '/functions/v1/pagamento', {
+    method:'POST', headers: cabecalhosApi(), body: JSON.stringify({ acao:'pix', codigo:res.codigo, telefone:tel }), signal: ac ? ac.signal : undefined
+  }).then(function(r){ return r.json().then(function(d){ if(!r.ok || !d.qr_code) throw new Error('mp'); return d; }); })
+    .then(function(d){ clearTimeout(t); res.pix_copia_cola = d.qr_code; res.mp = true; return res; })
+    .catch(function(){ clearTimeout(t); evento('erro_pix_mp'); return res; });
+}
+
+/* ================= CONFIRMAÇÃO, PAGAMENTO E ACOMPANHAMENTO ================= */
+var CHAVE_ULTIMO = 'divinus_ultimo_pedido', acomp = null, acompTimer = null;
+function carregarScript(src){
+  return new Promise(function(ok, falha){
+    if(document.querySelector('script[src="'+src+'"]')) return ok();
+    var s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = falha; document.head.appendChild(s);
+  });
+}
+function qrSvg(texto){
+  return carregarScript('https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js').then(function(){
+    var q = qrcode(0, 'M'); q.addData(texto); q.make();
+    return q.createSvgTag({cellSize:4, margin:2, scalable:true});
+  });
+}
+function textoStatus(i){
+  if(i.status==='cancelado') return { cls:'cancelado', txt:'Pedido cancelado. Fale com a gente no WhatsApp.' };
+  if(i.status==='concluido') return { cls:'ok', txt: i.modo==='entrega' ? 'Pedido entregue. Obrigado!' : 'Pedido retirado. Obrigado!' };
+  if(i.status==='pronto') return { cls:'ok', txt: i.modo==='entrega' ? 'Saiu para entrega!' : 'Pronto para retirar no trailer!' };
+  if(i.status==='confirmado') return { cls:'ok', txt: i.pagamento_status==='pago' ? 'Pagamento confirmado! Pedido em preparo.' : 'Pedido confirmado! Em preparo.' };
+  if(i.pagamento_status==='aguardando') return { cls:'espera', txt:'Aguardando pagamento' };
+  return { cls:'espera', txt:'Recebido. Aguardando confirmação do trailer.' };
+}
+function desenharAcompanhamento(i){
+  acomp = i;
+  var st = textoStatus(i), pend = i.pagamento_status==='aguardando' && i.status!=='cancelado';
+  $('confTitulo').textContent = i.teste ? 'Pedido de teste' : 'Pedido recebido!';
+  $('confCodigo').textContent = i.codigo;
+  $('confTotal').textContent = brl(i.total) + (i.a_combinar ? ' + entrega' : '') + ' · ' + (i.modo==='entrega' ? 'Entrega' : 'Retirada no trailer');
+  $('confStatus').className = 'conf-status ' + st.cls;
+  $('confStatus').textContent = st.txt;
+  $('confPrevia').hidden = !i.teste;
+
+  // Bloco de pagamento: só enquanto o dono não confirmou que o valor caiu.
+  var box = $('confPag');
+  box.hidden = !pend;
+  $('confPix').hidden = true; $('confCartao').hidden = true; $('confPagTexto').textContent = '';
+  if(pend && i.pagamento==='Pix' && i.pix_copia_cola){
+    $('confPix').hidden = false;
+    $('confPixValor').textContent = brl(i.total);
+    $('pixCodigo').value = i.pix_copia_cola;
+    if($('pixQr').getAttribute('data-para') !== i.pix_copia_cola){
+      $('pixQr').setAttribute('data-para', i.pix_copia_cola);
+      $('pixQr').innerHTML = '<span class="ajuda">Gerando QR Code...</span>';
+      qrSvg(i.pix_copia_cola).then(function(svg){ $('pixQr').innerHTML = svg; })
+        .catch(function(){ $('pixQr').innerHTML = '<span class="ajuda">Use o código abaixo no app do banco.</span>'; });
+    }
+  } else if(pend && i.pagamento==='Pix'){
+    $('confPagTexto').textContent = i.a_combinar
+      ? 'Assim que combinarmos a taxa de entrega, mandamos o valor final e a chave Pix no WhatsApp.'
+      : 'Vamos te mandar a chave Pix no WhatsApp.';
+  } else if(pend && i.pagamento==='Cartão online'){
+    if(i.a_combinar) $('confPagTexto').textContent = 'Assim que combinarmos a taxa de entrega, mandamos o link do cartão no WhatsApp.';
+    else if(DADOS && DADOS.mp){ $('confCartao').hidden = false; $('confCartaoValor').textContent = brl(i.total); }
+    else $('confPagTexto').textContent = 'Vamos te mandar o link do cartão no WhatsApp.';
+  }
+
+  var passos = [];
+  if(pend) passos.push('O pedido é confirmado assim que o pagamento cair na nossa conta. Esta tela atualiza sozinha.');
+  if(i.pagamento==='Cartão na maquininha' && i.status!=='cancelado') passos.push('Pague com cartão na maquininha, na retirada.');
+  if(i.a_combinar) passos.push('A taxa de entrega será combinada pelo WhatsApp.');
+  if(i.status!=='cancelado' && i.status!=='concluido') passos.push(i.modo==='entrega' ? 'Avisamos quando o pedido sair para entrega.' : 'Avisamos quando estiver pronto para retirar.');
+  if(i.fora_horario && (i.status==='novo')) passos.push('Seu pedido chegou fora do horário. Confirmamos assim que abrirmos.');
+  $('confPassos').innerHTML = passos.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('');
+  $('confPassos').hidden = !passos.length;
+  $('confZap').href = linkZap('Olá! Sobre o meu pedido ' + i.codigo + ' (' + brl(i.total) + ').' + (pend && i.pagamento==='Pix' ? ' Segue o comprovante do Pix.' : ''));
+  atualizarFaixaPedido();
+}
+function abrirConfirmacao(){
+  var d = $('dlgConfirma');
+  if(!d.open){ if(d.showModal) d.showModal(); else d.setAttribute('open',''); }
+  vigiarPedido();
+}
+function fecharConfirmacao(){
+  var d = $('dlgConfirma'); if(d.close) d.close(); else d.removeAttribute('open');
+  clearInterval(acompTimer); acompTimer = null;
+}
+function finalizado(i){ return i.status==='concluido' || i.status==='cancelado'; }
+// Enquanto a tela está aberta, pergunta ao banco a cada 8 s se o dono já confirmou.
+function vigiarPedido(){
+  clearInterval(acompTimer);
+  if(!acomp || acomp.teste || previa || finalizado(acomp)) return;
+  acompTimer = setInterval(function(){
+    if(!$('dlgConfirma').open){ clearInterval(acompTimer); return; }
+    consultarPedido();
+  }, 8000);
+}
+function consultarPedido(){
+  var u = LS.get(CHAVE_ULTIMO); if(!u || previa) return Promise.resolve(null);
+  return chamarApi('acompanhar_pedido', { p_codigo:u.codigo, p_telefone:u.tel }).then(function(i){
+    if(!i){ LS.set(CHAVE_ULTIMO, null); atualizarFaixaPedido(); return null; }
+    var antes = acomp && acomp.pagamento_status;
+    desenharAcompanhamento(i);
+    if(antes==='aguardando' && i.pagamento_status==='pago') evento('pagamento_confirmado', {value:i.total, currency:'BRL'});
+    if(finalizado(i)) clearInterval(acompTimer);
+    return i;
+  }).catch(function(){ return null; });
+}
+// Faixa "Acompanhar pedido" no topo, para quem fechou a tela ou voltou depois.
+function atualizarFaixaPedido(){
+  var f = $('faixaPedido'), u = LS.get(CHAVE_ULTIMO);
+  if(!acomp || !u || acomp.codigo!==u.codigo || finalizado(acomp)){ f.hidden = true; return; }
+  f.hidden = false;
+  $('faixaPedidoTexto').textContent = 'Pedido ' + acomp.codigo + ': ' + textoStatus(acomp).txt;
+}
+$('faixaPedido').addEventListener('click', function(){ if(acomp){ abrirConfirmacao(); consultarPedido(); } });
+$('confFechar').addEventListener('click', function(){ fecharConfirmacao(); if(naFinalizar()) location.hash = ''; else window.scrollTo({top:0, behavior:'smooth'}); });
+$('dlgConfirma').addEventListener('close', function(){ clearInterval(acompTimer); });
+$('confZap').addEventListener('click', function(){ evento('clique_whatsapp', {local:'confirmacao'}); });
+$('btnCopiarPix').addEventListener('click', function(){
+  var t = $('pixCodigo'), b = $('btnCopiarPix');
+  var feito = function(){ b.textContent = 'Código copiado!'; setTimeout(function(){ b.textContent = 'Copiar código Pix'; }, 2500); };
+  if(navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t.value).then(feito, function(){ t.select(); document.execCommand('copy'); feito(); });
+  else { t.select(); document.execCommand('copy'); feito(); }
+  evento('copiar_pix', {value:acomp && acomp.total, currency:'BRL'});
+});
+$('btnPagarCartao').addEventListener('click', function(){
+  if(!acomp) return;
+  var b = $('btnPagarCartao'), u = LS.get(CHAVE_ULTIMO) || {};
+  if(acomp.teste){ $('confCartaoErro').textContent = 'Prévia: aqui abriria o pagamento do Mercado Pago.'; return; }
+  if(acomp.link_pagamento){ window.open(acomp.link_pagamento, '_blank', 'noopener'); return; }
+  // A janela abre já no clique (senão o navegador bloqueia) e recebe o endereço quando ele chegar.
+  var janela = window.open('', '_blank');
+  b.disabled = true; b.textContent = 'Abrindo pagamento...'; $('confCartaoErro').textContent = '';
+  fetch(CONFIG.SUPABASE_URL.replace(/\/+$/,'') + '/functions/v1/pagamento', {
+    method:'POST', headers: cabecalhosApi(), body: JSON.stringify({ acao:'cartao', codigo:acomp.codigo, telefone:u.tel })
+  }).then(function(r){ return r.json().then(function(d){ if(!r.ok || !d.url) throw new Error(d && d.erro || 'falha'); return d.url; }); })
+    .then(function(url){
+      acomp.link_pagamento = url;
+      if(janela) janela.location.href = url; else window.location.href = url;
+      evento('abrir_pagamento_cartao', {value:acomp.total, currency:'BRL'});
+    })
+    .catch(function(e){
+      if(janela) janela.close();
+      $('confCartaoErro').textContent = (e.message && e.message!=='falha' ? e.message : 'Não conseguimos abrir o pagamento agora.') + ' Mandamos o link pelo WhatsApp.';
+    })
+    .then(function(){ b.disabled = false; b.textContent = 'Pagar com cartão'; });
+});
+// Ao abrir o site: retoma o último pedido (ex.: voltou do Mercado Pago ou fechou a aba).
+function retomarPedido(){
+  var u = LS.get(CHAVE_ULTIMO);
+  if(!u || !u.codigo || previa) return;
+  if(Date.now() - (u.t||0) > 3*24*60*60*1000){ LS.set(CHAVE_ULTIMO, null); return; }
+  consultarPedido().then(function(i){
+    if(i && new URLSearchParams(location.search).get('pedido')===i.codigo) abrirConfirmacao();
+  });
+}
+
+/* ================= SÓ NO TRAILER ================= */
+function desenharTrailer(){
+  var cats = {}, ordem = [];
+  DADOS.produtos.forEach(function(p){
+    if(p.online || !(p.preco>0) || p.disponivel===false) return;
+    if(!cats[p.categoria]){ cats[p.categoria]=[]; ordem.push(p.categoria); }
+    cats[p.categoria].push(p);
+  });
+  var box = $('catsTrailer'); box.innerHTML = '';
+  $('trailer').hidden = !ordem.length;
+  ordem.forEach(function(c){
+    box.appendChild(el('div',{class:'cat'}, '<span class="cat-tag">Só no trailer</span><h3>'+esc(c)+'</h3><ul>' + cats[c].map(function(p){ return '<li><span>'+esc(p.nome)+'</span><span>'+brl(p.preco)+'</span></li>' + saboresItem(p.nome); }).join('') + '</ul>' + saboresTrailer(c)));
+  });
+}
+function saboresItem(nome){
+  var l = (CONFIG.SABORES_ITEM || {})[nome];
+  if(!l || !l.length) return '';
+  return '<li class="li-sabores"><small>Sabores:</small><div class="chips">' + l.map(function(n){ return '<span class="chip">'+esc(n)+'</span>'; }).join('') + '</div></li>';
+}
+function saboresTrailer(cat){
+  var l = (CONFIG.SABORES_TRAILER || {})[cat];
+  if(!l || !l.length) return '';
+  return '<div class="sabores-trailer"><b>Sabores</b><div class="chips">' + l.map(function(n){ return '<span class="chip">'+esc(n)+'</span>'; }).join('') + '</div></div>';
+}
+
+/* ================= FOTOS DO TOPO ================= */
+// Foto sem arquivo: na prévia aparece o espaço reservado; no site publicado o espaço some.
+var ICONE_CAMERA = '<svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M4 7h3l2-2.5h6L17 7h3v12H4z"/><circle cx="12" cy="13" r="3.6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+function iniciarGaleria(){
+  var itens = [{ fig:$('fotoTrailer'), src:CONFIG.FOTO_TRAILER, alt:'Trailer da Divinus Gelatto no Parque Mataruna, Araruama', rotulo:'Foto do trailer', principal:true }]
+    .concat((CONFIG.FOTOS_PRODUTOS || []).slice(0,3).map(function(p, i){
+      var fig = el('figure', {class:'foto'}); $('fotosProdutos').appendChild(fig);
+      return { fig:fig, src:p.arquivo, alt:p.descricao || 'Açaí da Divinus Gelatto', rotulo:'Foto do produto ' + (i+1) };
+    }));
+  var faltam = itens.length;
+  function terminou(){
+    if(--faltam) return;
+    $('fotosProdutos').hidden = itens.slice(1).every(function(x){ return x.fig.hidden; });
+    $('galeria').hidden = itens.every(function(x){ return x.fig.hidden; });
+  }
+  itens.forEach(function(it){
+    var src = fotoUrl(it.src) || (/^img\//.test(String(it.src||'')) ? it.src : '');
+    it.fig.innerHTML = '<img alt="' + esc(it.alt) + '" decoding="async"' + (it.principal ? ' fetchpriority="high"' : ' loading="lazy"') + '>'
+      + '<figcaption class="foto-vazia" hidden>' + ICONE_CAMERA + '<span>' + esc(it.rotulo) + '</span><small>Salve como <b>' + esc(it.src || '') + '</b></small></figcaption>';
+    var img = it.fig.querySelector('img');
+    var falha = function(){ img.hidden = true; if(previa) it.fig.querySelector('.foto-vazia').hidden = false; else it.fig.hidden = true; terminou(); };
+    if(!src){ falha(); return; }
+    img.addEventListener('load', function(){
+      it.fig.classList.add('ok'); img.tabIndex = 0; img.setAttribute('role','button'); img.setAttribute('aria-label', 'Ampliar foto: ' + it.alt);
+      terminou();
+    }, {once:true});
+    img.addEventListener('error', falha, {once:true});
+    img.src = src;
+  });
+}
+function ampliar(img){
+  $('fotoZoom').src = img.currentSrc || img.src; $('fotoZoom').alt = img.alt;
+  var d = $('dlgFoto'); if(d.showModal) d.showModal(); else d.setAttribute('open','');
+  evento('ver_foto', {foto: img.alt});
+}
+$('galeria').addEventListener('click', function(ev){ var i = ev.target.closest('.foto.ok img'); if(i) ampliar(i); });
+$('galeria').addEventListener('keydown', function(ev){ var i = ev.target.closest('.foto.ok img'); if(i && (ev.key==='Enter' || ev.key===' ')){ ev.preventDefault(); ampliar(i); } });
+$('dlgFoto').addEventListener('click', function(){ var d = $('dlgFoto'); if(d.close) d.close(); else d.removeAttribute('open'); });
+
+/* ================= ACESSO ESCONDIDO AO PAINEL ================= */
+// 3 toques seguidos no logo (dentro de 3 s) abrem o painel. Quem entra ainda precisa do login.
+(function(){
+  var toques = 0, t0 = 0, logo = document.querySelector('.marca');
+  if(!logo) return;
+  logo.addEventListener('click', function(ev){
+    var agora = Date.now();
+    if(agora - t0 > 3000) toques = 0;
+    if(toques === 0) t0 = agora;
+    toques++;
+    if(toques >= 3){ ev.preventDefault(); toques = 0; location.href = 'painel.html'; }
+  });
+})();
+
+iniciarZap();
+rota();
+carregar();
+iniciarGaleria();
+</script>
+</body>
+</html>

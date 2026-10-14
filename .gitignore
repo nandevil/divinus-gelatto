@@ -1,0 +1,6 @@
+# capturas de tela e dados financeiros internos não vão para o repositório
+prints/
+financeiro/
+*.zip
+.DS_Store
+Thumbs.db
