@@ -527,7 +527,7 @@ create table if not exists public.vendas_plataforma (
 );
 alter table public.vendas_plataforma enable row level security;
 drop policy if exists admin_all on public.vendas_plataforma;
-create policy admin_all on public.vendas_plataforma for all using (public.is_admin()) with check (public.is_admin());
+create policy admin_all on public.vendas_plataforma for all to authenticated using (public.is_admin()) with check (public.is_admin());
 -- cardapio() também devolve 'mp' (config.mp_ativo) — a versão atual está no banco ao vivo.
 -- Conferir os nomes exatos das colunas de vendas_plataforma no banco antes de reaproveitar.
 

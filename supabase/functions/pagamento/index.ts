@@ -19,17 +19,28 @@
 
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+// Só o site da Divinus (e testes locais) pode chamar esta função pelo navegador.
+function origensPermitidas(): string[] {
+  const site = (Deno.env.get("SITE_URL") || "").replace(/\/+$/, "");
+  return [site, "http://localhost:8095", "http://127.0.0.1:8095"].filter(Boolean);
+}
+let CORS: Record<string, string> = {};
+function definirCors(req: Request) {
+  const origem = req.headers.get("origin") || "";
+  CORS = {
+    "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Vary": "Origin",
+  };
+  if (origem && origensPermitidas().includes(origem)) CORS["Access-Control-Allow-Origin"] = origem;
+}
 
 function resposta(corpo: unknown, status = 200) {
   return new Response(JSON.stringify(corpo), { status, headers: { ...CORS, "Content-Type": "application/json" } });
 }
 
 Deno.serve(async (req) => {
+  definirCors(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return resposta({ erro: "Método não permitido." }, 405);
 
@@ -38,7 +49,9 @@ Deno.serve(async (req) => {
 
   let acao = "", codigo = "", telefone = "";
   try {
-    const corpo = await req.json();
+    const bruto = await req.text();
+    if (bruto.length > 2000) return resposta({ erro: "Pedido inválido." }, 400);
+    const corpo = JSON.parse(bruto);
     acao = String(corpo.acao || "cartao").trim();
     codigo = String(corpo.codigo || "").trim().toUpperCase();
     telefone = String(corpo.telefone || "").replace(/\D/g, "");
