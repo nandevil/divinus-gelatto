@@ -921,6 +921,11 @@ function prepararPassos(){
 // Complementos e adicionais do COPO: só aparecem depois que o cliente escolhe o tamanho do copo.
 // Foto pequena do pote ao lado de cada creme (arquivos em img/cremes/).
 var FOTOS_CREME = { 'ovomaltine':'ovomaltine', 'pacoquinha':'pacoquinha', 'prestigio':'prestigio', 'galak com negresco':'galak-negresco', 'ninho':'ninho', 'kitkat':'kitkat', 'nutella':'nutella' };
+var FOTOS_INCLUSOS = { 'ovomaltine granulado':'ovomaltine-granulado', 'farofa de amendoim':'farofa-amendoim', 'delicado':'delicado', 'm&m':'mm', 'jujuba':'jujuba', 'amendoim granulado':'amendoim-granulado', 'granola':'granola', 'leite em po':'leite-em-po', 'chocobool':'chocobool' };
+function fotoIncluso(nome){
+  var f = FOTOS_INCLUSOS[norm(nome)];
+  return f ? '<img class="foto-creme" src="img/complementos/' + f + '.jpg" alt="" width="56" height="68" loading="lazy">' : '';
+}
 function fotoCreme(nome){
   var k = norm(String(nome).replace(/^creme de[ ]+/i, '')), f = FOTOS_CREME[k];
   return f ? '<img class="foto-creme" src="img/cremes/' + f + '.jpg" alt="" width="56" height="68" loading="lazy">' : '';
@@ -936,7 +941,7 @@ function desenharCopoPassos(p){
   var g = $('gradeInclusos'); g.innerHTML = '';
   inc.forEach(function(c,i){
     var d = el('div',{class:'opc'}), cid='inc_'+i;
-    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"><label for="'+cid+'"><b>'+esc(c.nome)+'</b></label>';
+    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"><label for="'+cid+'">'+fotoIncluso(c.nome)+'<b>'+esc(c.nome)+'</b></label>';
     g.appendChild(d);
     d.querySelector('input').addEventListener('change', function(ev){ alternar(mCopo.inclusos, c.nome, ev.target.checked, limite, ev.target); });
   });
