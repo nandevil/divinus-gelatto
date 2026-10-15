@@ -877,18 +877,20 @@ function categoriaPadrao(){
   return { categoria: c ? c.categoria : '' };
 }
 // Os passos 2 e 3 só somem se não houver nenhuma opção no cardápio inteiro (decidido uma vez, ao carregar).
-var TEM_INC = true;
+var TEM_INC = true, TEM_EXT = true;
 function prepararPassos(){
   var temInc = DADOS.complementos.some(function(c){ return c.grupo==='incluso'; }) && DADOS.inclusos>0;
   var temExt = DADOS.complementos.some(function(c){ return c.grupo==='opcional' && c.preco>0; });
-  TEM_INC = temInc;
+  TEM_INC = temInc; TEM_EXT = temExt;
   $('passoInclusos').hidden = !temInc;
   $('passoExtras').hidden = !temExt;
   desenharComplementos(null);
 }
 function desenharComplementos(p){
   var garrafa = !!(p && /garrafa/i.test(p.categoria));
-  $('passoInclusos').hidden = !TEM_INC || garrafa;
+  // Complementos e adicionais só aparecem depois que o cliente escolhe o tamanho (copo ou garrafa).
+  $('passoInclusos').hidden = !TEM_INC || garrafa || !p;
+  $('passoExtras').hidden = !TEM_EXT || !p;
   // copo: 1 tamanho, 2 complementos, 3 adicional | garrafa: 1 adicional, 2 sabor
   $('numExtras').textContent = String((garrafa ? 0 : 1) + ($('passoInclusos').hidden ? 0 : 1) + 1);
   var base = p || categoriaPadrao(), ativo = !!p;
