@@ -663,6 +663,7 @@ function cartao(p){
   var itens = (p.itens||[]).map(function(i){
     var det = [];
     if(i.inclusos && i.inclusos.length) det.push('Complementos: ' + i.inclusos.join(', '));
+    if(i.caldas && i.caldas.length) det.push('Caldas: ' + i.caldas.join(', '));
     if(i.extras && i.extras.length) det.push('Adicionais: ' + i.extras.join(', '));
     return '<li><div class="lin"><span>' + esc(i.qtd + 'x ' + i.nome) + '</span><span>' + brl(i.total!=null ? i.total : i.unit*i.qtd) + '</span></div>' + (det.length ? '<small>' + esc(det.join(' · ')) + '</small>' : '') + '</li>';
   }).join('');
@@ -774,7 +775,7 @@ var TABELAS = {
     {c:'preco', r:'Preço', t:'num', l:80}, {c:'online', r:'Online', t:'bool'}, {c:'disponivel', r:'Disponível', t:'bool'},
     {c:'foto', r:'Foto (link)', t:'texto', l:150}, {c:'ordem', r:'Ordem', t:'num', l:60}, {c:'custo', r:'Custo', t:'num', l:80} ]},
   complementos: { novo:{nome:'',grupo:'opcional',preco:0,vale:'Açaí no copo',disponivel:true,ordem:0,custo:null}, cols:[
-    {c:'nome', r:'Nome', t:'texto', l:200}, {c:'grupo', r:'Grupo', t:'lista', ops:['incluso','opcional'], l:110},
+    {c:'nome', r:'Nome', t:'texto', l:200}, {c:'grupo', r:'Grupo', t:'lista', ops:['incluso','opcional','calda'], l:110},
     {c:'preco', r:'Preço', t:'num', l:80}, {c:'vale', r:'Vale para', t:'lista', ops:CATEGORIAS, l:150},
     {c:'disponivel', r:'Disponível', t:'bool'}, {c:'ordem', r:'Ordem', t:'num', l:60}, {c:'custo', r:'Custo', t:'num', l:80} ]},
   bairros: { novo:{bairro:'',distancia_km:null,taxa_fixa:null,minutos:20,minimo:0,atende:true,ordem:0}, cols:[

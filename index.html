@@ -442,6 +442,12 @@ body.com-barra{padding-bottom:64px}
         <div class="grade" id="gradeInclusos"></div>
       </div>
 
+      <div class="passo" id="passoCaldas">
+        <h3><span class="num" id="numCaldas">3</span>Escolha suas caldas</h3>
+        <p class="dica"><span id="dicaCaldas">Escolha o tamanho primeiro.</span> <span class="contador" id="contCaldas" aria-live="polite"></span></p>
+        <div class="grade" id="gradeCaldas"></div>
+      </div>
+
       <div class="passo" id="passoExtras">
         <h3><span class="num" id="numExtras">3</span>Quer um adicional?</h3>
         <p class="dica" id="dicaExtras">Cobrados à parte. Pode pular.</p>
@@ -735,7 +741,7 @@ function evento(nome, params){ try{ if(window.gtag) gtag('event', nome, params||
 var DADOS = null, previa = false, aberto = true;
 var carrinho = [];
 // Copo e garrafa podem ser montados ao mesmo tempo, na mesma tela.
-var mCopo = { produto:null, inclusos:[], extras:[], qtd:1 }, mGar = { produto:null, inclusos:[], extras:[], qtd:1 }, ultimo = 'copo';
+var mCopo = { produto:null, inclusos:[], caldas:[], extras:[], qtd:1 }, mGar = { produto:null, inclusos:[], caldas:[], extras:[], qtd:1 }, ultimo = 'copo';
 var frete = { ok:false, taxa:0, minutos:0, minimo:0, bairro:'' };
 var CHAVE_FEED = 'divinus_feed_v1', CHAVE_CARRINHO = 'divinus_carrinho_v1', CHAVE_DADOS = 'divinus_cliente_v1';
 
@@ -896,6 +902,7 @@ function complementosDe(prod, grupo){
     var v = norm(c.vale||''); return v==='' || v===cat;
   });
 }
+function limiteCaldas(prod){ return Math.min(LIM_CALDAS, complementosDe(prod,'calda').length); }
 function limiteInclusos(prod){ return Math.min(DADOS.inclusos, complementosDe(prod,'incluso').length); }
 // Antes de escolher o tamanho, os passos mostram as opções do copo, desativadas.
 function categoriaPadrao(){
@@ -903,14 +910,16 @@ function categoriaPadrao(){
   return { categoria: c ? c.categoria : '' };
 }
 // Os passos 2 e 3 só somem se não houver nenhuma opção no cardápio inteiro (decidido uma vez, ao carregar).
-var TEM_INC = true, TEM_EXT = true;
+var TEM_INC = true, TEM_EXT = true, TEM_CAL = false, LIM_CALDAS = 2;
 function prepararPassos(){
   var temInc = DADOS.complementos.some(function(c){ return c.grupo==='incluso'; }) && DADOS.inclusos>0;
   var temExt = DADOS.complementos.some(function(c){ return c.grupo==='opcional' && c.preco>0; });
   TEM_INC = temInc; TEM_EXT = temExt;
+  TEM_CAL = DADOS.complementos.some(function(c){ return c.grupo==='calda'; });
   // Ordem fixa: copo → (complementos, adicional do copo) → garrafa → (adicional, sabor da garrafa)
   $('passoCopo').after($('passoInclusos'));
-  $('passoInclusos').after($('passoExtras'));
+  $('passoInclusos').after($('passoCaldas'));
+  $('passoCaldas').after($('passoExtras'));
   $('passoExtras').after($('passoGarrafa'));
   $('passoGarrafa').after($('passoExtrasG'));
   $('passoExtrasG').after($('passoSabor'));
@@ -934,7 +943,19 @@ function desenharCopoPassos(p){
   var ativo = !!p;
   $('passoInclusos').hidden = !TEM_INC || !ativo;
   $('passoExtras').hidden = !TEM_EXT || !ativo;
-  $('numExtras').textContent = $('passoInclusos').hidden ? '2' : '3';
+  var garr = !!(p && /garrafa/i.test(p.categoria));
+  $('passoCaldas').hidden = !TEM_CAL || !ativo || garr;
+  $('numCaldas').textContent = $('passoInclusos').hidden ? '2' : '3';
+  $('numExtras').textContent = String(2 + ($('passoInclusos').hidden ? 0 : 1) + ($('passoCaldas').hidden ? 0 : 1));
+  var calG = $('gradeCaldas'); calG.innerHTML = '';
+  var calLim = ativo ? limiteCaldas(p) : 0;
+  $('dicaCaldas').textContent = calLim ? 'Até ' + calLim + ' caldas, grátis.' : 'Este tamanho não leva caldas.';
+  (ativo ? complementosDe(p,'calda') : []).forEach(function(c,i){
+    var d = el('div',{class:'opc'}), cid='cal_'+i;
+    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"><label for="'+cid+'"><b>'+esc(c.nome)+'</b></label>';
+    calG.appendChild(d);
+    d.querySelector('input').addEventListener('change', function(ev){ alternar(mCopo.caldas, c.nome, ev.target.checked, calLim, ev.target); });
+  });
   var inc = ativo ? complementosDe(p,'incluso') : [], ext = ativo ? complementosDe(p,'opcional') : [];
   var limite = ativo ? limiteInclusos(p) : 0;
   $('dicaInclusos').textContent = limite ? 'Até ' + limite + ' inclusos no preço.' : 'Este tamanho não leva complementos inclusos.';
@@ -985,17 +1006,17 @@ function desenharSabores(p){
 function escolherProduto(id){
   var p = produto(id);
   if(/garrafa/i.test(p.categoria)){
-    mGar = { produto:p, inclusos:[], extras:[], qtd:1 }; ultimo = 'garrafa';
+    mGar = { produto:p, inclusos:[], caldas:[], extras:[], qtd:1 }; ultimo = 'garrafa';
     desenharExtrasGarrafa(p); desenharSabores(p);
   } else {
-    mCopo = { produto:p, inclusos:[], extras:[], qtd:1 }; ultimo = 'copo';
+    mCopo = { produto:p, inclusos:[], caldas:[], extras:[], qtd:1 }; ultimo = 'copo';
     desenharCopoPassos(p);
   }
   evento('escolher_tamanho', {item_name:p.nome, value:p.preco, currency:'BRL'});
   atualizarMontagem();
 }
 function limparGarrafa(){
-  mGar = { produto:null, inclusos:[], extras:[], qtd:1 };
+  mGar = { produto:null, inclusos:[], caldas:[], extras:[], qtd:1 };
   desenharExtrasGarrafa(null); desenharSabores(null);
   if(ultimo === 'garrafa') ultimo = 'copo';
   atualizarMontagem();
@@ -1019,6 +1040,10 @@ function atualizarMontagem(){
     $('contInclusos').className = 'contador' + (m.inclusos.length===limite ? ' cheio' : '');
     document.querySelectorAll('#gradeInclusos input').forEach(function(i){ i.disabled = !i.checked && m.inclusos.length>=limite; });
   }
+  var limCal = mCopo.produto ? limiteCaldas(mCopo.produto) : 0;
+  $('contCaldas').textContent = limCal ? mCopo.caldas.length + ' de ' + limCal + ' escolhidas' : '';
+  $('contCaldas').className = 'contador' + (limCal && mCopo.caldas.length===limCal ? ' cheio' : '');
+  document.querySelectorAll('#gradeCaldas input').forEach(function(i){ i.disabled = !i.checked && limCal && mCopo.caldas.length>=limCal; });
   var total = (mCopo.produto ? precoDe(mCopo.produto, mCopo.extras) * mCopo.qtd : 0) + (mGar.produto ? precoDe(mGar.produto, mGar.extras) * mGar.qtd : 0);
   $('qtdCopoBox').hidden = !mCopo.produto; $('qCopoVal').textContent = mCopo.qtd;
   $('qtdGarBox').hidden = !mGar.produto; $('qGarVal').textContent = mGar.qtd;
@@ -1080,7 +1105,7 @@ function atualizarCopo(){
 }
 
 /* ================= CARRINHO ================= */
-function chave(it){ return it.id+'|'+it.inclusos.slice().sort().join(',')+'|'+it.extras.slice().sort().join(','); }
+function chave(it){ return it.id+'|'+it.inclusos.slice().sort().join(',')+'|'+(it.caldas||[]).slice().sort().join(',')+'|'+it.extras.slice().sort().join(','); }
 [['Copo', function(){ return mCopo; }], ['Gar', function(){ return mGar; }]].forEach(function(x){
   $('q'+x[0]+'Menos').addEventListener('click', function(){ var m = x[1](); if(m.qtd > 1){ m.qtd--; atualizarMontagem(); } });
   $('q'+x[0]+'Mais').addEventListener('click', function(){ var m = x[1](); if(m.qtd < 20){ m.qtd++; atualizarMontagem(); } });
@@ -1089,12 +1114,12 @@ $('btnAdd').addEventListener('click', function(){
   var feitos = [mCopo, mGar].filter(function(m){ return m.produto; });
   if(!feitos.length) return;
   feitos.forEach(function(m){
-    var it = { id:m.produto.id, nome:m.produto.nome, inclusos:m.inclusos.slice(), extras:m.extras.slice(), unit:precoDe(m.produto, m.extras), qtd:m.qtd || 1 };
+    var it = { id:m.produto.id, nome:m.produto.nome, inclusos:m.inclusos.slice(), caldas:m.caldas.slice(), extras:m.extras.slice(), unit:precoDe(m.produto, m.extras), qtd:m.qtd || 1 };
     var ja = carrinho.filter(function(x){ return chave(x)===chave(it); })[0];
     if(ja) ja.qtd = Math.min(20, ja.qtd + it.qtd); else carrinho.push(it);
     evento('adicionar_item', {item_name:it.nome, value:it.unit, currency:'BRL', complementos:it.inclusos.length, adicionais:it.extras.length});
   });
-  mCopo = { produto:null, inclusos:[], extras:[], qtd:1 }; mGar = { produto:null, inclusos:[], extras:[], qtd:1 }; ultimo = 'copo';
+  mCopo = { produto:null, inclusos:[], caldas:[], extras:[], qtd:1 }; mGar = { produto:null, inclusos:[], caldas:[], extras:[], qtd:1 }; ultimo = 'copo';
   document.querySelectorAll('input[name=tam], input[name=tamG]').forEach(function(i){ i.checked=false; });
   desenharCopoPassos(null); desenharExtrasGarrafa(null); desenharSabores(null);
   atualizarMontagem(); desenharCarrinho();
@@ -1106,6 +1131,7 @@ function desenharCarrinho(){
   carrinho.forEach(function(it, idx){
     var d = el('div',{class:'item'}), det = [];
     if(it.inclusos.length) det.push('Complementos: ' + it.inclusos.join(', '));
+    if(it.caldas && it.caldas.length) det.push('Caldas: ' + it.caldas.join(', '));
     if(it.extras.length) det.push('Adicionais: ' + it.extras.join(', '));
     d.innerHTML = '<div><b>'+esc(it.nome)+'</b><span class="det">'+esc(det.join(' · '))+'</span></div><div><b>'+brl(it.unit*it.qtd)+'</b></div>'
       + '<div class="acoes"><div class="qtd"><button type="button" aria-label="Tirar um">−</button><span aria-label="Quantidade">'+it.qtd+'</span><button type="button" aria-label="Mais um">+</button></div><button type="button" class="link">Remover</button></div>';
@@ -1126,9 +1152,11 @@ function revalidar(lista){
     if(!p || !p.online || p.disponivel===false || !(p.preco>0)) return null;
     var nomesInc = complementosDe(p,'incluso').map(function(c){return c.nome;});
     var nomesExt = complementosDe(p,'opcional').map(function(c){return c.nome;});
+    var nomesCal = complementosDe(p,'calda').map(function(c){return c.nome;});
     var inc = (it.inclusos||[]).filter(function(n){ return nomesInc.indexOf(n)>=0; }).slice(0, limiteInclusos(p));
     var ext = (it.extras||[]).filter(function(n){ return nomesExt.indexOf(n)>=0; });
-    return { id:p.id, nome:p.nome, inclusos:inc, extras:ext, unit:precoDe(p, ext), qtd:Math.max(1, Math.min(20, +it.qtd||1)) };
+    var cal = (it.caldas||[]).filter(function(n){ return nomesCal.indexOf(n)>=0; }).slice(0, limiteCaldas(p));
+    return { id:p.id, nome:p.nome, inclusos:inc, caldas:cal, extras:ext, unit:precoDe(p, ext), qtd:Math.max(1, Math.min(20, +it.qtd||1)) };
   }).filter(Boolean);
 }
 function subtotal(){ return carrinho.reduce(function(s,i){ return s+i.unit*i.qtd; },0); }
@@ -1318,6 +1346,7 @@ function mensagemZap(res){
   (res && res.itens ? res.itens : carrinho).forEach(function(it){
     linhas.push(it.qtd + 'x ' + it.nome + ' (' + brl(it.unit*it.qtd) + ')');
     if(it.inclusos.length) linhas.push('   Complementos: ' + it.inclusos.join(', '));
+    if(it.caldas && it.caldas.length) linhas.push('   Caldas: ' + it.caldas.join(', '));
     if(it.extras.length) linhas.push('   Adicionais: ' + it.extras.join(', '));
   });
   linhas.push('', 'Itens: ' + brl(sub));
@@ -1366,12 +1395,12 @@ $('btnEnviar').addEventListener('click', function(){
   if(erros.length){ $('erroPedido').textContent = erros.join(' '); return; }
   salvarCliente();
   var pag = document.querySelector('input[name=pag]:checked').value, origem = SS.get('divinus_origem') || '';
-  var itensEnviados = carrinho.map(function(it){ return { id:it.id, nome:it.nome, qtd:it.qtd, inclusos:it.inclusos, extras:it.extras, unit:it.unit }; });
+  var itensEnviados = carrinho.map(function(it){ return { id:it.id, nome:it.nome, qtd:it.qtd, inclusos:it.inclusos, caldas:it.caldas||[], extras:it.extras, unit:it.unit }; });
   var payload = {
     nome:nome, telefone:telDigitos(), modo:modo(), pagamento:pag,
     cep:e ? $('cep').value : '', rua:e ? $('rua').value.trim() : '', numero:e ? $('numero').value.trim() : '', bairro:e ? bairro : '',
     complemento:e ? $('comp').value.trim() : '', obs:$('obs').value.trim(), origem:origem, fora_horario:!aberto,
-    itens: itensEnviados.map(function(it){ return { id:it.id, qtd:it.qtd, inclusos:it.inclusos, extras:it.extras }; })
+    itens: itensEnviados.map(function(it){ return { id:it.id, qtd:it.qtd, inclusos:it.inclusos, caldas:it.caldas||[], extras:it.extras }; })
   };
   var btn = $('btnEnviar'); btn.disabled = true; btn.textContent = 'Enviando pedido...'; $('erroPedido').textContent = '';
 
