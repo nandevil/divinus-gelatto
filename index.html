@@ -191,6 +191,7 @@ section.bloco{padding:34px 0;border-top:2px solid var(--creme-2)}
 .item b{display:block}
 .item .det{font-size:14.5px;color:var(--choco-2)}
 .item .acoes{display:flex;align-items:center;gap:8px;grid-column:1/-1}
+.qtd-linha{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:12px;font-weight:600;font-size:15px}
 .qtd{display:inline-flex;align-items:center;border:2px solid var(--choco);border-radius:999px;overflow:hidden;background:#fff}
 .qtd button{border:0;background:transparent;width:40px;height:36px;font-size:18px;font-weight:700;color:var(--choco)}
 .qtd span{min-width:28px;text-align:center;font-weight:700}
@@ -421,11 +422,13 @@ body.com-barra{padding-bottom:64px}
       <div class="passo" id="passoCopo">
         <h3><span class="num">1</span>Escolha seu açaí no copo</h3>
         <div class="grade" id="gradeTamanhos"><p class="carregando">Carregando o cardápio...</p></div>
+        <div class="qtd-linha" id="qtdCopoBox" hidden><span>Quantos copos iguais?</span><div class="qtd"><button type="button" id="qCopoMenos" aria-label="Tirar um">−</button><span id="qCopoVal" aria-live="polite">1</span><button type="button" id="qCopoMais" aria-label="Mais um">+</button></div></div>
       </div>
 
       <div class="passo" id="passoGarrafa" hidden>
         <h3>Açaí na garrafa</h3>
         <div class="grade" id="gradeGarrafa"></div>
+        <div class="qtd-linha" id="qtdGarBox" hidden><span>Quantas garrafas iguais?</span><div class="qtd"><button type="button" id="qGarMenos" aria-label="Tirar um">−</button><span id="qGarVal" aria-live="polite">1</span><button type="button" id="qGarMais" aria-label="Mais um">+</button></div></div>
       </div>
 
       <div class="passo" id="passoInclusos">
@@ -719,7 +722,7 @@ function evento(nome, params){ try{ if(window.gtag) gtag('event', nome, params||
 var DADOS = null, previa = false, aberto = true;
 var carrinho = [];
 // Copo e garrafa podem ser montados ao mesmo tempo, na mesma tela.
-var mCopo = { produto:null, inclusos:[], extras:[] }, mGar = { produto:null, inclusos:[], extras:[] }, ultimo = 'copo';
+var mCopo = { produto:null, inclusos:[], extras:[], qtd:1 }, mGar = { produto:null, inclusos:[], extras:[], qtd:1 }, ultimo = 'copo';
 var frete = { ok:false, taxa:0, minutos:0, minimo:0, bairro:'' };
 var CHAVE_FEED = 'divinus_feed_v1', CHAVE_CARRINHO = 'divinus_carrinho_v1', CHAVE_DADOS = 'divinus_cliente_v1';
 
@@ -958,17 +961,17 @@ function desenharSabores(p){
 function escolherProduto(id){
   var p = produto(id);
   if(/garrafa/i.test(p.categoria)){
-    mGar = { produto:p, inclusos:[], extras:[] }; ultimo = 'garrafa';
+    mGar = { produto:p, inclusos:[], extras:[], qtd:1 }; ultimo = 'garrafa';
     desenharExtrasGarrafa(p); desenharSabores(p);
   } else {
-    mCopo = { produto:p, inclusos:[], extras:[] }; ultimo = 'copo';
+    mCopo = { produto:p, inclusos:[], extras:[], qtd:1 }; ultimo = 'copo';
     desenharCopoPassos(p);
   }
   evento('escolher_tamanho', {item_name:p.nome, value:p.preco, currency:'BRL'});
   atualizarMontagem();
 }
 function limparGarrafa(){
-  mGar = { produto:null, inclusos:[], extras:[] };
+  mGar = { produto:null, inclusos:[], extras:[], qtd:1 };
   desenharExtrasGarrafa(null); desenharSabores(null);
   if(ultimo === 'garrafa') ultimo = 'copo';
   atualizarMontagem();
@@ -992,7 +995,9 @@ function atualizarMontagem(){
     $('contInclusos').className = 'contador' + (m.inclusos.length===limite ? ' cheio' : '');
     document.querySelectorAll('#gradeInclusos input').forEach(function(i){ i.disabled = !i.checked && m.inclusos.length>=limite; });
   }
-  var total = (mCopo.produto ? precoDe(mCopo.produto, mCopo.extras) : 0) + (mGar.produto ? precoDe(mGar.produto, mGar.extras) : 0);
+  var total = (mCopo.produto ? precoDe(mCopo.produto, mCopo.extras) * mCopo.qtd : 0) + (mGar.produto ? precoDe(mGar.produto, mGar.extras) * mGar.qtd : 0);
+  $('qtdCopoBox').hidden = !mCopo.produto; $('qCopoVal').textContent = mCopo.qtd;
+  $('qtdGarBox').hidden = !mGar.produto; $('qGarVal').textContent = mGar.qtd;
   $('precoItem').textContent = brl(total);
   var faltam = limite - m.inclusos.length, nada = !mCopo.produto && !mGar.produto;
   $('infoMontagem').textContent = nada ? 'Escolha um tamanho para começar.'
@@ -1052,16 +1057,20 @@ function atualizarCopo(){
 
 /* ================= CARRINHO ================= */
 function chave(it){ return it.id+'|'+it.inclusos.slice().sort().join(',')+'|'+it.extras.slice().sort().join(','); }
+[['Copo', function(){ return mCopo; }], ['Gar', function(){ return mGar; }]].forEach(function(x){
+  $('q'+x[0]+'Menos').addEventListener('click', function(){ var m = x[1](); if(m.qtd > 1){ m.qtd--; atualizarMontagem(); } });
+  $('q'+x[0]+'Mais').addEventListener('click', function(){ var m = x[1](); if(m.qtd < 20){ m.qtd++; atualizarMontagem(); } });
+});
 $('btnAdd').addEventListener('click', function(){
   var feitos = [mCopo, mGar].filter(function(m){ return m.produto; });
   if(!feitos.length) return;
   feitos.forEach(function(m){
-    var it = { id:m.produto.id, nome:m.produto.nome, inclusos:m.inclusos.slice(), extras:m.extras.slice(), unit:precoDe(m.produto, m.extras), qtd:1 };
+    var it = { id:m.produto.id, nome:m.produto.nome, inclusos:m.inclusos.slice(), extras:m.extras.slice(), unit:precoDe(m.produto, m.extras), qtd:m.qtd || 1 };
     var ja = carrinho.filter(function(x){ return chave(x)===chave(it); })[0];
-    if(ja) ja.qtd++; else carrinho.push(it);
+    if(ja) ja.qtd = Math.min(20, ja.qtd + it.qtd); else carrinho.push(it);
     evento('adicionar_item', {item_name:it.nome, value:it.unit, currency:'BRL', complementos:it.inclusos.length, adicionais:it.extras.length});
   });
-  mCopo = { produto:null, inclusos:[], extras:[] }; mGar = { produto:null, inclusos:[], extras:[] }; ultimo = 'copo';
+  mCopo = { produto:null, inclusos:[], extras:[], qtd:1 }; mGar = { produto:null, inclusos:[], extras:[], qtd:1 }; ultimo = 'copo';
   document.querySelectorAll('input[name=tam], input[name=tamG]').forEach(function(i){ i.checked=false; });
   desenharCopoPassos(null); desenharExtrasGarrafa(null); desenharSabores(null);
   atualizarMontagem(); desenharCarrinho();
