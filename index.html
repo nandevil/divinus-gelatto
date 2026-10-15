@@ -935,6 +935,11 @@ function fotoIncluso(nome){
   var f = FOTOS_INCLUSOS[norm(nome)];
   return f ? '<img class="foto-creme" src="img/complementos/' + f + '.jpg" alt="" width="56" height="68" loading="lazy">' : '';
 }
+var FOTOS_CALDAS = { 'morango':'morango', 'chocolate':'chocolate', 'banana caramelizada':'banana-caramelizada', 'leite condensado':'leite-condensado', 'uva':'uva', 'caramelo':'caramelo', 'tutti-frutti':'tutti-frutti', 'algodao doce':'algodao-doce' };
+function fotoCalda(nome){
+  var f = FOTOS_CALDAS[norm(String(nome).replace(/^calda de[ ]+/i, ''))];
+  return f ? '<img class="foto-creme" src="img/caldas/' + f + '.jpg" alt="" width="56" height="68" loading="lazy">' : '';
+}
 function fotoCreme(nome){
   var k = norm(String(nome).replace(/^creme de[ ]+/i, '')), f = FOTOS_CREME[k];
   return f ? '<img class="foto-creme" src="img/cremes/' + f + '.jpg" alt="" width="56" height="68" loading="lazy">' : '';
@@ -952,7 +957,7 @@ function desenharCopoPassos(p){
   $('dicaCaldas').textContent = calLim ? 'Até ' + calLim + ' caldas, grátis.' : 'Este tamanho não leva caldas.';
   (ativo ? complementosDe(p,'calda') : []).forEach(function(c,i){
     var d = el('div',{class:'opc'}), cid='cal_'+i;
-    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"><label for="'+cid+'"><b>'+esc(c.nome)+'</b></label>';
+    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"><label for="'+cid+'">'+fotoCalda(c.nome)+'<b>'+esc(c.nome)+'</b></label>';
     calG.appendChild(d);
     d.querySelector('input').addEventListener('change', function(ev){ alternar(mCopo.caldas, c.nome, ev.target.checked, calLim, ev.target); });
   });
