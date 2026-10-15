@@ -1,0 +1,93 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Guia do site para o dono</title><style>@page{size:A4;margin:15mm 14mm}
+body{font-family:Arial,Helvetica,sans-serif;color:#222;font-size:12px;line-height:1.5}
+h1{font-size:22px;color:#4A2E22;margin:0 0 4px}
+h2{font-size:15px;margin:20px 0 6px;color:#4A2E22;border-bottom:2px solid #C9922E;padding-bottom:3px;break-after:avoid}
+h3{font-size:13px;margin:12px 0 4px;color:#5B2A86;break-after:avoid}
+.sub{color:#666;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;margin:6px 0 10px}
+tr{break-inside:avoid}
+th,td{border:1px solid #bbb;padding:5px 7px;text-align:left;vertical-align:top}
+th{background:#f1e9d6}
+td.n,th.n{text-align:right;white-space:nowrap}
+.box{background:#fbf6ea;border:1px solid #e3d5ae;padding:8px 10px;margin:8px 0}
+.alerta{background:#fdecec;border:1px solid #e0a0a0;padding:8px 10px;margin:8px 0}
+ul,ol{margin:4px 0 8px 20px;padding:0}
+li{margin:2px 0}
+code{background:#f3f3f3;padding:0 3px;border-radius:3px;font-size:11px}
+.ck{list-style:none;margin-left:4px}.ck li:before{content:"\2610  ";}
+pre{font-family:Consolas,monospace;font-size:5.6px;line-height:1.25;white-space:pre-wrap;word-break:break-all;background:#fafafa;border:1px solid #ddd;padding:6px;margin:4px 0 14px}
+.pg{break-before:page}
+</style></head><body>
+<h1>Guia do site para o dono</h1>
+<div class="sub">Divinus Gelatto · explicação simples de tudo que o site faz</div>
+
+<h2>O que é o site</h2>
+<p>É o seu cardápio online. O cliente entra, monta o açaí, paga e você recebe o pedido em uma tela de controle (o <b>painel</b>). Os pedidos de <b>açaí no copo</b> e <b>açaí na garrafa</b> são feitos pelo site. Sorvetes e milkshakes são vendidos só no trailer.</p>
+
+<h2>O que o cliente vê</h2>
+<h3>1. Cardápio e montagem</h3>
+<ul>
+<li><b>Copo:</b> 400 ml, 500 ml, 700 ml ou 1 L.</li>
+<li><b>Complementos grátis:</b> até 3 (granola, leite em pó, M&amp;M, jujuba, etc.). Cada um tem foto.</li>
+<li><b>Caldas grátis:</b> até 2 (morango, chocolate, banana caramelizada, leite condensado, uva, caramelo, tutti-frutti, algodão doce).</li>
+<li><b>Cremes pagos:</b> Ovomaltine, Paçoquinha, Prestígio, Galak com Negresco, Ninho, KitKat e Nutella, R$ 2,50 cada.</li>
+<li><b>Garrafa de 500 ml:</b> sabor leite condensado com leite em pó, com adicional opcional de Ovomaltine.</li>
+<li>O desenho do copo e da garrafa muda conforme as escolhas.</li>
+</ul>
+<h3>2. Finalizar o pedido (4 passos)</h3>
+<ol>
+<li><b>Itens:</b> confere o carrinho e pode mudar a quantidade.</li>
+<li><b>Seus dados:</b> nome, WhatsApp e se é <b>retirada</b> (grátis) ou <b>entrega</b>.</li>
+<li><b>Forma de pagamento:</b> Pix ou cartão de crédito (o cartão leva um pequeno acréscimo).</li>
+<li><b>Finalizar:</b> o site mostra o QR Code do Pix ou abre o pagamento do cartão.</li>
+</ol>
+<h3>3. Entrega</h3>
+<ul>
+<li>Taxa fixa de <b>R$ 7,00 até 5 km</b> do trailer. O cliente marca "moro a até 5 km".</li>
+<li>Acima de 5 km, o site orienta combinar pelo WhatsApp (link já pronto).</li>
+</ul>
+<h3>4. Acompanhar o pedido</h3>
+<p>Depois de pagar, o cliente vê a tela mudar sozinha: <i>pagamento recebido → pedido aceito → saiu para entrega</i>. Isso funciona no mesmo celular em que fez o pedido.</p>
+<h3>5. Cliente que volta</h3>
+<p>Quando digita o telefone, o site mostra o primeiro nome. Para preencher o endereço, o cliente digita o <b>código de um pedido anterior</b>. Isso protege os dados das pessoas.</p>
+
+<h2>O que acontece sozinho</h2>
+<ul>
+<li><b>Pagamento confirmado:</b> o Mercado Pago avisa o site, que marca o pedido como pago.</li>
+<li><b>Alerta de pedido pago:</b> o painel toca um som quando entra pedido já pago.</li>
+<li><b>Pedidos abandonados:</b> pedidos nunca pagos são apagados a cada 10 minutos. Pedidos pagos nunca são apagados.</li>
+<li><b>Preços:</b> o servidor recalcula tudo; ninguém consegue mudar preço pelo navegador.</li>
+<li><b>Horário:</b> fora do expediente o site avisa o cliente.</li>
+</ul>
+
+<h2>O que você faz no painel</h2>
+<table>
+<tr><th>Aba</th><th>Para que serve</th></tr>
+<tr><td><b>Pedidos</b></td><td>Lista ao vivo. Botões: <b>Aceitar pedido</b>, <b>Saiu para entrega / Pronto</b>, <b>Cancelar</b>. Mostra itens, caldas, endereço e se já foi pago.</td></tr>
+<tr><td><b>Cardápio</b></td><td>Preços, disponibilidade e fotos dos produtos e complementos (inclusive caldas, no campo Grupo = calda).</td></tr>
+<tr><td><b>Entrega</b></td><td>Bairros atendidos, tempo e taxa.</td></tr>
+<tr><td><b>Clientes</b></td><td>Quem comprou, quantos pedidos, total gasto, último pedido. Botão para baixar planilha.</td></tr>
+<tr><td><b>Financeiro</b></td><td>Compras (notas), repasses do iFood e 99Food e resultado do mês.</td></tr>
+<tr><td><b>Configurações</b></td><td>Horário, aviso do dia, WhatsApp, taxa do cartão, número de complementos grátis, chave Pix.</td></tr>
+</table>
+
+<h2>Como ficam as plataformas</h2>
+<p>iFood e 99Food são cardápios separados, que <b>você mantém em cada portal</b>. O site não envia nada para elas automaticamente. Os preços lá são mais altos para cobrir a comissão e as taxas de cada uma.</p>
+
+<h2>O que o site não faz (ainda)</h2>
+<ul>
+<li>Não controla estoque nem emite nota fiscal.</li>
+<li>Não mostra o motoboy no mapa para o cliente.</li>
+<li>Não mostra, no painel, os resultados de Instagram, Facebook e TikTok.</li>
+<li>Não atualiza sozinho o cardápio do iFood e da 99Food.</li>
+</ul>
+
+<h2>Se algo der errado</h2>
+<table>
+<tr><th>Problema</th><th>O que fazer</th></tr>
+<tr><td>Site não abre</td><td>Esperar 1 minuto e tentar de novo; se persistir, avisar quem mantém o sistema (pode ser o Supabase pausado).</td></tr>
+<tr><td>Pedido pago e não aparece como pago</td><td>Conferir no Mercado Pago; se aprovado, usar o botão manual "Conferi: o valor caiu".</td></tr>
+<tr><td>Cliente quer cancelar depois de pagar</td><td>Cancelar o pedido no painel e fazer o estorno no Mercado Pago.</td></tr>
+<tr><td>Produto acabou</td><td>Desmarcar "disponível" no painel (e nas plataformas).</td></tr>
+</table>
+</body></html>

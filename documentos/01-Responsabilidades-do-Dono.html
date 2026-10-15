@@ -1,0 +1,99 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Responsabilidades do dono</title><style>@page{size:A4;margin:15mm 14mm}
+body{font-family:Arial,Helvetica,sans-serif;color:#222;font-size:12px;line-height:1.5}
+h1{font-size:22px;color:#4A2E22;margin:0 0 4px}
+h2{font-size:15px;margin:20px 0 6px;color:#4A2E22;border-bottom:2px solid #C9922E;padding-bottom:3px;break-after:avoid}
+h3{font-size:13px;margin:12px 0 4px;color:#5B2A86;break-after:avoid}
+.sub{color:#666;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;margin:6px 0 10px}
+tr{break-inside:avoid}
+th,td{border:1px solid #bbb;padding:5px 7px;text-align:left;vertical-align:top}
+th{background:#f1e9d6}
+td.n,th.n{text-align:right;white-space:nowrap}
+.box{background:#fbf6ea;border:1px solid #e3d5ae;padding:8px 10px;margin:8px 0}
+.alerta{background:#fdecec;border:1px solid #e0a0a0;padding:8px 10px;margin:8px 0}
+ul,ol{margin:4px 0 8px 20px;padding:0}
+li{margin:2px 0}
+code{background:#f3f3f3;padding:0 3px;border-radius:3px;font-size:11px}
+.ck{list-style:none;margin-left:4px}.ck li:before{content:"\2610  ";}
+pre{font-family:Consolas,monospace;font-size:5.6px;line-height:1.25;white-space:pre-wrap;word-break:break-all;background:#fafafa;border:1px solid #ddd;padding:6px;margin:4px 0 14px}
+.pg{break-before:page}
+</style></head><body>
+<h1>Responsabilidades do dono: site, Mercado Pago, iFood e 99Food</h1>
+<div class="sub">Divinus Gelatto · rotina semanal, mensal e anual · atualizado em 15/10/2026</div>
+<div class="box">Ideia central: o site cuida do pedido e do pagamento sozinho. Você cuida de <b>aceitar o pedido, entregar, conferir o dinheiro e manter o cardápio em dia</b>. Esta lista mostra o que acompanhar em cada período.</div>
+
+<h2>Todo dia (2 minutos)</h2>
+<ul class="ck">
+<li>Abrir o painel (<code>/painel</code>) no início do expediente e deixar a aba aberta com o som ligado.</li>
+<li>Aceitar cada pedido novo; marcar "Saiu para entrega" ou "Pronto"; cancelar quando for o caso.</li>
+<li>Conferir se o horário e o aviso do dia (feriado, falta de produto) estão certos.</li>
+<li>Marcar como indisponível o que acabou (painel, iFood e 99Food).</li>
+</ul>
+
+<h2>Toda semana</h2>
+<h3>Site e painel</h3>
+<ul class="ck">
+<li>Abrir o site no celular e fazer o caminho até a tela de pagamento (sem pagar) para ver se tudo carrega.</li>
+<li>Olhar a aba <b>Pedidos</b>: algum pedido "aguardando pagamento" parado há dias? (o sistema limpa sozinho; se sobrar, cancele).</li>
+<li>Conferir pedidos cancelados que já estavam pagos: <b>estornar no Mercado Pago</b> (o painel avisa na observação do pedido).</li>
+<li>Lançar no <b>Financeiro</b> as notas de compra da semana (fornecedor, item, valor).</li>
+<li>Ver o alerta de uso do plano grátis do Supabase. Se o site ficar uma semana sem acesso, o Supabase pausa o projeto.</li>
+</ul>
+<h3>Mercado Pago</h3>
+<ul class="ck">
+<li>Conferir o extrato: cada venda do site tem um pagamento aprovado correspondente.</li>
+<li>Ver o saldo e transferir para a conta bancária.</li>
+<li>Responder a qualquer contestação ou chargeback (prazo curto).</li>
+</ul>
+<h3>iFood</h3>
+<ul class="ck">
+<li>Responder avaliações e mensagens; manter a loja aberta no horário.</li>
+<li>Conferir pausas e itens indisponíveis no cardápio.</li>
+<li>Lançar no painel (Financeiro &gt; Vendas por plataforma) o <b>repasse da semana</b>: bruto, comissão, taxa de pagamento, anúncios e promoções.</li>
+</ul>
+<h3>99Food</h3>
+<ul class="ck">
+<li>Manter a loja <b>online</b> no horário (fora do expediente aparece "offline / empresa fechada").</li>
+<li>Conferir avaliações e pedidos; responder o suporte quando houver chamado aberto.</li>
+<li>Lançar o repasse da semana (bruto, comissão, logística ≈ R$ 5,49 por pedido, promoções).</li>
+</ul>
+
+<h2>Todo mês</h2>
+<ul class="ck">
+<li><b>Fechar o mês no painel (Financeiro):</b> vendas do site + repasses de iFood e 99 − compras = resultado. Baixar o CSV.</li>
+<li>Conferir o <b>extrato do Mercado Pago</b>, o <b>extrato do iFood</b> e o <b>extrato da 99Food</b> contra o que foi lançado.</li>
+<li>Revisar <b>preços</b>: o custo dos insumos subiu? Reajustar o site e aplicar a fórmula nas plataformas (preço do site ÷ (1 − taxa)).</li>
+<li>Rever a <b>comissão real</b> do iFood e da 99 (o contrato pode mudar) e recalcular preços se preciso.</li>
+<li>Olhar a aba <b>Clientes</b>: quem mais compra, quem sumiu, e planejar uma ação (promoção, mensagem).</li>
+<li>Exportar o CSV de clientes e pedidos como <b>backup</b>.</li>
+<li>Pagar os impostos do mês (ex.: DAS, se for MEI, até o dia 20) e guardar o comprovante.</li>
+<li>Revisar horários e feriados do mês seguinte no painel e nas duas plataformas.</li>
+<li>Conferir o limite do plano grátis de Supabase e Cloudflare (pedidos e visitas).</li>
+<li>Cobrar o suporte da 99Food enquanto o cardápio/preços estiverem travados.</li>
+</ul>
+
+<h2>Todo ano</h2>
+<ul class="ck">
+<li><b>Declaração anual</b> do negócio (ex.: DASN-SIMEI do MEI, até 31 de maio) e contabilidade do ano.</li>
+<li><b>Reajuste anual</b> do cardápio e da taxa de entrega (hoje R$ 7,00 até 5 km).</li>
+<li>Trocar a <b>senha do painel</b> e as do Mercado Pago, iFood, 99Food, Supabase, Cloudflare e GitHub; conferir quem tem acesso.</li>
+<li>Rever as credenciais do Mercado Pago (chave de acesso) e, se necessário, gerar uma nova e atualizar no Supabase.</li>
+<li>Renovar o <b>domínio</b> (se tiver um próprio), alvarás e licença sanitária.</li>
+<li>Renegociar contratos: comissão do iFood e da 99Food, taxa do Mercado Pago.</li>
+<li>Rever a <b>política de privacidade</b> e apagar dados de clientes que pediram exclusão (LGPD).</li>
+<li>Fazer um <b>backup completo</b>: exportar o banco do Supabase e baixar o repositório do GitHub.</li>
+<li>Avaliar melhorias: métricas de marketing, rastreio do motoboy, nota fiscal, estoque.</li>
+</ul>
+
+<h2>Quem faz o quê</h2>
+<table>
+<tr><th>Tarefa</th><th>Quem</th><th>Onde</th></tr>
+<tr><td>Aceitar pedidos, entregar, cancelar</td><td>Dono / equipe</td><td>Painel</td></tr>
+<tr><td>Confirmar pagamento</td><td>Automático (Mercado Pago)</td><td>-</td></tr>
+<tr><td>Estornar pedido cancelado</td><td>Dono</td><td>Mercado Pago</td></tr>
+<tr><td>Cardápio no site</td><td>Dono</td><td>Painel &gt; Cardápio</td></tr>
+<tr><td>Cardápio no iFood e 99Food</td><td>Dono</td><td>Portal de cada plataforma</td></tr>
+<tr><td>Financeiro</td><td>Dono</td><td>Painel &gt; Financeiro</td></tr>
+<tr><td>Atualizar código e publicar o site</td><td>Quem mantém o sistema</td><td>GitHub + Cloudflare</td></tr>
+</table>
+</body></html>
