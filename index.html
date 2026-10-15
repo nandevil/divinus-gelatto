@@ -440,6 +440,12 @@ body.com-barra{padding-bottom:64px}
         <div class="grade" id="gradeExtras"></div>
       </div>
 
+      <div class="passo" id="passoExtrasG" hidden>
+        <h3><span class="num">1</span>Quer um adicional?</h3>
+        <p class="dica">Cobrados à parte. Pode pular.</p>
+        <div class="grade" id="gradeExtrasG"></div>
+      </div>
+
       <div class="passo" id="passoSabor" hidden>
         <h3><span class="num" id="numSabor">4</span>Sabor da garrafa</h3>
         <p class="dica">O sabor já vem no pedido. Se quiser, acrescente Ovomaltine nos adicionais acima.</p>
@@ -712,7 +718,8 @@ function evento(nome, params){ try{ if(window.gtag) gtag('event', nome, params||
 /* ================= ESTADO ================= */
 var DADOS = null, previa = false, aberto = true;
 var carrinho = [];
-var montagem = { produto:null, inclusos:[], extras:[] };
+// Copo e garrafa podem ser montados ao mesmo tempo, na mesma tela.
+var mCopo = { produto:null, inclusos:[], extras:[] }, mGar = { produto:null, inclusos:[], extras:[] }, ultimo = 'copo';
 var frete = { ok:false, taxa:0, minutos:0, minimo:0, bairro:'' };
 var CHAVE_FEED = 'divinus_feed_v1', CHAVE_CARRINHO = 'divinus_carrinho_v1', CHAVE_DADOS = 'divinus_cliente_v1';
 
@@ -849,7 +856,8 @@ function desenharTamanhos(){
   lista.forEach(function(p){
     var d = el('div',{class:'opc'}), id = 'tam_'+p.id, foto = fotoUrl(p.foto), esgot = p.disponivel===false;
     var nomeCurto = p.nome.replace(/^Açaí (no copo|na garrafa) /i,'');
-    d.innerHTML = '<input type="radio" name="tam" id="'+esc(id)+'" value="'+esc(p.id)+'"'+(esgot?' disabled':'')+'>'
+    var ehG = /garrafa/i.test(p.categoria);
+    d.innerHTML = '<input type="'+(ehG?'checkbox':'radio')+'" name="'+(ehG?'tamG':'tam')+'" id="'+esc(id)+'" value="'+esc(p.id)+'"'+(esgot?' disabled':'')+'>'
       + '<label for="'+esc(id)+'">'
       + (foto ? '<img class="foto" src="'+esc(foto)+'" alt="" loading="lazy" referrerpolicy="no-referrer">' : '')
       + '<b>'+esc(nomeCurto)+'</b><small>'+(/garrafa/i.test(p.categoria)?'Na garrafa':'No copo')+'</small><span class="valor">'+brl(p.preco)+'</span>'
@@ -857,7 +865,9 @@ function desenharTamanhos(){
       + '</label>';
     var img = d.querySelector('img'); if(img) img.addEventListener('error', function(){ img.remove(); });
     (/garrafa/i.test(p.categoria) ? gg : g).appendChild(d);
-    d.querySelector('input').addEventListener('change', function(){ escolherProduto(p.id); });
+    d.querySelector('input').addEventListener('change', function(ev){
+      if(ehG && !ev.target.checked) limparGarrafa(); else escolherProduto(p.id);
+    });
   });
   $('passoGarrafa').hidden = !gg.children.length;
   if(!g.children.length) g.innerHTML = '<p class="vazio">Escolha a opção na garrafa abaixo.</p>';
@@ -882,51 +892,62 @@ function prepararPassos(){
   var temInc = DADOS.complementos.some(function(c){ return c.grupo==='incluso'; }) && DADOS.inclusos>0;
   var temExt = DADOS.complementos.some(function(c){ return c.grupo==='opcional' && c.preco>0; });
   TEM_INC = temInc; TEM_EXT = temExt;
-  $('passoInclusos').hidden = !temInc;
-  $('passoExtras').hidden = !temExt;
-  desenharComplementos(null);
-}
-function desenharComplementos(p){
-  var garrafa = !!(p && /garrafa/i.test(p.categoria));
-  // Complementos e adicionais só aparecem depois que o cliente escolhe o tamanho (copo ou garrafa).
-  $('passoInclusos').hidden = !TEM_INC || garrafa || !p;
-  $('passoExtras').hidden = !TEM_EXT || !p;
-  // Os quadrados aparecem logo abaixo do tamanho escolhido: do copo, abaixo do copo; da garrafa, abaixo da garrafa.
+  // Ordem fixa: copo → (complementos, adicional do copo) → garrafa → (adicional, sabor da garrafa)
   $('passoCopo').after($('passoInclusos'));
-  if(garrafa){ $('passoGarrafa').after($('passoExtras')); $('passoExtras').after($('passoSabor')); }
-  else { $('passoInclusos').after($('passoExtras')); $('passoGarrafa').after($('passoSabor')); }
-  // copo: 1 tamanho, 2 complementos, 3 adicional | garrafa: 1 adicional, 2 sabor
-  $('numExtras').textContent = String((garrafa ? 0 : 1) + ($('passoInclusos').hidden ? 0 : 1) + 1);
-  var base = p || categoriaPadrao(), ativo = !!p;
-  var inc = complementosDe(base,'incluso'), ext = complementosDe(base,'opcional');
-  var limite = p ? limiteInclusos(p) : Math.min(DADOS.inclusos, inc.length);
-  $('dicaInclusos').textContent = !ativo ? 'Escolha o tamanho primeiro.'
-    : (limite ? 'Até ' + limite + ' inclusos no preço.' : 'Este tamanho não leva complementos inclusos.');
-  $('dicaExtras').textContent = ativo ? 'Cobrados à parte. Pode pular.' : 'Escolha o tamanho primeiro.';
+  $('passoInclusos').after($('passoExtras'));
+  $('passoExtras').after($('passoGarrafa'));
+  $('passoGarrafa').after($('passoExtrasG'));
+  $('passoExtrasG').after($('passoSabor'));
+  desenharCopoPassos(null);
+  desenharExtrasGarrafa(null);
+  desenharSabores(null);
+}
+// Complementos e adicionais do COPO: só aparecem depois que o cliente escolhe o tamanho do copo.
+function desenharCopoPassos(p){
+  var ativo = !!p;
+  $('passoInclusos').hidden = !TEM_INC || !ativo;
+  $('passoExtras').hidden = !TEM_EXT || !ativo;
+  $('numExtras').textContent = $('passoInclusos').hidden ? '2' : '3';
+  var inc = ativo ? complementosDe(p,'incluso') : [], ext = ativo ? complementosDe(p,'opcional') : [];
+  var limite = ativo ? limiteInclusos(p) : 0;
+  $('dicaInclusos').textContent = limite ? 'Até ' + limite + ' inclusos no preço.' : 'Este tamanho não leva complementos inclusos.';
   var g = $('gradeInclusos'); g.innerHTML = '';
   inc.forEach(function(c,i){
     var d = el('div',{class:'opc'}), cid='inc_'+i;
-    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"'+(ativo?'':' disabled')+'><label for="'+cid+'"><b>'+esc(c.nome)+'</b></label>';
+    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"><label for="'+cid+'"><b>'+esc(c.nome)+'</b></label>';
     g.appendChild(d);
-    d.querySelector('input').addEventListener('change', function(ev){ alternar(montagem.inclusos, c.nome, ev.target.checked, limite, ev.target); });
+    d.querySelector('input').addEventListener('change', function(ev){ alternar(mCopo.inclusos, c.nome, ev.target.checked, limite, ev.target); });
   });
   if(ativo && !inc.length) g.innerHTML = '<p class="vazio">Sem complementos inclusos para este tamanho.</p>';
   var ge = $('gradeExtras'); ge.innerHTML = '';
   ext.forEach(function(c,i){
     var d = el('div',{class:'opc'}), cid='ext_'+i;
-    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"'+(ativo?'':' disabled')+'><label for="'+cid+'"><b>'+esc(c.nome)+'</b><small>+ '+brl(c.preco)+'</small></label>';
+    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"><label for="'+cid+'"><b>'+esc(c.nome)+'</b><small>+ '+brl(c.preco)+'</small></label>';
     ge.appendChild(d);
-    d.querySelector('input').addEventListener('change', function(ev){ alternar(montagem.extras, c.nome, ev.target.checked, 99, ev.target); });
+    d.querySelector('input').addEventListener('change', function(ev){ alternar(mCopo.extras, c.nome, ev.target.checked, 99, ev.target); });
   });
   if(ativo && !ext.length) ge.innerHTML = '<p class="vazio">Sem adicionais para este tamanho.</p>';
+}
+// Adicional da GARRAFA: só aparece depois que o cliente escolhe a garrafa.
+function desenharExtrasGarrafa(p){
+  var ativo = !!p;
+  $('passoExtrasG').hidden = !TEM_EXT || !ativo;
+  var ext = ativo ? complementosDe(p,'opcional') : [];
+  var ge = $('gradeExtrasG'); ge.innerHTML = '';
+  ext.forEach(function(c,i){
+    var d = el('div',{class:'opc'}), cid='extg_'+i;
+    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"><label for="'+cid+'"><b>'+esc(c.nome)+'</b><small>+ '+brl(c.preco)+'</small></label>';
+    ge.appendChild(d);
+    d.querySelector('input').addEventListener('change', function(ev){ alternar(mGar.extras, c.nome, ev.target.checked, 99, ev.target); });
+  });
+  if(ativo && !ext.length) ge.innerHTML = '<p class="vazio">Sem adicionais para esta opção.</p>';
 }
 function desenharSabores(p){
   var box = $('passoSabor'), lista = CONFIG.SABORES_GARRAFA || [];
   var garrafa = !!(p && /garrafa/i.test(p.categoria)) && lista.length > 0;
   box.hidden = !garrafa;
   if(!garrafa) return;
-  var temInc = !$('passoInclusos').hidden, temExt = !$('passoExtras').hidden;
-  $('numSabor').textContent = String(0 + (temInc ? 1 : 0) + (temExt ? 1 : 0) + 1);
+  $('numSabor').textContent = $('passoExtrasG').hidden ? '1' : '2';
   var g = $('gradeSabor'); g.innerHTML = '';
   lista.forEach(function(sb){
     var foto = sb.foto ? '<span class="sabor-foto com-foto"><img src="'+esc(sb.foto)+'" alt="'+esc(sb.nome)+'" loading="lazy"></span>'
@@ -936,10 +957,20 @@ function desenharSabores(p){
 }
 function escolherProduto(id){
   var p = produto(id);
-  montagem = { produto:p, inclusos:[], extras:[] };
-  desenharComplementos(p);
-  desenharSabores(p);
+  if(/garrafa/i.test(p.categoria)){
+    mGar = { produto:p, inclusos:[], extras:[] }; ultimo = 'garrafa';
+    desenharExtrasGarrafa(p); desenharSabores(p);
+  } else {
+    mCopo = { produto:p, inclusos:[], extras:[] }; ultimo = 'copo';
+    desenharCopoPassos(p);
+  }
   evento('escolher_tamanho', {item_name:p.nome, value:p.preco, currency:'BRL'});
+  atualizarMontagem();
+}
+function limparGarrafa(){
+  mGar = { produto:null, inclusos:[], extras:[] };
+  desenharExtrasGarrafa(null); desenharSabores(null);
+  if(ultimo === 'garrafa') ultimo = 'copo';
   atualizarMontagem();
 }
 function alternar(lista, nome, marcado, limite, input){
@@ -954,25 +985,26 @@ function precoDe(prod, extras){
   return t;
 }
 function atualizarMontagem(){
-  var m = montagem, limite = m.produto ? limiteInclusos(m.produto) : 0;
+  var m = mCopo, limite = m.produto ? limiteInclusos(m.produto) : 0;
   $('contInclusos').textContent = '';
   if(limite){
     $('contInclusos').textContent = m.inclusos.length + ' de ' + limite + ' escolhidos';
     $('contInclusos').className = 'contador' + (m.inclusos.length===limite ? ' cheio' : '');
     document.querySelectorAll('#gradeInclusos input').forEach(function(i){ i.disabled = !i.checked && m.inclusos.length>=limite; });
   }
-  $('precoItem').textContent = brl(m.produto ? precoDe(m.produto, m.extras) : 0);
-  var faltam = limite - m.inclusos.length;
-  $('infoMontagem').textContent = !m.produto ? 'Escolha um tamanho para começar.'
+  var total = (mCopo.produto ? precoDe(mCopo.produto, mCopo.extras) : 0) + (mGar.produto ? precoDe(mGar.produto, mGar.extras) : 0);
+  $('precoItem').textContent = brl(total);
+  var faltam = limite - m.inclusos.length, nada = !mCopo.produto && !mGar.produto;
+  $('infoMontagem').textContent = nada ? 'Escolha um tamanho para começar.'
     : (limite && faltam>0 ? 'Você ainda pode escolher ' + faltam + (faltam===1 ? ' complemento grátis.' : ' complementos grátis.') : '');
-  $('btnAdd').disabled = !m.produto;
+  $('btnAdd').disabled = nada;
   atualizarCopo();
 }
 
 /* ================= COPO ================= */
 var CORES = ['#C9922E','#F2A58E','#4A2E22','#E8C547','#A3321F','#8FB573','#D9C7A0','#F7F3E8','#B9783A'];
 function atualizarCopo(){
-  var m = montagem, nivel = 190, escala = 0.8, legenda = 'Escolha o tamanho e veja o copo encher';
+  var m = (ultimo === 'garrafa' && mGar.produto) ? mGar : mCopo, nivel = 190, escala = 0.8, legenda = 'Escolha o tamanho e veja o copo encher';
   if(m.produto){
     var ml = (m.produto.nome.match(/(\d+)\s*ml/i)||[])[1], litro = (m.produto.nome.match(/(\d+(?:[.,]\d+)?)\s*l\b/i)||[])[1];
     var v = litro ? parseFloat(litro.replace(',','.'))*1000 : (+ml||500);
@@ -1021,15 +1053,17 @@ function atualizarCopo(){
 /* ================= CARRINHO ================= */
 function chave(it){ return it.id+'|'+it.inclusos.slice().sort().join(',')+'|'+it.extras.slice().sort().join(','); }
 $('btnAdd').addEventListener('click', function(){
-  var m = montagem; if(!m.produto) return;
-  var it = { id:m.produto.id, nome:m.produto.nome, inclusos:m.inclusos.slice(), extras:m.extras.slice(), unit:precoDe(m.produto, m.extras), qtd:1 };
-  var ja = carrinho.filter(function(x){ return chave(x)===chave(it); })[0];
-  if(ja) ja.qtd++; else carrinho.push(it);
-  evento('adicionar_item', {item_name:it.nome, value:it.unit, currency:'BRL', complementos:it.inclusos.length, adicionais:it.extras.length});
-  montagem = { produto:null, inclusos:[], extras:[] };
-  document.querySelectorAll('input[name=tam]').forEach(function(i){ i.checked=false; });
-  desenharComplementos(null);
-  desenharSabores(null);
+  var feitos = [mCopo, mGar].filter(function(m){ return m.produto; });
+  if(!feitos.length) return;
+  feitos.forEach(function(m){
+    var it = { id:m.produto.id, nome:m.produto.nome, inclusos:m.inclusos.slice(), extras:m.extras.slice(), unit:precoDe(m.produto, m.extras), qtd:1 };
+    var ja = carrinho.filter(function(x){ return chave(x)===chave(it); })[0];
+    if(ja) ja.qtd++; else carrinho.push(it);
+    evento('adicionar_item', {item_name:it.nome, value:it.unit, currency:'BRL', complementos:it.inclusos.length, adicionais:it.extras.length});
+  });
+  mCopo = { produto:null, inclusos:[], extras:[] }; mGar = { produto:null, inclusos:[], extras:[] }; ultimo = 'copo';
+  document.querySelectorAll('input[name=tam], input[name=tamG]').forEach(function(i){ i.checked=false; });
+  desenharCopoPassos(null); desenharExtrasGarrafa(null); desenharSabores(null);
   atualizarMontagem(); desenharCarrinho();
   location.hash = '#finalizar';
 });
