@@ -6,7 +6,7 @@ Site de pedidos online do trailer **Divinus Gelatto** (açaí e gelados, Araruam
 - **Painel do dono:** https://divinusgelatto.pages.dev/painel
 - **Hospedagem:** Cloudflare Pages (envio de .zip) · **Banco e funções:** Supabase · **Pagamento:** Mercado Pago
 
-> Este repositório é **privado**. Nunca coloque aqui chaves secretas (`service_role`, `MP_ACCESS_TOKEN`). O `config.js` leva apenas a chave pública (publishable).
+> Este repositório é **público**. Nunca coloque aqui chaves secretas (`service_role`, `MP_ACCESS_TOKEN`), senhas, e-mails de contas, dados de clientes, custos, margens ou contratos. O `config.js` leva apenas a chave pública (publishable). Documentos financeiros e de contrato ficam só no computador do dono (pasta `documentos/` local, fora do Git).
 
 ## Estrutura
 
@@ -28,7 +28,7 @@ divinus-gelatto/
 │   └── functions/
 │       ├── pagamento/      gera Pix (QR Code) e link de cartão no Mercado Pago
 │       └── mp-webhook/     recebe o aviso do Mercado Pago e marca o pedido como pago
-├── documentos/             PDFs de operação, explicação e documentação técnica
+├── documentos/             PDFs públicos de operação e explicação (os financeiros ficam fora do Git)
 ├── financeiro/             planilhas e notas lançadas
 ├── LEIA-ME.md              passo a passo de instalação e operação
 └── serve.ps1               servidor local só para testes
@@ -59,11 +59,12 @@ Detalhes e checklist em [LEIA-ME.md](LEIA-ME.md).
 
 ## Segurança e privacidade (LGPD)
 
-- Dados do cliente (nome, telefone, endereço) ficam no Supabase com acesso só para o dono (RLS).
+- Dados do cliente (nome, telefone, endereço) ficam no Supabase com acesso só para o dono (RLS); nada disso está neste repositório.
 - O site mostra só o primeiro nome do cliente que volta; os dados completos exigem o código de um pedido anterior.
 - Chaves secretas ficam só nos *secrets* do Supabase, nunca no código.
 
 ## Pendências conhecidas
 
+- Plataformas: manter o cardápio igual ao do site (detalhes em documento interno, fora do Git).
 - Pix real de teste e chave Pix do dono no painel.
 - Ping diário para o Supabase Free não pausar por inatividade.
