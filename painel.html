@@ -206,6 +206,7 @@ tr.sujo td{background:#FFF6DA}
       <button role="tab" aria-selected="true" data-aba="pedidos">Pedidos<span class="badge" id="badgeNovos" hidden>0</span></button>
       <button role="tab" aria-selected="false" data-aba="cardapio">Cardápio</button>
       <button role="tab" aria-selected="false" data-aba="entrega">Entrega</button>
+      <button role="tab" aria-selected="false" data-aba="clientes">Clientes</button>
       <button role="tab" aria-selected="false" data-aba="financeiro">Financeiro</button>
       <button role="tab" aria-selected="false" data-aba="config">Configurações</button>
     </div>
@@ -325,6 +326,13 @@ tr.sujo td{background:#FFF6DA}
     </section>
 
     <!-- CONFIGURAÇÕES -->
+    <!-- CLIENTES -->
+    <section id="aba-clientes" hidden>
+      <div class="sec-titulo"><h2>Clientes</h2><button class="btn" type="button" id="btnCsvClientes">Baixar planilha (CSV)</button></div>
+      <p class="ajuda" id="resumoClientes"></p>
+      <div class="bloco"><div class="tabela-box" id="tab-clientes" style="margin-top:0"></div></div>
+    </section>
+
     <section id="aba-config" hidden>
       <div class="sec-titulo"><h2>Configurações</h2></div>
       <form class="bloco" id="formConfig">
@@ -400,6 +408,7 @@ function criarDbSupabase(){
     sair: function(){ return sb.auth.signOut(); },
     souAdmin: function(){ return r(sb.rpc('sou_admin')); },
     pedidos: function(desde){ return r(sb.from('pedidos').select('*').gte('criado_em', desde.toISOString()).order('criado_em',{ascending:false}).limit(800)); },
+    pedidosTodos: function(){ return r(sb.from('pedidos').select('nome,telefone,criado_em,total,status,rua,numero,bairro').order('criado_em',{ascending:false}).limit(5000)); },
     atualizarPedido: function(id, campos){ return r(sb.from('pedidos').update(campos).eq('id', id).select().single()); },
     listar: function(t){ return r(sb.from(t).select('*').order('ordem').order(t==='produtos'?'id':(t==='bairros'?'bairro':'id'))); },
     salvar: function(t, linha){
@@ -537,12 +546,45 @@ document.querySelectorAll('[data-aba]').forEach(function(b){
 });
 function trocarAba(nome){
   document.querySelectorAll('[data-aba]').forEach(function(b){ b.setAttribute('aria-selected', b.getAttribute('data-aba')===nome); });
-  ['pedidos','cardapio','entrega','financeiro','config'].forEach(function(n){ $('aba-'+n).hidden = n!==nome; });
+  ['pedidos','cardapio','entrega','clientes','financeiro','config'].forEach(function(n){ $('aba-'+n).hidden = n!==nome; });
   if(nome==='cardapio'){ carregarTabela('produtos'); carregarTabela('complementos'); }
   if(nome==='entrega'){ carregarConfig().then(function(){ carregarTabela('bairros'); }); }
   if(nome==='config'){ carregarConfig().then(preencherConfig); }
   if(nome==='financeiro'){ carregarFinanceiro(); }
+  if(nome==='clientes'){ carregarClientes(); }
 }
+
+/* ================= CLIENTES ================= */
+// Agrupa todos os pedidos (que ficam guardados no banco) pelo telefone.
+var CLIENTES = [];
+function carregarClientes(){
+  var busca = db.pedidosTodos ? db.pedidosTodos() : db.pedidos(new Date(0));
+  busca.then(function(lista){
+    var mapa = {};
+    (lista||[]).forEach(function(p){
+      if(p.status==='cancelado' || !p.telefone) return;
+      var c = mapa[p.telefone] || (mapa[p.telefone] = { telefone:p.telefone, nome:p.nome, pedidos:0, total:0, ultimo:p.criado_em, endereco:'' });
+      c.pedidos++; c.total += +p.total || 0;
+      if(p.criado_em >= c.ultimo){ c.ultimo = p.criado_em; c.nome = p.nome; }
+      if(p.rua && !c.endereco) c.endereco = p.rua + ', ' + p.numero + (p.bairro ? ' - ' + p.bairro : '');
+    });
+    CLIENTES = Object.keys(mapa).map(function(k){ return mapa[k]; }).sort(function(a,b){ return a.ultimo < b.ultimo ? 1 : -1; });
+    $('resumoClientes').textContent = CLIENTES.length + ' clientes · ' + CLIENTES.filter(function(c){ return c.pedidos>1; }).length + ' voltaram a pedir.';
+    var h = '<table><thead><tr><th>Cliente</th><th>Telefone</th><th>Pedidos</th><th>Total gasto</th><th>Último pedido</th><th>Endereço</th></tr></thead><tbody>';
+    CLIENTES.forEach(function(c){
+      h += '<tr><td>' + esc(c.nome) + '</td><td><a href="' + esc(zap(c.telefone)) + '" target="_blank" rel="noopener">' + esc(fone(c.telefone)) + '</a></td><td>' + c.pedidos + '</td><td>' + brl(c.total) + '</td><td>' + esc(dataBR(new Date(c.ultimo))) + '</td><td>' + esc(c.endereco) + '</td></tr>';
+    });
+    $('tab-clientes').innerHTML = CLIENTES.length ? h + '</tbody></table>' : '<p class="ajuda" style="padding:12px">Ainda não há clientes.</p>';
+  }).catch(function(){ aviso('Não foi possível carregar os clientes.'); });
+}
+$('btnCsvClientes').addEventListener('click', function(){
+  function cel(v){ v = String(v==null?'':v); if(/^[=+@-]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g,'""') + '"'; }
+  var linhas = [['Nome','Telefone','Pedidos','Total gasto','Último pedido','Endereço'].map(cel).join(';')];
+  CLIENTES.forEach(function(c){ linhas.push([c.nome, c.telefone, c.pedidos, c.total.toFixed(2).replace('.',','), dataBR(new Date(c.ultimo)), c.endereco].map(cel).join(';')); });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([String.fromCharCode(65279) + linhas.join(String.fromCharCode(13, 10))], { type:'text/csv;charset=utf-8' }));
+  a.download = 'clientes-divinus.csv'; document.body.appendChild(a); a.click(); a.remove();
+});
 
 /* ================= PEDIDOS ================= */
 var PEDIDOS = [], filtro = 'abertos', somLigado = false, novosNaoVistos = 0;

@@ -508,6 +508,12 @@ body.com-barra{padding-bottom:64px}
           <h3><span class="num">2</span>Seus dados</h3>
           <div class="campo"><label for="nome">Nome</label><input id="nome" autocomplete="name"></div>
           <div class="campo"><label for="tel">WhatsApp</label><input id="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="(22) 99999-9999"><span class="ajuda">Para confirmar o pedido e avisar quando estiver pronto.</span></div>
+          <div class="campo" id="boxCliente" hidden>
+            <span class="ajuda" id="boxClienteTxt" style="font-weight:700"></span>
+            <span class="ajuda">Para preencher seus dados, digite o código de um pedido anterior (ex.: DG4F7K). Ele está na tela de confirmação.</span>
+            <div style="display:flex;gap:8px"><input id="codCliente" maxlength="7" autocomplete="off" placeholder="Código do pedido" style="text-transform:uppercase"><button type="button" class="btn" id="btnCodCliente">Preencher</button></div>
+            <span class="ajuda" id="erroCliente" role="alert"></span>
+          </div>
           <div class="sel-entrega" role="radiogroup" aria-label="Como receber">
             <div class="opc"><input type="radio" name="modo" id="modoRetirada" value="retirada" checked><label for="modoRetirada"><b>Retirar no trailer</b><small>Sem taxa</small></label></div>
             <div class="opc"><input type="radio" name="modo" id="modoEntrega" value="entrega"><label for="modoEntrega"><b>Entrega</b><small>Taxa pelo bairro</small></label></div>
@@ -1223,6 +1229,41 @@ function restaurar(){
   }
   trocarModo(); aplicarBairro(); desenharCarrinho();
 }
+
+/* ===== Cliente que volta: mostra só o primeiro nome; os dados completos exigem o código de um pedido anterior ===== */
+var ultimoTelConsultado = '';
+function consultarCliente(){
+  var t = telDigitos(), box = $('boxCliente');
+  if(previa || t.length < 10){ box.hidden = true; ultimoTelConsultado = ''; return; }
+  if(t === ultimoTelConsultado) return;
+  ultimoTelConsultado = t;
+  chamarApi('reconhecer_cliente', { p_telefone:t }).then(function(r){
+    if(telDigitos() !== t) return;
+    if(r && r.existe && !$('rua').value.trim()){
+      $('boxClienteTxt').textContent = 'Que bom ter você de volta' + (r.nome ? ', ' + r.nome : '') + '!';
+      $('erroCliente').textContent = ''; box.hidden = false;
+    } else box.hidden = true;
+  }).catch(function(){ box.hidden = true; });
+}
+$('tel').addEventListener('input', consultarCliente);
+$('btnCodCliente').addEventListener('click', function(){
+  var t = telDigitos(), cod = $('codCliente').value.trim();
+  if(!cod){ $('erroCliente').textContent = 'Digite o código do pedido.'; return; }
+  $('erroCliente').textContent = 'Procurando...';
+  chamarApi('dados_cliente', { p_telefone:t, p_codigo:cod }).then(function(d){
+    if(!d){ $('erroCliente').textContent = 'Não encontramos esse código para este telefone.'; return; }
+    if(d.nome && !$('nome').value.trim()) $('nome').value = d.nome;
+    if(d.modo === 'entrega' && d.rua){
+      $('modoEntrega').checked = true; trocarModo();
+      $('cep').value = d.cep || ''; $('rua').value = d.rua || ''; $('numero').value = d.numero || ''; $('comp').value = d.complemento || '';
+      var idx = -1; DADOS.entrega.forEach(function(x,i){ if(idx<0 && d.bairro && norm(x.bairro)===norm(d.bairro)) idx = i; });
+      if(idx>=0) $('bairroSel').value = String(idx); else { $('bairroSel').value = 'outro'; $('bairroOutro').value = d.bairro || ''; }
+      aplicarBairro();
+    }
+    salvarCliente(); atualizarResumo();
+    $('boxCliente').hidden = true;
+  }).catch(function(){ $('erroCliente').textContent = 'Não foi possível buscar agora. Preencha manualmente.'; });
+});
 
 /* ================= RESUMO ================= */
 function atualizarResumo(){
