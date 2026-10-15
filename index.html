@@ -418,7 +418,7 @@ body.com-barra{padding-bottom:64px}
         <div class="copo-legenda" id="legendaCopo" aria-live="polite">Escolha o tamanho e veja o copo encher</div>
       </div>
      <div class="passos">
-      <div class="passo">
+      <div class="passo" id="passoCopo">
         <h3><span class="num">1</span>Escolha seu açaí no copo</h3>
         <div class="grade" id="gradeTamanhos"><p class="carregando">Carregando o cardápio...</p></div>
       </div>
@@ -891,6 +891,10 @@ function desenharComplementos(p){
   // Complementos e adicionais só aparecem depois que o cliente escolhe o tamanho (copo ou garrafa).
   $('passoInclusos').hidden = !TEM_INC || garrafa || !p;
   $('passoExtras').hidden = !TEM_EXT || !p;
+  // Os quadrados aparecem logo abaixo do tamanho escolhido: do copo, abaixo do copo; da garrafa, abaixo da garrafa.
+  $('passoCopo').after($('passoInclusos'));
+  if(garrafa){ $('passoGarrafa').after($('passoExtras')); $('passoExtras').after($('passoSabor')); }
+  else { $('passoInclusos').after($('passoExtras')); $('passoGarrafa').after($('passoSabor')); }
   // copo: 1 tamanho, 2 complementos, 3 adicional | garrafa: 1 adicional, 2 sabor
   $('numExtras').textContent = String((garrafa ? 0 : 1) + ($('passoInclusos').hidden ? 0 : 1) + 1);
   var base = p || categoriaPadrao(), ativo = !!p;
