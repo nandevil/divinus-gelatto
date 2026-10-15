@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Divinus Gelatto | Peça seu açaí em Araruama</title>
-<meta name="description" content="Monte seu açaí no copo ou na garrafa e peça pelo site. Retirada no trailer ou entrega em Araruama, RJ.">
+<title>Divinus Gelatto | Açaí e gelados em Araruama</title>
+<meta name="description" content="Monte seu açaí no copo ou na garrafa e peça pelo site. Retirada grátis no trailer ou entrega em Araruama, RJ. Segunda a sábado, das 10h às 18h.">
 <meta name="theme-color" content="#4A2E22">
 <link rel="icon" href="img/logo.jpg">
 <link rel="apple-touch-icon" href="img/logo.jpg">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Divinus Gelatto">
-<meta property="og:title" content="Divinus Gelatto | Monte seu açaí">
+<meta property="og:title" content="Divinus Gelatto | Açaí e gelados em Araruama">
 <meta property="og:description" content="Gelato que encanta, momentos que ficam! Monte seu açaí e peça pelo site. Araruama, RJ.">
 <!-- Depois de publicar, troque pelo endereço completo, ex.: https://divinusgelatto.com.br/img/logo.jpg -->
 <meta property="og:image" content="https://divinusgelatto.pages.dev/img/trailer.jpg">
@@ -110,6 +110,7 @@ button{font:inherit;cursor:pointer}
 /* hero: tudo centralizado */
 .hero{padding:30px 0 40px;text-align:center}
 .hero .wrap{display:flex;flex-direction:column;align-items:center}
+.apoio-topo{margin:0 0 10px;font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#4A2E22}
 .hero h1{font-size:clamp(34px,7vw,56px);color:var(--choco);max-width:16ch}
 .hero p.lead{font-size:19px;color:var(--choco-2);margin:14px auto 8px;max-width:34ch}
 .cta{display:inline-block;background:var(--ouro);color:var(--choco);border:2px solid var(--choco);border-radius:999px;padding:13px 28px;font-weight:700;text-decoration:none;box-shadow:0 4px 0 var(--choco)}
@@ -350,6 +351,7 @@ body.com-barra{padding-bottom:64px}
 <section class="hero">
   <div class="wrap">
     <div>
+      <p class="apoio-topo">Açaí e gelados em Araruama</p>
       <h1>Gelato que encanta, momentos que ficam!</h1>
       <p class="lead">Monte seu açaí do jeito que você gosta e peça aqui pelo site.</p>
       <div class="apps" id="apps" hidden>
@@ -516,7 +518,7 @@ body.com-barra{padding-bottom:64px}
           </div>
           <div class="sel-entrega" role="radiogroup" aria-label="Como receber">
             <div class="opc"><input type="radio" name="modo" id="modoRetirada" value="retirada" checked><label for="modoRetirada"><b>Retirar no trailer</b><small>Sem taxa</small></label></div>
-            <div class="opc"><input type="radio" name="modo" id="modoEntrega" value="entrega"><label for="modoEntrega"><b>Entrega</b><small>Taxa pelo bairro</small></label></div>
+            <div class="opc"><input type="radio" name="modo" id="modoEntrega" value="entrega"><label for="modoEntrega"><b>Entrega</b><small>Taxa de entrega: R$ 7,00 até 5 km do trailer.<br>Acima de 5 km, combine o valor pelo WhatsApp.<br><a href="https://wa.me/5522974035793?text=Oi!%20Quero%20pedir%20a%C3%A7a%C3%AD%20com%20entrega%20e%20moro%20a%20mais%20de%205%20km.%20Pode%20me%20passar%20a%20taxa%3F" target="_blank" rel="noopener" id="linkEntregaZap">Combinar entrega no WhatsApp ›</a></small></label></div>
           </div>
           <div id="blocoEndereco" hidden>
             <div class="campo"><label for="cep">CEP</label><input id="cep" inputmode="numeric" maxlength="9" placeholder="00000-000" autocomplete="postal-code"><span class="ajuda">Com o CEP, preenchemos a rua e o bairro. Não sabe o CEP? Escolha o bairro abaixo.</span></div>
@@ -547,6 +549,7 @@ body.com-barra{padding-bottom:64px}
         <div class="lin" id="linCartao" hidden><span id="rotCartao">Taxa do cartão</span><span id="vCartao"></span></div>
         <div class="lin total"><span>Total</span><span id="vTotal">R$ 0,00</span></div>
         <p class="nota" id="notaResumo"></p>
+        <div id="campoDistancia" hidden style="margin:10px 0"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:600;color:#fff;font-size:14px"><input type="checkbox" id="chkDistancia" style="width:auto;margin-top:3px"> Confirmo que moro a até 5 km do trailer.</label></div>
         <div class="msg-erro" id="erroPedido" role="alert"></div>
         <button class="btn" type="button" id="btnEnviar" disabled>Finalizar pedido</button>
         <a class="zap-alt" id="zapAlternativo" href="#" target="_blank" rel="noopener" hidden>Enviar pelo WhatsApp</a>
@@ -1152,6 +1155,7 @@ document.querySelectorAll('input[name=modo]').forEach(function(r){ r.addEventLis
 function trocarModo(){
   var e = modo()==='entrega';
   $('blocoEndereco').hidden = !e;
+  $('campoDistancia').hidden = !e;
   atualizarResumo();
 }
 function desenharBairros(){
@@ -1343,6 +1347,7 @@ $('btnEnviar').addEventListener('click', function(){
   if(!nome) erros.push('Informe seu nome.');
   if(telDigitos().length < 10) erros.push('Informe seu WhatsApp com DDD.');
   if(e){
+    if(!$('chkDistancia').checked) erros.push('Confirme que mora a até 5 km do trailer.');
     if(!$('rua').value.trim() || !$('numero').value.trim()) erros.push('Informe rua e número.');
     if(!bairro) erros.push('Informe o bairro.');
   }
