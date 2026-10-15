@@ -177,3 +177,15 @@ https://SEUSITE/?utm_source=qrcode&utm_campaign=trailer
 - Para atualizar: Cloudflare > Workers & Pages > divinusgelatto > Create deployment > enviar um .zip com `index.html`, `painel.html`, `config.js` e `img/` (nunca `financeiro/` nem `supabase/`).
 - Supabase: secrets `MP_ACCESS_TOKEN` e `SITE_URL` já criados; função `pagamento` sem verificação de JWT.
 - Taxa extra do cartão online: Painel > Configurações (hoje 4,98%, igual à taxa à vista do Mercado Pago).
+
+## Automação do pagamento (Mercado Pago)
+- Só existe pagamento online: **Pix** e **cartão de crédito** (a maquininha foi removida; o banco recusa outras formas).
+- Função `mp-webhook` (Supabase, sem verificação de JWT): o Mercado Pago avisa quando o pagamento é aprovado; a função confere o pagamento na API do MP (usa `MP_ACCESS_TOKEN`), compara o valor e marca o pedido como **pago** sozinha.
+- O dono só faz: **Aceitar pedido** → **Saiu para entrega / Pronto** → ou **Cancelar**. O botão "Conferi: o valor caiu (manual)" só é plano B.
+- Pedido cancelado que já estava pago ganha a nota "Estorne no Mercado Pago".
+- `supabase/automacao.sql`: trigger que impede confirmar pedido online sem pagamento + `limpeza_pedidos()` rodando a cada 10 min (pg_cron) para apagar pedidos abandonados e não pagos. Pedidos pagos nunca são apagados.
+- Ordem dos SQLs aplicados depois do `schema.sql`: `taxa-cartao.sql`, `so-online.sql`, `automacao.sql`, `cliente.sql`.
+
+## Clientes
+- `supabase/cliente.sql`: o site reconhece telefone que já pediu e mostra só o primeiro nome; nome/endereço completos só aparecem com o **código de um pedido anterior** do mesmo telefone.
+- Painel > aba **Clientes**: histórico por telefone (pedidos, total gasto, último pedido, endereço) e exportação CSV. Os dados dos pedidos ficam guardados no banco por tempo indeterminado e não afetam o Financeiro.
