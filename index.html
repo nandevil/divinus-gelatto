@@ -1381,7 +1381,8 @@ function textoStatus(i){
   if(i.status==='cancelado') return { cls:'cancelado', txt:'Pedido cancelado. Fale com a gente no WhatsApp.' };
   if(i.status==='concluido') return { cls:'ok', txt: i.modo==='entrega' ? 'Pedido entregue. Obrigado!' : 'Pedido retirado. Obrigado!' };
   if(i.status==='pronto') return { cls:'ok', txt: i.modo==='entrega' ? 'Saiu para entrega!' : 'Pronto para retirar no trailer!' };
-  if(i.status==='confirmado') return { cls:'ok', txt: i.pagamento_status==='pago' ? 'Pagamento confirmado! Pedido em preparo.' : 'Pedido confirmado! Em preparo.' };
+  if(i.status==='confirmado') return { cls:'ok', txt: i.pagamento_status==='pago' ? 'Pedido aceito! Em preparo.' : 'Pedido confirmado! Em preparo.' };
+  if(i.status==='novo' && i.pagamento_status==='pago') return { cls:'ok', txt:'Pagamento recebido! Aguardando o trailer aceitar o pedido.' };
   if(i.pagamento_status==='aguardando') return { cls:'espera', txt:'Aguardando pagamento' };
   return { cls:'espera', txt:'Recebido. Aguardando confirmação do trailer.' };
 }

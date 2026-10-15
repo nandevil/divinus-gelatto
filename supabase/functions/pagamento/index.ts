@@ -74,6 +74,9 @@ Deno.serve(async (req) => {
   const valor = Math.round(Number(p.total) * 100) / 100;
   if (!(valor > 0)) return resposta({ erro: "Valor inválido." }, 400);
 
+  // O Mercado Pago avisa este endereço quando o pagamento é aprovado (confirmação automática).
+  const urlAviso = `${Deno.env.get("SUPABASE_URL")}/functions/v1/mp-webhook`;
+
   const cabecalhos = (chave: string) => ({
     "Authorization": `Bearer ${token}`,
     "Content-Type": "application/json",
@@ -89,6 +92,7 @@ Deno.serve(async (req) => {
     const preferencia: Record<string, unknown> = {
       items: [{ id: p.codigo, title: `Pedido ${p.codigo} - Divinus Gelatto`, quantity: 1, unit_price: valor, currency_id: "BRL" }],
       external_reference: p.codigo,
+      notification_url: urlAviso,
       statement_descriptor: "DIVINUS GELATTO",
       // Só cartão: o Pix já é pago pelo QR Code, e boleto não serve para pedido de açaí.
       payment_methods: {
@@ -125,6 +129,7 @@ Deno.serve(async (req) => {
     description: `Pedido ${p.codigo} - Divinus Gelatto`,
     payment_method_id: "pix",
     external_reference: p.codigo,
+    notification_url: urlAviso,
     date_of_expiration: new Date(Date.now() + 30 * 60 * 1000).toISOString().replace("Z", "+00:00"),
     // O site não pede e-mail do cliente. Endereço de domínio reservado (example.com) nunca recebe mensagem.
     payer: { email: `${p.codigo.toLowerCase()}@example.com`, first_name: primeiroNome },

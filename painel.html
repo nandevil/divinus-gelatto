@@ -549,8 +549,8 @@ var PEDIDOS = [], filtro = 'abertos', somLigado = false, novosNaoVistos = 0;
 var ROTULO = { novo:'Novo', confirmado:'Confirmado', pronto:'Pronto', concluido:'Concluído', cancelado:'Cancelado' };
 function rotuloStatus(p){ return p.status==='pronto' && p.modo==='entrega' ? 'Saiu p/ entrega' : ROTULO[p.status]; }
 function proximo(p){
-  if(aguardando(p)) return { st:'confirmado', pago:true, txt:'Conferi: o valor caiu' };
-  if(p.status==='novo') return { st:'confirmado', txt:'Confirmar pedido' };
+  if(aguardando(p)) return { st:'confirmado', pago:true, txt:'Conferi: o valor caiu (manual)' };
+  if(p.status==='novo') return { st:'confirmado', txt:'Aceitar pedido' };
   if(p.status==='confirmado') return { st:'pronto', txt: p.modo==='entrega' ? 'Saiu para entrega' : 'Pronto para retirar' };
   if(p.status==='pronto') return { st:'concluido', txt: p.modo==='entrega' ? 'Entregue' : 'Retirado' };
   return null;
@@ -981,8 +981,14 @@ function abrirPainel(){
   // Configurações primeiro: as mensagens de WhatsApp usam a chave Pix.
   carregarConfig().then(carregarPedidos);
   db.aoVivo(function(tipo, p){
-    if(tipo==='INSERT') pedidoChegou(p);
-    else if(tipo==='UPDATE') substituir(p);
+    // Só avisa (som) quando o pagamento já caiu; pedido aguardando pagamento entra em silêncio.
+    if(tipo==='INSERT'){ if(p.pagamento_status==='pago') pedidoChegou(p); else substituir(p); }
+    else if(tipo==='UPDATE'){
+      var antes = PEDIDOS.filter(function(x){ return x.id===p.id; })[0];
+      // Pagamento confirmado sozinho pelo Mercado Pago: avisa o dono para aceitar.
+      if(antes && antes.pagamento_status!=='pago' && p.pagamento_status==='pago' && p.status==='novo') pedidoChegou(p);
+      substituir(p);
+    }
   }, function(on){ $('aoVivo').classList.toggle('on', on); });
   // Rede de segurança: recarrega a lista a cada minuto (e atualiza o "há X min").
   setInterval(carregarPedidos, 60000);
