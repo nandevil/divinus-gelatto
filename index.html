@@ -111,6 +111,7 @@ button{font:inherit;cursor:pointer}
 .hero{padding:30px 0 40px;text-align:center}
 .hero .wrap{display:flex;flex-direction:column;align-items:center}
 .apoio-topo{margin:0 0 10px;font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#4A2E22}
+.foto-creme{display:block;width:56px;height:68px;object-fit:contain;margin:0 auto 6px;border-radius:8px;background:#fff}
 .hero h1{font-size:clamp(34px,7vw,56px);color:var(--choco);max-width:16ch}
 .hero p.lead{font-size:19px;color:var(--choco-2);margin:14px auto 8px;max-width:34ch}
 .cta{display:inline-block;background:var(--ouro);color:var(--choco);border:2px solid var(--choco);border-radius:999px;padding:13px 28px;font-weight:700;text-decoration:none;box-shadow:0 4px 0 var(--choco)}
@@ -918,6 +919,12 @@ function prepararPassos(){
   desenharSabores(null);
 }
 // Complementos e adicionais do COPO: só aparecem depois que o cliente escolhe o tamanho do copo.
+// Foto pequena do pote ao lado de cada creme (arquivos em img/cremes/).
+var FOTOS_CREME = { 'ovomaltine':'ovomaltine', 'pacoquinha':'pacoquinha', 'prestigio':'prestigio', 'galak com negresco':'galak-negresco', 'ninho':'ninho', 'kitkat':'kitkat', 'nutella':'nutella' };
+function fotoCreme(nome){
+  var k = norm(String(nome).replace(/^creme de[ ]+/i, '')), f = FOTOS_CREME[k];
+  return f ? '<img class="foto-creme" src="img/cremes/' + f + '.jpg" alt="" width="56" height="68" loading="lazy">' : '';
+}
 function desenharCopoPassos(p){
   var ativo = !!p;
   $('passoInclusos').hidden = !TEM_INC || !ativo;
@@ -937,7 +944,7 @@ function desenharCopoPassos(p){
   var ge = $('gradeExtras'); ge.innerHTML = '';
   ext.forEach(function(c,i){
     var d = el('div',{class:'opc'}), cid='ext_'+i;
-    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"><label for="'+cid+'"><b>'+esc(c.nome)+'</b><small>+ '+brl(c.preco)+'</small></label>';
+    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"><label for="'+cid+'">'+fotoCreme(c.nome)+'<b>'+esc(c.nome)+'</b><small>+ '+brl(c.preco)+'</small></label>';
     ge.appendChild(d);
     d.querySelector('input').addEventListener('change', function(ev){ alternar(mCopo.extras, c.nome, ev.target.checked, 99, ev.target); });
   });
@@ -951,7 +958,7 @@ function desenharExtrasGarrafa(p){
   var ge = $('gradeExtrasG'); ge.innerHTML = '';
   ext.forEach(function(c,i){
     var d = el('div',{class:'opc'}), cid='extg_'+i;
-    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"><label for="'+cid+'"><b>'+esc(c.nome)+'</b><small>+ '+brl(c.preco)+'</small></label>';
+    d.innerHTML = '<input type="checkbox" id="'+cid+'" value="'+esc(c.nome)+'"><label for="'+cid+'">'+fotoCreme(c.nome)+'<b>'+esc(c.nome)+'</b><small>+ '+brl(c.preco)+'</small></label>';
     ge.appendChild(d);
     d.querySelector('input').addEventListener('change', function(ev){ alternar(mGar.extras, c.nome, ev.target.checked, 99, ev.target); });
   });
@@ -1137,7 +1144,7 @@ function irCardapio(paraMonte){
 function rota(){
   var fin = naFinalizar(), nova = fin ? 'finalizar' : 'cardapio';
   $('viewCardapio').hidden = fin; $('viewFinalizar').hidden = !fin;
-  document.title = fin ? 'Finalizar pedido | Divinus Gelatto' : 'Divinus Gelatto | Peça seu açaí em Araruama';
+  document.title = fin ? 'Finalizar pedido | Divinus Gelatto' : 'Divinus Gelatto | Açaí e gelados em Araruama';
   if(nova !== telaAtual){
     var primeira = telaAtual === '';
     telaAtual = nova;
