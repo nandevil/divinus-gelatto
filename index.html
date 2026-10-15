@@ -201,6 +201,8 @@ section.bloco{padding:34px 0;border-top:2px solid var(--creme-2)}
 .campo input,.campo select,.campo textarea{font:inherit;border:2px solid var(--choco-2);border-radius:10px;padding:11px 12px;background:#fff;color:var(--choco);width:100%}
 .campo .ajuda{font-size:13.5px;color:var(--choco-2)}
 .duas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.resumo-tit{display:flex;align-items:center;gap:8px;font-size:20px;margin:0 0 12px;color:var(--ouro)}
+.resumo .num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ouro);color:var(--choco);font-family:'Figtree';font-weight:700;font-size:15px}
 .resumo{background:var(--choco);color:var(--creme);border-radius:var(--raio);padding:18px}
 .resumo .lin{display:flex;justify-content:space-between;gap:12px;padding:5px 0}
 .selo-pix{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:#1f7a3d;color:#fff;font-size:11px;font-weight:700;vertical-align:middle}
@@ -495,15 +497,15 @@ body.com-barra{padding-bottom:64px}
     <div class="pedido">
       <div>
         <div class="passo">
-          <h3>Itens</h3>
+          <h3><span class="num">1</span>Itens</h3>
           <div id="listaItens"><p class="vazio">Seu pedido está vazio. Volte ao cardápio para montar seu açaí.</p></div>
           <div class="acoes-carrinho" id="acoesCarrinho">
             <a class="btn sec" href="#" data-mais>+ Adicionar mais um açaí</a>
-            <button class="btn" type="button" id="irDados">Finalizar pedido</button>
+            <button class="btn" type="button" id="irDados">Continuar</button>
           </div>
         </div>
         <div class="passo" id="dadosCliente">
-          <h3>Seus dados</h3>
+          <h3><span class="num">2</span>Seus dados</h3>
           <div class="campo"><label for="nome">Nome</label><input id="nome" autocomplete="name"></div>
           <div class="campo"><label for="tel">WhatsApp</label><input id="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="(22) 99999-9999"><span class="ajuda">Para confirmar o pedido e avisar quando estiver pronto.</span></div>
           <div class="sel-entrega" role="radiogroup" aria-label="Como receber">
@@ -523,16 +525,17 @@ body.com-barra{padding-bottom:64px}
           </div>
           <div class="campo"><label for="obs">Observação (opcional)</label><textarea id="obs" rows="2" placeholder="Ex.: sem colher, troco para R$ 50"></textarea></div>
         </div>
-        <div class="passo">
-          <h3>Pagamento</h3>
+        <div class="passo" id="passoPagamento">
+          <h3><span class="num">3</span>Forma de pagamento</h3>
+          <p class="dica">O pedido é pago aqui, online, pelo Mercado Pago. Depois é só retirar no trailer ou aguardar a entrega.</p>
           <div class="grade grade-pag" role="radiogroup" aria-label="Forma de pagamento">
             <div class="opc"><input type="radio" name="pag" id="pagPix" value="Pix" checked><label for="pagPix"><b>Pix <span class="selo-pix">Melhor preço</span></b><small id="smallPix">QR Code na hora, sem taxa extra</small></label></div>
             <div class="opc"><input type="radio" name="pag" id="pagOnline" value="Cartão online"><label for="pagOnline"><b>Cartão de crédito</b><small id="smallOnline">Pague online pelo Mercado Pago</small></label></div>
-            <div class="opc"><input type="radio" name="pag" id="pagMaq" value="Cartão na maquininha"><label for="pagMaq"><b>Cartão na maquininha</b><small id="smallMaq">Na retirada, no trailer</small></label></div>
           </div>
         </div>
       </div>
       <aside class="resumo" aria-label="Resumo do pedido">
+        <h3 class="resumo-tit"><span class="num">4</span>Finalizar pedido</h3>
         <div class="lin"><span>Itens</span><span id="vItens">R$ 0,00</span></div>
         <div class="lin"><span>Entrega</span><span id="vEntrega">Retirada grátis</span></div>
         <div class="lin" id="linCartao" hidden><span id="rotCartao">Taxa do cartão</span><span id="vCartao"></span></div>
@@ -1129,11 +1132,12 @@ function rota(){
   if(nova !== telaAtual){
     var primeira = telaAtual === '';
     telaAtual = nova;
-    if(!primeira) window.scrollTo(0, 0);
+    if(!primeira){ window.scrollTo(0, 0); requestAnimationFrame(function(){ window.scrollTo(0, 0); }); setTimeout(function(){ window.scrollTo(0, 0); }, 60); }
     if(fin) evento('ver_carrinho', {itens:qtdTotal(), value:subtotal(), currency:'BRL'});
   }
   if(typeof atualizarResumo === 'function' && DADOS) atualizarResumo();
 }
+try{ if('scrollRestoration' in history) history.scrollRestoration = 'manual'; }catch(e){}
 window.addEventListener('hashchange', rota);
 
 /* ================= ENTREGA ================= */
@@ -1142,9 +1146,6 @@ document.querySelectorAll('input[name=modo]').forEach(function(r){ r.addEventLis
 function trocarModo(){
   var e = modo()==='entrega';
   $('blocoEndereco').hidden = !e;
-  if(e && $('pagMaq').checked) $('pagPix').checked = true;
-  $('pagMaq').disabled = e;
-  $('smallMaq').textContent = e ? 'Só na retirada' : 'Na retirada, no trailer';
   atualizarResumo();
 }
 function desenharBairros(){
@@ -1231,10 +1232,9 @@ function atualizarResumo(){
   var pct = DADOS && +DADOS.taxa_cartao > 0 ? +DADOS.taxa_cartao : 0;
   var pagSel = document.querySelector('input[name=pag]:checked');
   var tc = (pct > 0 && pagSel && pagSel.value === 'Cartão online' && !(e && !frete.ok)) ? Math.round((sub+ent)*pct)/100 : 0;
-  var pctTxt = String(pct).replace('.', ',') + '%';
   $('linCartao').hidden = !(tc > 0);
-  if(tc > 0){ $('rotCartao').textContent = 'Taxa do cartão (' + pctTxt + ')'; $('vCartao').textContent = brl(tc); }
-  $('smallOnline').textContent = pct > 0 ? 'Pague online pelo Mercado Pago · taxa de ' + pctTxt : 'Pague online pelo Mercado Pago';
+  if(tc > 0){ $('rotCartao').textContent = 'Taxa do cartão'; $('vCartao').textContent = brl(tc); }
+  $('smallOnline').textContent = 'Pague online pelo Mercado Pago';
   $('vTotal').textContent = brl(sub+ent+tc) + (e && !frete.ok ? ' + entrega' : '');
   $('notaResumo').textContent = (e && !frete.ok) ? 'A taxa de entrega será confirmada no WhatsApp.' : (e && frete.minutos ? 'Entrega em cerca de ' + frete.minutos + ' min depois da confirmação.' : '');
   var erro = (carrinho.length && e && frete.ok && frete.minimo>sub) ? 'Pedido mínimo para ' + frete.bairro + ': ' + brl(frete.minimo) + '.' : '';
@@ -1421,7 +1421,6 @@ function desenharAcompanhamento(i){
 
   var passos = [];
   if(pend) passos.push('O pedido é confirmado assim que o pagamento cair na nossa conta. Esta tela atualiza sozinha.');
-  if(i.pagamento==='Cartão na maquininha' && i.status!=='cancelado') passos.push('Pague com cartão na maquininha, na retirada.');
   if(i.a_combinar) passos.push('A taxa de entrega será combinada pelo WhatsApp.');
   if(i.status!=='cancelado' && i.status!=='concluido') passos.push(i.modo==='entrega' ? 'Avisamos quando o pedido sair para entrega.' : 'Avisamos quando estiver pronto para retirar.');
   if(i.fora_horario && (i.status==='novo')) passos.push('Seu pedido chegou fora do horário. Confirmamos assim que abrirmos.');
