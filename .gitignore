@@ -9,3 +9,6 @@ Thumbs.db
 documentos/03-Documentacao-Tecnica-e-Financeira.*
 documentos/Divinus-Gelatto-Solicitacao-99Food.pdf
 documentos/solicitacao-99food.html
+
+# guia com dados de acesso (senha): nunca vai para o Git
+documentos/privado/
