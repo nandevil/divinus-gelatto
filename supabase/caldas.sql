@@ -5,7 +5,7 @@ alter table public.complementos add constraint complementos_grupo_check check (g
 insert into public.complementos (nome, grupo, preco, vale, disponivel, ordem)
 select v.nome, 'calda', 0, 'Açaí no copo', true, v.ordem
 from (values ('Calda de Morango',40),('Calda de Chocolate',41),('Calda de Banana caramelizada',42),('Calda de Leite condensado',43),
-             ('Calda de Uva',44),('Calda de Caramelo',45),('Calda de Tutti-frutti',46),('Calda de Algodão doce',47)) as v(nome, ordem)
+             ('Calda de Uva',44),('Calda de Caramelo',45),('Calda de Tutti-frutti',46),('Calda de Algodão doce',47),('Calda de Limão galego',48),('Calda de Kiwi',49)) as v(nome, ordem)
 where not exists (select 1 from public.complementos c where c.nome = v.nome);
 
 do $fn$
