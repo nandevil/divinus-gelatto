@@ -22,7 +22,7 @@ create table if not exists public.config (
   id            int primary key default 1 check (id = 1),
   inclusos      int     not null default 3,
   abre          text    not null default '10:00',
-  fecha         text    not null default '18:00',
+  fecha         text    not null default '19:00',
   dias          text    not null default 'seg a sáb',
   fechado_agora boolean not null default false,
   aviso         text    not null default '',
