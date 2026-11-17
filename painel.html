@@ -260,7 +260,7 @@ tr.sujo td{background:#FFF6DA}
 
     <!-- ENTREGA -->
     <section id="aba-entrega" hidden>
-      <div class="sec-titulo"><div><h2>Entrega</h2><p class="ajuda">Taxa fixa vale no lugar da calculada. Sem taxa nenhuma, o bairro fica "a combinar".</p></div><button class="btn peq" type="button" data-novo="bairros">+ Bairro</button></div>
+      <div class="sec-titulo"><div><h2>Entrega</h2><p class="ajuda">A entrega é feita pelo motoboy parceiro do iFood e da 99Food. Informe a taxa de cada bairro. Sem taxa, o bairro fica "a combinar".</p></div><button class="btn peq" type="button" data-novo="bairros">+ Bairro</button></div>
       <div class="bloco"><div class="tabela-box" id="tab-bairros" style="margin-top:0"></div></div>
     </section>
 
@@ -321,6 +321,12 @@ tr.sujo td{background:#FFF6DA}
           <div class="campo"><label for="dsPag">Forma de pagamento</label><select id="dsPag"><option value="">Escolha</option><option>Dinheiro</option><option>Pix</option><option>Cartão de débito</option><option>Cartão de crédito</option><option>Carteira digital</option></select></div>
           <div class="campo cheia"><button class="btn" type="submit">Adicionar compra</button></div>
         </form>
+        <div class="fin-import">
+          <h3 style="font-size:18px;margin:14px 0 2px">Importar uma planilha de compras (CSV)</h3>
+          <p class="ajuda">Para lançar uma nota inteira de uma vez. Colunas, nesta ordem, separadas por ponto e vírgula: data (AAAA-MM-DD); fornecedor; cnpj; documento; item; quantidade; unidade; valor_unitario; valor_total; categoria; forma_pagamento; observacao. A primeira linha é o cabeçalho.</p>
+          <input id="dsArquivo" type="file" accept=".csv,text/csv">
+          <p class="ajuda" id="dsImportStatus" role="status"></p>
+        </div>
       </details>
       <div id="finLista"></div>
     </section>
@@ -356,11 +362,6 @@ tr.sujo td{background:#FFF6DA}
           <div class="cheia"><h3 style="font-size:18px;margin:6px 0 2px">iFood e 99Food</h3><p class="ajuda">Cole o link da página da Divinus em cada app. Sem link, o botão não aparece no site.</p></div>
           <div class="campo"><label for="cf_ifood_url">Link do iFood</label><input id="cf_ifood_url" type="url" inputmode="url" placeholder="https://www.ifood.com.br/delivery/..."></div>
           <div class="campo"><label for="cf_app99_url">Link do 99Food</label><input id="cf_app99_url" type="url" inputmode="url" placeholder="https://..."></div>
-          <div class="cheia"><h3 style="font-size:18px;margin:6px 0 2px">Cálculo da taxa de entrega</h3><p class="ajuda">(motoboy + km × custo por km) × (1 + acréscimo% × km), arredondado a R$ 0,50.</p></div>
-          <div class="campo"><label for="cf_motoboy_fixo">Motoboy, valor fixo por saída (R$)</label><input id="cf_motoboy_fixo" type="number" step="0.5" min="0"></div>
-          <div class="campo"><label for="cf_custo_km">Custo por km (R$)</label><input id="cf_custo_km" type="number" step="0.1" min="0"></div>
-          <div class="campo"><label for="cf_acrescimo_km">Acréscimo por km (%)</label><input id="cf_acrescimo_km" type="number" step="0.5" min="0"></div>
-          <div class="campo"><label for="cf_taxa_maxima">Taxa máxima (R$, opcional)</label><input id="cf_taxa_maxima" type="number" step="0.5" min="0"></div>
         </div>
         <button class="btn" type="submit" style="margin-top:8px">Salvar configurações</button>
       </form>
@@ -779,8 +780,8 @@ var TABELAS = {
     {c:'preco', r:'Preço', t:'num', l:80}, {c:'vale', r:'Vale para', t:'lista', ops:CATEGORIAS, l:150},
     {c:'disponivel', r:'Disponível', t:'bool'}, {c:'ordem', r:'Ordem', t:'num', l:60}, {c:'custo', r:'Custo', t:'num', l:80} ]},
   bairros: { novo:{bairro:'',distancia_km:null,taxa_fixa:null,minutos:20,minimo:0,atende:true,ordem:0}, cols:[
-    {c:'bairro', r:'Bairro', t:'texto', l:200}, {c:'distancia_km', r:'Distância (km)', t:'num', l:90}, {c:'taxa_fixa', r:'Taxa fixa', t:'num', l:90},
-    {c:'_calc', r:'Taxa no site', t:'calc'}, {c:'minutos', r:'Minutos', t:'num', l:70}, {c:'minimo', r:'Pedido mín.', t:'num', l:80},
+    {c:'bairro', r:'Bairro', t:'texto', l:200}, {c:'taxa_fixa', r:'Taxa de entrega (R$)', t:'num', l:110},
+    {c:'minutos', r:'Minutos', t:'num', l:70}, {c:'minimo', r:'Pedido mín.', t:'num', l:80},
     {c:'atende', r:'Atende', t:'bool'}, {c:'ordem', r:'Ordem', t:'num', l:60} ]}
 };
 var LINHAS = {};
@@ -968,6 +969,47 @@ $('formDespesa').addEventListener('submit', function(ev){
     aviso('Compra lançada'); return carregarFinanceiro();
   }).catch(function(){ aviso('Não consegui salvar a compra.'); }).then(function(){ b.disabled = false; });
 });
+function lerCsv(txt){
+  var linhas = [], atual = [], cel = '', asp = false, i, c, LF = String.fromCharCode(10), CR = String.fromCharCode(13);
+  txt = String(txt); if(txt.charCodeAt(0) === 65279) txt = txt.slice(1);
+  for(i = 0; i < txt.length; i++){
+    c = txt.charAt(i);
+    if(asp){ if(c === '"'){ if(txt.charAt(i+1) === '"'){ cel += '"'; i++; } else asp = false; } else cel += c; }
+    else if(c === '"') asp = true;
+    else if(c === ';'){ atual.push(cel); cel = ''; }
+    else if(c === LF || c === CR){ if(c === CR && txt.charAt(i+1) === LF) i++; atual.push(cel); cel = ''; if(atual.join('').trim()) linhas.push(atual); atual = []; }
+    else cel += c;
+  }
+  atual.push(cel); if(atual.join('').trim()) linhas.push(atual);
+  return linhas;
+}
+$('dsArquivo').addEventListener('change', function(ev){
+  var f = ev.target.files[0], st = $('dsImportStatus'); if(!f) return;
+  var CATS = ['Insumo','Utensílio/Embalagem','Desconto','Entrega/Motoboy','Outros'];
+  var rd = new FileReader();
+  rd.onload = function(){
+    var ls = lerCsv(rd.result).slice(1), itens = [], erros = 0;
+    ls.forEach(function(c){
+      var data = (c[0]||'').trim(), desc = (c[4]||'').trim(), tot = num(String(c[8]||'').replace(/[.]/g,'').replace(',','.'));
+      if(!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(data) || !desc || tot == null){ erros++; return; }
+      var qtd = num(String(c[5]||'').replace(',','.')) || 1, vu = num(String(c[7]||'').replace(/[.]/g,'').replace(',','.'));
+      var cat = CATS.indexOf((c[9]||'').trim()) >= 0 ? c[9].trim() : 'Insumo';
+      itens.push({ data:data, fornecedor:(c[1]||'').trim(), cnpj:(c[2]||'').trim(), documento:(c[3]||'').trim(), descricao:desc, quantidade:qtd,
+        unidade:(c[6]||'').trim(), valor_unitario: vu == null ? Math.round(tot/qtd*100)/100 : vu, valor_total:tot, categoria:cat,
+        forma_pagamento:(c[10]||'').trim(), obs:(c[11]||'').trim() });
+    });
+    if(!itens.length){ st.textContent = 'Não achei nenhuma linha válida. Confira as colunas e as datas (AAAA-MM-DD).'; ev.target.value = ''; return; }
+    var soma = itens.reduce(function(a, x){ return a + x.valor_total; }, 0);
+    if(!confirm('Lançar ' + itens.length + ' itens, total ' + brl(soma) + (erros ? ' (' + erros + ' linhas ignoradas)' : '') + '?')){ ev.target.value = ''; return; }
+    st.textContent = 'Lançando...';
+    itens.reduce(function(p, x){ return p.then(function(){ return db.addDespesa(x); }); }, Promise.resolve()).then(function(){
+      st.textContent = itens.length + ' itens lançados.'; var m = itens[0].data.slice(0, 7); if($('finMes').value !== m) $('finMes').value = m;
+      aviso('Compras lançadas'); return carregarFinanceiro();
+    }).catch(function(){ st.textContent = 'Parou no meio. Veja a lista abaixo antes de tentar de novo, para não duplicar.'; carregarFinanceiro(); });
+    ev.target.value = '';
+  };
+  rd.readAsText(f, 'utf-8');
+});
 $('finLista').addEventListener('click', function(ev){
   var b = ev.target.closest('[data-del-desp]'); if(!b) return;
   var id = +b.getAttribute('data-del-desp'), d = DESPESAS.filter(function(x){ return x.id === id; })[0];
@@ -977,7 +1019,7 @@ $('finLista').addEventListener('click', function(ev){
 
 /* ================= CONFIGURAÇÕES ================= */
 var CONFIG_ATUAL = null;
-var CAMPOS_CFG = ['mp_ativo','taxa_cartao_pct','fechado_agora','aviso','abre','fecha','dias','inclusos','whatsapp','motoboy_fixo','custo_km','acrescimo_km','taxa_maxima','pix_tipo','pix_chave','pix_nome','pix_cidade','ifood_url','app99_url'];
+var CAMPOS_CFG = ['mp_ativo','taxa_cartao_pct','fechado_agora','aviso','abre','fecha','dias','inclusos','whatsapp','pix_tipo','pix_chave','pix_nome','pix_cidade','ifood_url','app99_url'];
 // Chave Pix no formato que os bancos exigem dentro do QR Code.
 function normalizarPix(tipo, chave){
   var d = String(chave||'').replace(/\D/g,''), t = String(chave||'').trim();

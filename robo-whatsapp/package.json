@@ -1,0 +1,14 @@
+{
+  "name": "divinus-robo-whatsapp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Resposta automática simples (sem IA) do Divinus Gelatto no WhatsApp",
+  "scripts": { "start": "node bot.mjs" },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.18",
+    "pino": "^9.0.0",
+    "qrcode-terminal": "^0.12.0"
+  }
+}
