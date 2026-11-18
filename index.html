@@ -304,6 +304,11 @@ section.bloco{padding:34px 0;border-top:2px solid var(--creme-2)}
 .aviso-trailer a{display:inline-block;margin-top:10px;background:var(--ouro);color:var(--choco);border-radius:999px;padding:7px 16px;font-weight:700;font-size:15px;text-decoration:none}
 @media(max-width:480px){.aviso-trailer{flex-direction:column;align-items:center;text-align:center}}
 .cat-tag{display:block;width:max-content;margin-left:auto;margin-right:auto;background:var(--ouro);color:var(--choco);border-radius:999px;font-size:12px;font-weight:700;padding:2px 10px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
+.cat li.li-add{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end;padding:2px 0 10px}
+.cat li.li-add select{flex:1 1 140px;min-width:0;font:inherit;font-size:14px;padding:7px 8px;border:2px solid var(--choco-2);border-radius:10px;background:#fff;color:var(--choco)}
+.cat li.li-add button{flex:none;font:inherit;font-weight:700;font-size:14px;padding:8px 14px;border-radius:999px;border:2px solid var(--choco);background:var(--ouro);color:var(--choco);cursor:pointer}
+.cat li.li-add button:hover{filter:brightness(1.05)}
+.cat li.li-add .ok-add{flex-basis:100%;text-align:right;font-size:13px;color:var(--choco-2)}
 
 footer{background:var(--choco);color:var(--creme);padding:30px 0 40px}
 footer .wrap{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));text-align:center}
@@ -642,12 +647,15 @@ var CONFIG = {
   ],
   // Sabores mostrados nos cartões "Só no trailer" (a chave é o nome da categoria no cardápio).
   SABORES_TRAILER: {
-    'Milkshake': ['Morango','Ninho','Prestígio','Nutella','Oreo','Ovomaltine','KitKat','Paçoquinha','Alpino trufado','Galak com Negresco','Dois Frades'],
+    'Milkshake': ['Morango','Ninho','Prestígio','Nutella','Ovomaltine','KitKat','Paçoquinha','Galak com Negresco','Dois Frades'],
     'Milkshake com polpa': ['Limão','Caramelo','Menta','Chocolate','Amora','Maracujá (com semente)','Morango','Framboesa','Abacaxi ao vinho']
   },
   // Sabores de itens específicos (a chave é o nome exato do item no cardápio).
   SABORES_ITEM: {
-    'Casquinha recheada': ['Morango','Ninho','Prestígio','Nutella','Galak com Negresco']
+    'Casquinha (baunilha, açaí ou mista)': ['Baunilha','Açaí','Mista'],
+    'Cascão (baunilha, açaí ou mista)': ['Baunilha','Açaí','Mista'],
+    'Casquinha recheada': ['Morango','Ninho','Prestígio','Nutella','Galak com Negresco'],
+    'Cascão recheado': ['Morango','Ninho','Prestígio','Nutella','Galak com Negresco']
   },
   FOTOS_PRODUTOS: [
     { arquivo: 'img/produto1.jpg', descricao: 'Copo de açaí da Divinus Gelatto com morango, amendoim e confeitos coloridos' },
@@ -673,17 +681,17 @@ var PREVIA = {
     { id:'P003', nome:'Açaí no copo 700 ml', categoria:'Açaí no copo', preco:22, disponivel:true, online:true, foto:'' },
     { id:'P004', nome:'Açaí no copo 1 L', categoria:'Açaí no copo', preco:28, disponivel:true, online:true, foto:'' },
     { id:'P005', nome:'Açaí na garrafa 500 ml', categoria:'Açaí na garrafa', preco:15, disponivel:true, online:true, foto:'' },
-    { id:'P006', nome:'Casquinha (baunilha, açaí ou mista)', categoria:'Sorvete', preco:3.5, disponivel:true, online:false },
-    { id:'P007', nome:'Cascão (baunilha, açaí ou mista)', categoria:'Sorvete', preco:6, disponivel:true, online:false },
-    { id:'P008', nome:'Casquinha recheada', categoria:'Sorvete', preco:6, disponivel:true, online:false },
-    { id:'P009', nome:'Cascão recheado', categoria:'Sorvete', preco:8, disponivel:true, online:false },
-    { id:'P010', nome:'Sundae', categoria:'Sorvete', preco:7, disponivel:true, online:false },
-    { id:'P011', nome:'Milkshake 400 ml', categoria:'Milkshake', preco:14, disponivel:true, online:false },
-    { id:'P012', nome:'Milkshake 500 ml', categoria:'Milkshake', preco:15, disponivel:true, online:false },
-    { id:'P013', nome:'Milkshake 700 ml', categoria:'Milkshake', preco:18, disponivel:true, online:false },
-    { id:'P014', nome:'Milkshake com polpa 400 ml', categoria:'Milkshake com polpa', preco:12, disponivel:true, online:false },
-    { id:'P015', nome:'Milkshake com polpa 500 ml', categoria:'Milkshake com polpa', preco:13, disponivel:true, online:false },
-    { id:'P016', nome:'Milkshake com polpa 700 ml', categoria:'Milkshake com polpa', preco:16, disponivel:true, online:false },
+    { id:'P006', nome:'Casquinha (baunilha, açaí ou mista)', categoria:'Sorvete', preco:3.5, disponivel:true, online:true },
+    { id:'P007', nome:'Cascão (baunilha, açaí ou mista)', categoria:'Sorvete', preco:6, disponivel:true, online:true },
+    { id:'P008', nome:'Casquinha recheada', categoria:'Sorvete', preco:6, disponivel:true, online:true },
+    { id:'P009', nome:'Cascão recheado', categoria:'Sorvete', preco:8, disponivel:true, online:true },
+    { id:'P010', nome:'Sundae', categoria:'Sorvete', preco:7, disponivel:true, online:true },
+    { id:'P011', nome:'Milkshake 400 ml', categoria:'Milkshake', preco:14, disponivel:true, online:true },
+    { id:'P012', nome:'Milkshake 500 ml', categoria:'Milkshake', preco:15, disponivel:true, online:true },
+    { id:'P013', nome:'Milkshake 700 ml', categoria:'Milkshake', preco:18, disponivel:true, online:true },
+    { id:'P014', nome:'Milkshake com polpa 400 ml', categoria:'Milkshake com polpa', preco:12, disponivel:true, online:true },
+    { id:'P015', nome:'Milkshake com polpa 500 ml', categoria:'Milkshake com polpa', preco:13, disponivel:true, online:true },
+    { id:'P016', nome:'Milkshake com polpa 700 ml', categoria:'Milkshake com polpa', preco:16, disponivel:true, online:true },
     { id:'EX1', nome:'EX: produto de exemplo (nunca aparece)', categoria:'Sorvete', preco:1, disponivel:true, online:true }
   ],
   complementos: [
@@ -876,7 +884,7 @@ function observarCardapio(){
 }
 
 /* ================= TAMANHOS ================= */
-function itensOnline(){ return DADOS.produtos.filter(function(p){ return p.online && p.preco>0; }); }
+function itensOnline(){ return DADOS.produtos.filter(function(p){ return p.online && p.preco>0 && /a[cç]a[ií]/i.test(p.categoria); }); }
 function produto(id){ return DADOS.produtos.filter(function(x){ return x.id===id; })[0]; }
 function desenharTamanhos(){
   var g = $('gradeTamanhos'), gg = $('gradeGarrafa'); g.innerHTML = ''; gg.innerHTML = '';
@@ -1117,7 +1125,7 @@ function atualizarCopo(){
 }
 
 /* ================= CARRINHO ================= */
-function chave(it){ return it.id+'|'+it.inclusos.slice().sort().join(',')+'|'+(it.caldas||[]).slice().sort().join(',')+'|'+it.extras.slice().sort().join(','); }
+function chave(it){ return it.id+'|'+it.inclusos.slice().sort().join(',')+'|'+(it.caldas||[]).slice().sort().join(',')+'|'+it.extras.slice().sort().join(',')+'|'+(it.sabor||''); }
 [['Copo', function(){ return mCopo; }], ['Gar', function(){ return mGar; }]].forEach(function(x){
   $('q'+x[0]+'Menos').addEventListener('click', function(){ var m = x[1](); if(m.qtd > 1){ m.qtd--; atualizarMontagem(); } });
   $('q'+x[0]+'Mais').addEventListener('click', function(){ var m = x[1](); if(m.qtd < 20){ m.qtd++; atualizarMontagem(); } });
@@ -1142,6 +1150,7 @@ function desenharCarrinho(){
   if(!carrinho.length) box.innerHTML = '<p class="vazio">Seu pedido está vazio. Volte ao cardápio para montar seu açaí.</p>';
   carrinho.forEach(function(it, idx){
     var d = el('div',{class:'item'}), det = [];
+    if(it.sabor) det.push('Sabor: ' + it.sabor);
     if(it.inclusos.length) det.push('Complementos: ' + it.inclusos.join(', '));
     if(it.caldas && it.caldas.length) det.push('Caldas: ' + it.caldas.join(', '));
     if(it.extras.length) det.push('Adicionais: ' + it.extras.join(', '));
@@ -1168,7 +1177,8 @@ function revalidar(lista){
     var inc = (it.inclusos||[]).filter(function(n){ return nomesInc.indexOf(n)>=0; }).slice(0, limiteInclusos(p));
     var ext = (it.extras||[]).filter(function(n){ return nomesExt.indexOf(n)>=0; });
     var cal = (it.caldas||[]).filter(function(n){ return nomesCal.indexOf(n)>=0; }).slice(0, limiteCaldas(p));
-    return { id:p.id, nome:p.nome, inclusos:inc, caldas:cal, extras:ext, unit:precoDe(p, ext), qtd:Math.max(1, Math.min(20, +it.qtd||1)) };
+    var _s = saboresDe(p); if(_s && _s.indexOf(it.sabor)<0) return null;
+    return { id:p.id, nome:p.nome, inclusos:inc, caldas:cal, extras:ext, sabor:(function(){ var sb = saboresDe(p); return sb && sb.indexOf(it.sabor)>=0 ? it.sabor : ''; })(), unit:precoDe(p, ext), qtd:Math.max(1, Math.min(20, +it.qtd||1)) };
   }).filter(Boolean);
 }
 function subtotal(){ return carrinho.reduce(function(s,i){ return s+i.unit*i.qtd; },0); }
@@ -1357,6 +1367,7 @@ function mensagemZap(res){
   var linhas = ['*Pedido Divinus Gelatto*' + (res ? ' (' + res.codigo + ')' : ''), 'Nome: ' + $('nome').value.trim(), ''];
   (res && res.itens ? res.itens : carrinho).forEach(function(it){
     linhas.push(it.qtd + 'x ' + it.nome + ' (' + brl(it.unit*it.qtd) + ')');
+    if(it.sabor) linhas.push('   Sabor: ' + it.sabor);
     if(it.inclusos.length) linhas.push('   Complementos: ' + it.inclusos.join(', '));
     if(it.caldas && it.caldas.length) linhas.push('   Caldas: ' + it.caldas.join(', '));
     if(it.extras.length) linhas.push('   Adicionais: ' + it.extras.join(', '));
@@ -1407,11 +1418,11 @@ $('btnEnviar').addEventListener('click', function(){
   if(erros.length){ $('erroPedido').textContent = erros.join(' '); return; }
   salvarCliente();
   var pag = document.querySelector('input[name=pag]:checked').value, origem = SS.get('divinus_origem') || '';
-  var itensEnviados = carrinho.map(function(it){ return { id:it.id, nome:it.nome, qtd:it.qtd, inclusos:it.inclusos, caldas:it.caldas||[], extras:it.extras, unit:it.unit }; });
+  var itensEnviados = carrinho.map(function(it){ return { id:it.id, nome:it.nome, qtd:it.qtd, inclusos:it.inclusos, caldas:it.caldas||[], extras:it.extras, unit:it.unit, sabor:it.sabor||'' }; });
   var payload = {
     nome:nome, telefone:telDigitos(), modo:modo(), pagamento:pag,
     cep:e ? $('cep').value : '', rua:e ? $('rua').value.trim() : '', numero:e ? $('numero').value.trim() : '', bairro:e ? bairro : '',
-    complemento:e ? $('comp').value.trim() : '', obs:$('obs').value.trim(), origem:origem, fora_horario:!aberto,
+    complemento:e ? $('comp').value.trim() : '', obs:obsComSabores($('obs').value.trim(), itensEnviados), origem:origem, fora_horario:!aberto,
     itens: itensEnviados.map(function(it){ return { id:it.id, qtd:it.qtd, inclusos:it.inclusos, caldas:it.caldas||[], extras:it.extras }; })
   };
   var btn = $('btnEnviar'); btn.disabled = true; btn.textContent = 'Enviando pedido...'; $('erroPedido').textContent = '';
@@ -1611,20 +1622,65 @@ function retomarPedido(){
   });
 }
 
-/* ================= SÓ NO TRAILER ================= */
+/* ================= SORVETES E MILKSHAKES ================= */
+function ehAcai(p){ return /a[cç]a[ií]/i.test(p.categoria); }
+function saboresDe(p){
+  if(ehAcai(p)) return null;
+  var l = (CONFIG.SABORES_ITEM || {})[p.nome] || (CONFIG.SABORES_TRAILER || {})[p.categoria];
+  return l && l.length ? l : null;
+}
+// O servidor guarda só o item; o sabor vai junto nas observações do pedido para aparecer no painel.
+function obsComSabores(obs, itens){
+  var s = itens.filter(function(i){ return i.sabor; }).map(function(i){ return i.qtd + 'x ' + i.nome + ': ' + i.sabor; }).join('; ');
+  return s ? ('Sabores: ' + s + (obs ? ' | ' + obs : '')).slice(0, 300) : obs;
+}
+function adicionarGelado(p, sabor){
+  var it = { id:p.id, nome:p.nome, inclusos:[], caldas:[], extras:[], sabor:sabor||'', unit:p.preco, qtd:1 };
+  var ja = carrinho.filter(function(x){ return chave(x)===chave(it); })[0];
+  if(ja) ja.qtd = Math.min(20, ja.qtd + 1); else carrinho.push(it);
+  evento('adicionar_item', {item_name:it.nome, value:it.unit, currency:'BRL', complementos:0, adicionais:0});
+  desenharCarrinho();
+}
 function desenharTrailer(){
-  var cats = {}, ordem = [];
+  var cats = {}, ordem = [], temTrailer = false;
   DADOS.produtos.forEach(function(p){
-    if(p.online || !(p.preco>0) || p.disponivel===false) return;
+    if(ehAcai(p) || !(p.preco>0) || p.disponivel===false) return;
+    if(!p.online) temTrailer = true;
     if(!cats[p.categoria]){ cats[p.categoria]=[]; ordem.push(p.categoria); }
     cats[p.categoria].push(p);
   });
   var box = $('catsTrailer'); box.innerHTML = '';
   $('trailer').hidden = !ordem.length;
+  $('avisoTrailer').hidden = !temTrailer;
   ordem.forEach(function(c){
-    box.appendChild(el('div',{class:'cat'}, '<span class="cat-tag">Só no trailer</span><h3>'+esc(c)+'</h3><ul>' + cats[c].map(function(p){ return '<li><span>'+esc(p.nome)+'</span><span>'+brl(p.preco)+'</span></li>' + saboresItem(p.nome); }).join('') + '</ul>' + saboresTrailer(c)));
+    var card = el('div',{class:'cat'}, '<span class="cat-tag">' + (cats[c].every(function(p){ return p.online; }) ? 'Peça pelo site' : 'Só no trailer') + '</span><h3>'+esc(c)+'</h3><ul></ul>');
+    var ul = card.querySelector('ul');
+    cats[c].forEach(function(p){
+      var li = el('li',{}, '<span>'+esc(p.nome)+'</span><span>'+brl(p.preco)+'</span>');
+      ul.appendChild(li);
+      if(!p.online){ var sb0 = saboresItem(p.nome); if(sb0) ul.insertAdjacentHTML('beforeend', sb0); return; }
+      var sab = saboresDe(p), a = el('li',{class:'li-add'}, '');
+      var sel = null;
+      if(sab){
+        sel = document.createElement('select'); sel.setAttribute('aria-label', 'Sabor de ' + p.nome);
+        sel.innerHTML = '<option value="">Escolha o sabor</option>' + sab.map(function(n){ return '<option>'+esc(n)+'</option>'; }).join('');
+        a.appendChild(sel);
+      }
+      var bt = document.createElement('button'); bt.type = 'button'; bt.textContent = 'Adicionar';
+      var msg = el('span',{class:'ok-add'}, ''); msg.setAttribute('aria-live','polite');
+      bt.addEventListener('click', function(){
+        if(sel && !sel.value){ msg.textContent = 'Escolha o sabor primeiro.'; sel.focus(); return; }
+        adicionarGelado(p, sel ? sel.value : '');
+        msg.textContent = 'Adicionado ao pedido.';
+        setTimeout(function(){ msg.textContent = ''; }, 2500);
+      });
+      a.appendChild(bt); a.appendChild(msg); ul.appendChild(a);
+    });
+    if(cats[c].some(function(p){ return !p.online; })) card.insertAdjacentHTML('beforeend', saboresTrailer(c));
+    box.appendChild(card);
   });
 }
+
 function saboresItem(nome){
   var l = (CONFIG.SABORES_ITEM || {})[nome];
   if(!l || !l.length) return '';
