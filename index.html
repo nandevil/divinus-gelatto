@@ -304,6 +304,7 @@ section.bloco{padding:34px 0;border-top:2px solid var(--creme-2)}
 .aviso-trailer a{display:inline-block;margin-top:10px;background:var(--ouro);color:var(--choco);border-radius:999px;padding:7px 16px;font-weight:700;font-size:15px;text-decoration:none}
 @media(max-width:480px){.aviso-trailer{flex-direction:column;align-items:center;text-align:center}}
 .cat-tag{display:block;width:max-content;margin-left:auto;margin-right:auto;background:var(--ouro);color:var(--choco);border-radius:999px;font-size:12px;font-weight:700;padding:2px 10px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
+.bloco-gelado+.bloco-gelado{margin-top:34px;padding-top:26px;border-top:3px dashed var(--choco-2)}
 .cat li.li-add{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end;padding:2px 0 10px}
 .cat li.li-add select{flex:1 1 140px;min-width:0;font:inherit;font-size:14px;padding:7px 8px;border:2px solid var(--choco-2);border-radius:10px;background:#fff;color:var(--choco)}
 .cat li.li-add button{flex:none;font:inherit;font-weight:700;font-size:14px;padding:8px 14px;border-radius:999px;border:2px solid var(--choco);background:var(--ouro);color:var(--choco);cursor:pointer}
@@ -374,7 +375,7 @@ body.com-barra{padding-bottom:64px}
       </div>
       <ul class="chips" aria-label="Informações rápidas">
         <li id="chipStatus" hidden></li>
-        <li class="chip-link"><a href="#avisoTrailer">Retirada grátis no trailer <span aria-hidden="true">›</span></a></li>
+        <li>Retirada grátis no trailer</li>
         <li>Entrega em Araruama</li>
       </ul>
     </div>
@@ -384,7 +385,7 @@ body.com-barra{padding-bottom:64px}
 <section class="bloco" id="monte">
   <div class="wrap">
     <h2>Monte seu açaí</h2>
-    <p class="sub" id="subMonte">Pedidos online: apenas açaí.</p>
+    <p class="sub" id="subMonte">Escolha o tamanho, os complementos e as caldas.</p>
 
     <div id="areaMonte" class="monte">
       <div class="copo-box">
@@ -490,19 +491,19 @@ body.com-barra{padding-bottom:64px}
   </div>
 </section>
 
-<section class="bloco trailer" id="trailer" hidden>
+<section class="bloco trailer" id="milkshakes" hidden>
   <div class="wrap">
-    <h2>Sorvetes e milkshakes</h2>
-    <div class="aviso-trailer" id="avisoTrailer" role="note">
-      <svg viewBox="0 0 24 24" width="44" height="44" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.6A2.6 2.6 0 1 1 12 6.4a2.6 2.6 0 0 1 0 5.2z"/></svg>
-      <div>
-        <strong>Só no trailer</strong>
-        <span>Sorvetes e milkshakes <b>não são vendidos pelo site</b>. Para comprar, venha até o trailer.</span>
-        <small>Rua Professor Oscar Clark, 1377, em frente ao Mercado Esperança · <span id="trailerHorario">Segunda a sábado, das 10h às 19h</span></small>
-        <a href="https://www.google.com/maps/search/?api=1&query=Rua+Professor+Oscar+Clark+1377+Parque+Mataruna+Araruama+RJ" target="_blank" rel="noopener">Como chegar</a>
-      </div>
-    </div>
-    <div class="cats" id="catsTrailer"></div>
+    <h2>Milk-shakes</h2>
+    <p class="sub">Escolha o tamanho e depois o sabor.</p>
+    <div class="monte" id="areaMilk"></div>
+  </div>
+</section>
+
+<section class="bloco" id="sorvetes" hidden>
+  <div class="wrap">
+    <h2>Sorvetes</h2>
+    <p class="sub">Casquinhas, cascões e sundae.</p>
+    <div class="monte" id="areaSorv"></div>
   </div>
 </section>
 </div>
@@ -783,7 +784,7 @@ function carregar(){
     // Sem conexão com o banco: usa a última cópia (até 3 dias) ou mostra o WhatsApp.
     if(cache && cache.d && Date.now() - cache.t < 3*24*60*60*1000){ iniciar(cache.d); return; }
     $('areaMonte').hidden = true; $('falhaCardapio').hidden = false;
-    $('subMonte').textContent = 'Pedidos online: apenas açaí.';
+    $('subMonte').textContent = 'Não conseguimos carregar o cardápio agora.';
     evento('erro_cardapio');
   });
 }
@@ -834,7 +835,7 @@ function iniciar(d){
   $('faixaPrevia').hidden = !previa;
   if(d.aviso){ $('faixaAviso').hidden = false; $('faixaAviso').textContent = d.aviso; }
   $('textoHorario').textContent = textoHorario(d.horario);
-  $('trailerHorario').textContent = textoHorario(d.horario);
+  if($('trailerHorario')) $('trailerHorario').textContent = textoHorario(d.horario);
   aberto = estaAberto(d.horario);
   var chip = $('chipStatus'); chip.hidden = false;
   chip.className = aberto ? 'aberto' : 'fechado';
@@ -1634,51 +1635,86 @@ function obsComSabores(obs, itens){
   var s = itens.filter(function(i){ return i.sabor; }).map(function(i){ return i.qtd + 'x ' + i.nome + ': ' + i.sabor; }).join('; ');
   return s ? ('Sabores: ' + s + (obs ? ' | ' + obs : '')).slice(0, 300) : obs;
 }
-function adicionarGelado(p, sabor){
-  var it = { id:p.id, nome:p.nome, inclusos:[], caldas:[], extras:[], sabor:sabor||'', unit:p.preco, qtd:1 };
+function adicionarGelado(p, sabor, qtd){
+  var it = { id:p.id, nome:p.nome, inclusos:[], caldas:[], extras:[], sabor:sabor||'', unit:p.preco, qtd:Math.max(1, Math.min(20, qtd||1)) };
   var ja = carrinho.filter(function(x){ return chave(x)===chave(it); })[0];
-  if(ja) ja.qtd = Math.min(20, ja.qtd + 1); else carrinho.push(it);
+  if(ja) ja.qtd = Math.min(20, ja.qtd + it.qtd); else carrinho.push(it);
   evento('adicionar_item', {item_name:it.nome, value:it.unit, currency:'BRL', complementos:0, adicionais:0});
   desenharCarrinho();
 }
 function desenharTrailer(){
-  var cats = {}, ordem = [], temTrailer = false;
+  var cats = {}, ordem = [];
   DADOS.produtos.forEach(function(p){
-    if(ehAcai(p) || !(p.preco>0) || p.disponivel===false) return;
-    if(!p.online) temTrailer = true;
+    if(ehAcai(p) || !p.online || !(p.preco>0)) return;
     if(!cats[p.categoria]){ cats[p.categoria]=[]; ordem.push(p.categoria); }
     cats[p.categoria].push(p);
   });
-  var box = $('catsTrailer'); box.innerHTML = '';
-  $('trailer').hidden = !ordem.length;
-  $('avisoTrailer').hidden = !temTrailer;
-  ordem.forEach(function(c){
-    var card = el('div',{class:'cat'}, '<span class="cat-tag">' + (cats[c].every(function(p){ return p.online; }) ? 'Peça pelo site' : 'Só no trailer') + '</span><h3>'+esc(c)+'</h3><ul></ul>');
-    var ul = card.querySelector('ul');
-    cats[c].forEach(function(p){
-      var li = el('li',{}, '<span>'+esc(p.nome)+'</span><span>'+brl(p.preco)+'</span>');
-      ul.appendChild(li);
-      if(!p.online){ var sb0 = saboresItem(p.nome); if(sb0) ul.insertAdjacentHTML('beforeend', sb0); return; }
-      var sab = saboresDe(p), a = el('li',{class:'li-add'}, '');
-      var sel = null;
-      if(sab){
-        sel = document.createElement('select'); sel.setAttribute('aria-label', 'Sabor de ' + p.nome);
-        sel.innerHTML = '<option value="">Escolha o sabor</option>' + sab.map(function(n){ return '<option>'+esc(n)+'</option>'; }).join('');
-        a.appendChild(sel);
-      }
-      var bt = document.createElement('button'); bt.type = 'button'; bt.textContent = 'Adicionar';
-      var msg = el('span',{class:'ok-add'}, ''); msg.setAttribute('aria-live','polite');
-      bt.addEventListener('click', function(){
-        if(sel && !sel.value){ msg.textContent = 'Escolha o sabor primeiro.'; sel.focus(); return; }
-        adicionarGelado(p, sel ? sel.value : '');
-        msg.textContent = 'Adicionado ao pedido.';
-        setTimeout(function(){ msg.textContent = ''; }, 2500);
-      });
-      a.appendChild(bt); a.appendChild(msg); ul.appendChild(a);
-    });
-    if(cats[c].some(function(p){ return !p.online; })) card.insertAdjacentHTML('beforeend', saboresTrailer(c));
-    box.appendChild(card);
+  var milk = ordem.filter(function(c){ return /milk/i.test(c); }), sorv = ordem.filter(function(c){ return !/milk/i.test(c); });
+  $('areaMilk').innerHTML = ''; $('areaSorv').innerHTML = '';
+  milk.forEach(function(c,k){ montarBloco($('areaMilk'), c, cats[c], 'mk'+k); });
+  sorv.forEach(function(c,k){ montarBloco($('areaSorv'), sorv.length>1 ? c : '', cats[c], 'sv'+k); });
+  $('milkshakes').hidden = !milk.length;
+  $('sorvetes').hidden = !sorv.length;
+}
+function nomeCurtoGelado(p){
+  var n = p.nome, c = p.categoria;
+  return n.toLowerCase().indexOf(c.toLowerCase()+' ')===0 ? n.slice(c.length+1) : n;
+}
+function montarBloco(area, titulo, prods, pre){
+  var sel = { p:null, sabor:'', qtd:1 };
+  var box = el('div',{class:'bloco-gelado'}, '');
+  var temSabor = prods.some(function(p){ return saboresDe(p); });
+  box.innerHTML =
+      '<div class="passo">'
+    + '<h3><span class="num">1</span>' + (titulo ? esc(titulo) + ': escolha o tamanho' : 'Escolha o sorvete') + '</h3>'
+    + '<div class="grade" data-g="tam"></div>'
+    + '</div>'
+    + (temSabor ? '<div class="passo" data-g="passoSabor"><h3><span class="num">2</span>Escolha o sabor</h3><p class="dica" data-g="dicaSabor">Escolha o tamanho primeiro.</p><div class="grade" data-g="sab"></div></div>' : '')
+    + '<div class="qtd-linha" data-g="qtdBox" hidden><span>Quantos iguais?</span><div class="qtd"><button type="button" data-g="menos" aria-label="Tirar um">−</button><span data-g="qtd" aria-live="polite">1</span><button type="button" data-g="mais" aria-label="Mais um">+</button></div></div>'
+    + '<div class="add-linha"><div><div class="preco-item" data-g="preco">R$ 0,00</div><div class="msg-info" data-g="info" aria-live="polite"></div></div>'
+    + '<button class="btn" type="button" data-g="add" disabled>Adicionar ao pedido</button></div>';
+  var q = function(k){ return box.querySelector('[data-g="'+k+'"]'); };
+  var gTam = q('tam');
+  prods.forEach(function(p){
+    var id = pre+'_'+p.id, esg = p.disponivel===false, d = el('div',{class:'opc'}, '');
+    d.innerHTML = '<input type="radio" name="'+pre+'_tam" id="'+esc(id)+'" value="'+esc(p.id)+'"'+(esg?' disabled':'')+'>'
+      + '<label for="'+esc(id)+'"><b>'+esc(nomeCurtoGelado(p))+'</b><span class="valor">'+brl(p.preco)+'</span>'+(esg?'<span class="esgotado">Esgotado hoje</span>':'')+'</label>';
+    gTam.appendChild(d);
+    d.querySelector('input').addEventListener('change', function(){ sel.p = p; sel.sabor = ''; desenharSab(); atualizar(); });
   });
+  function desenharSab(){
+    if(!temSabor) return;
+    var g = q('sab'), lista = sel.p ? (saboresDe(sel.p) || []) : [];
+    g.innerHTML = '';
+    q('passoSabor').hidden = !!(sel.p && !lista.length);
+    q('dicaSabor').textContent = sel.p ? 'Escolha 1 sabor.' : 'Escolha o tamanho primeiro.';
+    lista.forEach(function(n,k){
+      var id = pre+'_s'+k, d = el('div',{class:'opc'}, '');
+      d.innerHTML = '<input type="radio" name="'+pre+'_sab" id="'+id+'" value="'+esc(n)+'"><label for="'+id+'"><b>'+esc(n)+'</b></label>';
+      g.appendChild(d);
+      d.querySelector('input').addEventListener('change', function(ev){ sel.sabor = ev.target.value; atualizar(); });
+    });
+  }
+  function precisaSabor(){ return !!(sel.p && saboresDe(sel.p)); }
+  function atualizar(){
+    q('qtdBox').hidden = !sel.p; q('qtd').textContent = sel.qtd;
+    q('preco').textContent = brl(sel.p ? sel.p.preco * sel.qtd : 0);
+    var falta = !sel.p ? 'Escolha o tamanho para começar.' : (precisaSabor() && !sel.sabor ? 'Agora escolha o sabor.' : '');
+    q('info').textContent = falta;
+    q('add').disabled = !!falta;
+  }
+  q('menos').addEventListener('click', function(){ if(sel.qtd>1){ sel.qtd--; atualizar(); } });
+  q('mais').addEventListener('click', function(){ if(sel.qtd<20){ sel.qtd++; atualizar(); } });
+  q('add').addEventListener('click', function(){
+    if(!sel.p || (precisaSabor() && !sel.sabor)) return;
+    adicionarGelado(sel.p, sel.sabor, sel.qtd);
+    sel = { p:null, sabor:'', qtd:1 };
+    box.querySelectorAll('input').forEach(function(x){ x.checked = false; });
+    desenharSab(); atualizar();
+    location.hash = '#finalizar';
+  });
+  desenharSab(); atualizar();
+  area.appendChild(box);
 }
 
 function saboresItem(nome){
