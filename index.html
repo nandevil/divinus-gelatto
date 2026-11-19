@@ -327,6 +327,8 @@ section.bloco{padding:34px 0;border-top:2px solid var(--creme-2)}
 .card-painel .copo-box{margin:12px auto 0}
 .card-painel .add-linha{padding-bottom:6px}
 .card-painel [data-g="sab"] .opc label{min-height:44px;padding:8px}
+.tag-trailer{display:inline-block;background:var(--choco);color:var(--ouro);border-radius:999px;font-size:12.5px;font-weight:700;padding:2px 10px;margin-bottom:4px}
+.so-trailer{background:var(--papel);box-shadow:none;border-style:dashed}
 .cat li.li-add{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end;padding:2px 0 10px}
 .cat li.li-add select{flex:1 1 140px;min-width:0;font:inherit;font-size:14px;padding:7px 8px;border:2px solid var(--choco-2);border-radius:10px;background:#fff;color:var(--choco)}
 .cat li.li-add button{flex:none;font:inherit;font-weight:700;font-size:14px;padding:8px 14px;border-radius:999px;border:2px solid var(--choco);background:var(--ouro);color:var(--choco);cursor:pointer}
@@ -724,10 +726,10 @@ var PREVIA = {
     { id:'P003', nome:'Açaí no copo 700 ml', categoria:'Açaí no copo', preco:22, disponivel:true, online:true, foto:'' },
     { id:'P004', nome:'Açaí no copo 1 L', categoria:'Açaí no copo', preco:28, disponivel:true, online:true, foto:'' },
     { id:'P005', nome:'Açaí na garrafa 500 ml', categoria:'Açaí na garrafa', preco:15, disponivel:true, online:true, foto:'' },
-    { id:'P006', nome:'Casquinha (baunilha, açaí ou mista)', categoria:'Sorvete', preco:3.5, disponivel:true, online:true },
-    { id:'P007', nome:'Cascão (baunilha, açaí ou mista)', categoria:'Sorvete', preco:6, disponivel:true, online:true },
-    { id:'P008', nome:'Casquinha recheada', categoria:'Sorvete', preco:6, disponivel:true, online:true },
-    { id:'P009', nome:'Cascão recheado', categoria:'Sorvete', preco:8, disponivel:true, online:true },
+    { id:'P006', nome:'Casquinha (baunilha, açaí ou mista)', categoria:'Sorvete', preco:3.5, disponivel:true, online:false },
+    { id:'P007', nome:'Cascão (baunilha, açaí ou mista)', categoria:'Sorvete', preco:6, disponivel:true, online:false },
+    { id:'P008', nome:'Casquinha recheada', categoria:'Sorvete', preco:6, disponivel:true, online:false },
+    { id:'P009', nome:'Cascão recheado', categoria:'Sorvete', preco:8, disponivel:true, online:false },
     { id:'P010', nome:'Sundae', categoria:'Sorvete', preco:7, disponivel:true, online:true },
     { id:'P011', nome:'Milkshake 400 ml', categoria:'Milkshake', preco:14, disponivel:true, online:true },
     { id:'P012', nome:'Milkshake 500 ml', categoria:'Milkshake', preco:15, disponivel:true, online:true },
@@ -1729,7 +1731,7 @@ function baseGelado(p){ return p.nome.replace(/\s+\d+(?:[.,]\d+)?\s*(?:ml|l)\b.*
 function desenharTrailer(){
   var grupos = {}, ordem = [];
   DADOS.produtos.forEach(function(p){
-    if(ehAcai(p) || !p.online || !(p.preco>0)) return;
+    if(ehAcai(p) || !(p.preco>0)) return;
     var b = baseGelado(p);
     if(!grupos[b]){ grupos[b] = { milk:/milk/i.test(p.categoria), prods:[] }; ordem.push(b); }
     grupos[b].prods.push(p);
@@ -1744,7 +1746,23 @@ function desenharTrailer(){
   $('milkshakes').hidden = !nMilk;
   $('sorvetes').hidden = !nSorv;
 }
+// Produto que não está à venda pelo site: card com foto, preço e sabores, marcado "Só no trailer".
+function cardTrailer(area, base, prods){
+  var titulo = base.replace(/\s*\([^)]*\)\s*$/, '');
+  var desc = descDoCard(base) || (base !== titulo ? base.slice(titulo.length).replace(/[()]/g,'').trim().replace(/^./, function(c){ return c.toUpperCase(); }) : '');
+  var sab = saboresDe(prods[0]);
+  var box = el('article',{class:'card-prod so-trailer'}, '');
+  box.innerHTML = '<div class="card-topo"><div class="card-foto"></div><div class="card-txt"><span class="tag-trailer">Só no trailer</span><h3>'+esc(titulo)+'</h3>'
+    + (desc && !/recheio/i.test(desc) ? '<p class="card-desc">'+esc(desc)+'</p>' : '')
+    + (sab && sab.length && !/baunilha, açaí ou mista/i.test(base) ? '<p class="card-desc">Sabores: '+esc(sab.join(', '))+'</p>' : '')
+    + '<p class="card-preco">'+esc(aPartir(prods))+'</p></div></div>';
+  pintarFoto(box.querySelector('.card-foto'), fotoDoCard(base, prods), titulo);
+  area.appendChild(box);
+}
 function montarCard(area, base, prods, pre){
+  var online = prods.filter(function(p){ return p.online; });
+  if(!online.length){ cardTrailer(area, base, prods); return; }
+  prods = online;
   var unico = prods.length === 1;
   var sel = { p: unico ? prods[0] : null, sabor:'', qtd:1 };
   if(unico && prods[0].disponivel===false) sel.p = null;
