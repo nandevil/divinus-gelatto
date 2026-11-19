@@ -1738,6 +1738,9 @@ function desenharTrailer(){
   });
   $('areaMilk').innerHTML = ''; $('areaSorv').innerHTML = '';
   var nMilk = 0, nSorv = 0;
+  // o que dá para pedir pelo site vem primeiro (o Sundae fica logo depois dos milk-shakes); os "só no trailer" vão para o fim
+  var temOnline = function(b){ return grupos[b].prods.some(function(p){ return p.online; }); };
+  ordem = ordem.filter(temOnline).concat(ordem.filter(function(b){ return !temOnline(b); }));
   ordem.forEach(function(b, k){
     var g = grupos[b];
     montarCard(g.milk ? $('areaMilk') : $('areaSorv'), b, g.prods, 'g'+k);
