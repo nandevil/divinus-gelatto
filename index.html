@@ -213,6 +213,10 @@ section.bloco{padding:34px 0;border-top:2px solid var(--creme-2)}
 .resumo .btn{width:100%;margin-top:12px;background:var(--ouro);border-color:var(--creme);box-shadow:0 3px 0 var(--creme)}
 .resumo .msg-erro{color:#FFB4A4}
 .sel-entrega{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.sel-entrega .opc label{min-height:0;padding:10px 8px}
+.sel-entrega .opc label small{font-size:13px;line-height:1.35}
+.btn-local{display:inline-flex;align-items:center;gap:6px;margin:0 0 12px;background:#fff;border:2px solid var(--choco-2);color:var(--choco);border-radius:999px;padding:8px 14px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.btn-local[disabled]{opacity:.6;cursor:wait}
 .status-frete{font-size:15px;font-weight:600;min-height:22px;margin:0 0 10px}
 .status-frete.ok{color:var(--ok)}.status-frete.ruim{color:var(--erro)}
 
@@ -569,15 +573,17 @@ body.com-barra{padding-bottom:64px}
           </div>
           <div class="sel-entrega" role="radiogroup" aria-label="Como receber">
             <div class="opc"><input type="radio" name="modo" id="modoRetirada" value="retirada" checked><label for="modoRetirada"><b>Retirar no trailer</b><small>Sem taxa</small></label></div>
-            <div class="opc"><input type="radio" name="modo" id="modoEntrega" value="entrega"><label for="modoEntrega"><b>Entrega</b><small>Entrega feita pelo motoboy parceiro do iFood e da 99Food.<br>Taxa de entrega: R$ 8,00 até 5 km do trailer.<br>Acima de 5 km, combine o valor pelo WhatsApp.<br><a href="https://wa.me/5522974035793?text=Oi!%20Quero%20pedir%20a%C3%A7a%C3%AD%20com%20entrega%20e%20moro%20a%20mais%20de%205%20km.%20Pode%20me%20passar%20a%20taxa%3F" target="_blank" rel="noopener" id="linkEntregaZap">Combinar entrega no WhatsApp ›</a></small></label></div>
+            <div class="opc"><input type="radio" name="modo" id="modoEntrega" value="entrega"><label for="modoEntrega"><b>Entrega</b><small id="txtRegraEntrega">Motoboy próprio<br>R$ 8,00 até 5 km<br>R$ 10,00 acima de 5 km</small></label></div>
           </div>
           <div id="blocoEndereco" hidden>
-            <div class="campo"><label for="cep">CEP</label><input id="cep" inputmode="numeric" maxlength="9" placeholder="00000-000" autocomplete="postal-code"><span class="ajuda">Com o CEP, preenchemos a rua e o bairro. Não sabe o CEP? Escolha o bairro abaixo.</span></div>
+            <div class="campo"><label for="cep">CEP</label><input id="cep" inputmode="numeric" maxlength="9" placeholder="00000-000" autocomplete="postal-code"><span class="ajuda">Com o CEP, preenchemos a rua. A taxa é calculada pela distância até o trailer.</span></div>
+            <button type="button" class="btn-local" id="btnLocal">📍 Usar minha localização</button>
             <div class="campo"><label for="rua">Rua</label><input id="rua" autocomplete="address-line1"></div>
             <div class="duas">
               <div class="campo"><label for="numero">Número</label><input id="numero" inputmode="numeric"></div>
               <div class="campo"><label for="bairroSel">Bairro</label><select id="bairroSel"></select></div>
             </div>
+            <div class="campo"><label for="cidade">Cidade</label><input id="cidade" value="Araruama" autocomplete="address-level2"></div>
             <div class="campo" id="campoBairroOutro" hidden><label for="bairroOutro">Qual é o seu bairro?</label><input id="bairroOutro" autocomplete="address-level3"></div>
             <p class="status-frete" id="statusFrete" aria-live="polite"></p>
             <div class="campo"><label for="comp">Complemento ou ponto de referência</label><input id="comp"></div>
@@ -600,7 +606,6 @@ body.com-barra{padding-bottom:64px}
         <div class="lin" id="linCartao" hidden><span id="rotCartao">Taxa do cartão</span><span id="vCartao"></span></div>
         <div class="lin total"><span>Total</span><span id="vTotal">R$ 0,00</span></div>
         <p class="nota" id="notaResumo"></p>
-        <div id="campoDistancia" hidden style="margin:10px 0"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:600;color:#fff;font-size:14px"><input type="checkbox" id="chkDistancia" style="width:auto;margin-top:3px"> Confirmo que moro a até 5 km do trailer.</label></div>
         <div class="msg-erro" id="erroPedido" role="alert"></div>
         <button class="btn" type="button" id="btnEnviar" disabled>Finalizar pedido</button>
         <a class="zap-alt" id="zapAlternativo" href="#" target="_blank" rel="noopener" hidden>Enviar pelo WhatsApp</a>
@@ -707,6 +712,8 @@ var CONFIG = {
   },
   // Quantos complementos inclusos cada categoria pode escolher (sem a categoria aqui, vale o número do painel).
   LIMITE_COMPLEMENTOS: { 'Sundae': 1 },
+  // Entrega por distância (motoboy próprio). Os valores do banco (config) têm prioridade sobre estes.
+  FRETE_KM: { lat:-22.8650806, lng:-42.3436897, km_base:5, taxa_base:8, taxa_extra:10, km_max:15 },
   FOTOS_PRODUTOS: [
     { arquivo: 'img/produto1.jpg', descricao: 'Copo de açaí da Divinus Gelatto com morango, amendoim e confeitos coloridos' },
     { arquivo: 'img/produto2.jpg', descricao: 'Sorvetes de casquinha da Divinus Gelatto: chocolate, baunilha e mista' },
@@ -1308,40 +1315,121 @@ document.querySelectorAll('input[name=modo]').forEach(function(r){ r.addEventLis
 function trocarModo(){
   var e = modo()==='entrega';
   $('blocoEndereco').hidden = !e;
-  $('campoDistancia').hidden = !e;
+  if(e) agendarFrete();
   atualizarResumo();
 }
 function desenharBairros(){
   var s = $('bairroSel');
   s.innerHTML = '<option value="">Escolha seu bairro</option>' + DADOS.entrega.map(function(b,i){
-    return '<option value="'+i+'">'+esc(b.bairro)+(ehTaxa(b.taxa) ? ' · '+(b.taxa>0?brl(b.taxa):'grátis') : '')+'</option>';
+    return '<option value="'+i+'">'+esc(b.bairro)+'</option>';
   }).join('') + '<option value="outro">Outro bairro</option>';
   if(!DADOS.entrega.length) s.value = 'outro';
+  var f = regraFrete();
+  $('txtRegraEntrega').innerHTML = 'Motoboy próprio<br>' + esc(brl(+f.taxa_base)) + ' até ' + esc(String(f.km_base).replace('.',',')) + ' km<br>' + esc(brl(+f.taxa_extra)) + ' acima de ' + esc(String(f.km_base).replace('.',',')) + ' km';
   aplicarBairro();
 }
 function bairroDigitado(){ return $('bairroSel').value==='outro' ? $('bairroOutro').value.trim() : (DADOS.entrega[+$('bairroSel').value]||{}).bairro || ''; }
 function aplicarBairro(){
-  var v = $('bairroSel').value, st = $('statusFrete');
-  $('campoBairroOutro').hidden = v!=='outro';
-  frete = { ok:false, taxa:0, minutos:0, minimo:0, bairro:'' };
-  st.className = 'status-frete'; st.textContent = '';
-  if(v==='outro'){
-    st.className = 'status-frete ruim';
-    st.textContent = 'Ainda não calculamos entrega para esse endereço. Finalize o pedido e combinamos o valor pelo WhatsApp.';
-  } else if(v!==''){
-    var b = DADOS.entrega[+v];
-    if(ehTaxa(b.taxa)){
-      frete = { ok:true, taxa:b.taxa, minutos:+b.minutos||0, minimo:+b.minimo||0, bairro:b.bairro };
-      st.className = 'status-frete ok';
-      st.textContent = b.bairro + ': entrega ' + (b.taxa>0?brl(b.taxa):'grátis') + (frete.minutos?' · cerca de '+frete.minutos+' min':'') + (frete.minimo>0?' · pedido mínimo '+brl(frete.minimo):'');
-    } else {
-      st.className = 'status-frete ruim';
-      st.textContent = b.bairro + ': a taxa de entrega é combinada pelo WhatsApp.';
-    }
-  }
-  atualizarResumo();
+  $('campoBairroOutro').hidden = $('bairroSel').value!=='outro';
+  agendarFrete();
 }
-$('bairroSel').addEventListener('change', function(){ aplicarBairro(); salvarCliente(); });
+
+/* ===== Frete por distância: endereço (ou localização) → mapa → distância de carro até o trailer ===== */
+function regraFrete(){ var f = (DADOS && DADOS.frete_km) || {}; var c = CONFIG.FRETE_KM; return { lat:+(f.lat||c.lat), lng:+(f.lng||c.lng), km_base:+(f.km_base||c.km_base), taxa_base:+(f.taxa_base||c.taxa_base), taxa_extra:+(f.taxa_extra||c.taxa_extra), km_max:+(f.km_max||c.km_max) }; }
+function kmReta(lat1,lng1,lat2,lng2){ var r = Math.PI/180, x = Math.sin((lat2-lat1)*r/2), y = Math.sin((lng2-lng1)*r/2); return 2*6371*Math.asin(Math.sqrt(x*x + Math.cos(lat1*r)*Math.cos(lat2*r)*y*y)); }
+function fmtKm(km){ return String(Math.round(km*10)/10).replace('.',',') + ' km'; }
+function taxaPorKm(km){ var f = regraFrete(); if(km > f.km_max) return null; return km <= f.km_base ? f.taxa_base : f.taxa_extra; }
+var SERV_ROTA = ['https://routing.openstreetmap.de/routed-car/route/v1/driving/', 'https://router.project-osrm.org/route/v1/driving/'];
+function kmRota(lat, lng){
+  var f = regraFrete(), q = f.lng+','+f.lat+';'+lng+','+lat+'?overview=false';
+  function tenta(i){
+    if(i >= SERV_ROTA.length) return Promise.reject(new Error('rota'));
+    return fetch(SERV_ROTA[i] + q).then(function(r){ return r.json(); }).then(function(j){
+      if(j.code!=='Ok' || !j.routes || !j.routes[0]) throw new Error('rota');
+      return j.routes[0].distance/1000;
+    }).catch(function(){ return tenta(i+1); });
+  }
+  return tenta(0);
+}
+var AREA_MAPA = '-42.75,-22.70,-42.05,-23.00';
+function cidadeDigitada(){ return $('cidade').value.trim() || 'Araruama'; }
+function bairroComCidade(){ var b = bairroDigitado(), c = cidadeDigitada(); return norm(c)==='araruama' ? b : (b ? b + ' - ' : '') + c; }
+function geocodificar(){
+  var rua = $('rua').value.trim(), bairro = bairroDigitado(), cidade = cidadeDigitada(), base = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&bounded=1&viewbox=' + AREA_MAPA, buscas = [];
+  if(rua){
+    buscas.push({ u: base + '&street=' + encodeURIComponent(rua) + '&city=' + encodeURIComponent(cidade) + '&state=' + encodeURIComponent('Rio de Janeiro'), porRua:true });
+    if(bairro) buscas.push({ u: base + '&q=' + encodeURIComponent(rua + ', ' + bairro + ', ' + cidade), porRua:true });
+  }
+  if(bairro) buscas.push({ u: base + '&q=' + encodeURIComponent(bairro + ', ' + cidade), porRua:false, nivel:'bairro' });
+  buscas.push({ u: base + '&city=' + encodeURIComponent(cidade) + '&state=' + encodeURIComponent('Rio de Janeiro'), porRua:false, nivel:'cidade' });
+  function tenta(i){
+    if(i >= buscas.length) return Promise.reject(new Error('endereco'));
+    return fetch(buscas[i].u).then(function(r){ return r.json(); }).then(function(a){
+      if(!a || !a.length) throw new Error('vazio');
+      return { lat:+a[0].lat, lng:+a[0].lon, porRua:buscas[i].porRua, nivel:buscas[i].nivel };
+    }).catch(function(){ return tenta(i+1); });
+  }
+  return tenta(0);
+}
+var freteSeq = 0, freteTimer = null, localGps = null;
+function freteVazio(){ return { ok:false, taxa:0, minutos:0, minimo:0, bairro:'', km:null, lat:null, lng:null }; }
+function agendarFrete(){ clearTimeout(freteTimer); freteTimer = setTimeout(calcularFrete, 700); }
+function calcularFrete(){
+  if(!DADOS || modo()!=='entrega') return;
+  var st = $('statusFrete'), seq = ++freteSeq;
+  frete = freteVazio();
+  var temEndereco = $('rua').value.trim() || bairroDigitado();
+  if(!localGps && !temEndereco){ st.className = 'status-frete'; st.textContent = 'Informe a rua e o bairro, ou use sua localização, para calcular a entrega.'; atualizarResumo(); return; }
+  st.className = 'status-frete'; st.textContent = 'Calculando a distância até o trailer...';
+  atualizarResumo();
+  (localGps ? Promise.resolve(localGps) : geocodificar()).then(function(pt){
+    var f = regraFrete(), reta = kmReta(f.lat, f.lng, pt.lat, pt.lng);
+    return kmRota(pt.lat, pt.lng).catch(function(){ return reta * 1.3; }).then(function(kmCarro){
+      return { pt:pt, km: Math.round(Math.max(kmCarro, reta) * 10) / 10 };
+    });
+  }).then(function(r){
+    if(seq !== freteSeq) return;
+    var t = taxaPorKm(r.km);
+    if(t === null){
+      st.className = 'status-frete ruim';
+      st.textContent = 'Seu endereço fica a cerca de ' + fmtKm(r.km) + ' do trailer, fora da nossa área de entrega. Finalize o pedido e combinamos pelo WhatsApp.';
+    } else {
+      frete = { ok:true, taxa:t, minutos:0, minimo:0, bairro:bairroDigitado(), km:r.km, lat:r.pt.lat, lng:r.pt.lng };
+      st.className = 'status-frete ok';
+      st.textContent = 'Distância até o trailer: cerca de ' + fmtKm(r.km) + ' · entrega ' + brl(t) + (r.pt.gps ? ' (pela sua localização)' : (r.pt.porRua ? '' : ' (aproximada pel' + (r.pt.nivel==='cidade' ? 'a cidade' : 'o bairro') + ')'));
+    }
+    atualizarResumo();
+  }).catch(function(){
+    if(seq !== freteSeq) return;
+    st.className = 'status-frete ruim';
+    st.textContent = 'Não achamos esse endereço no mapa. Confira a rua e o bairro, use sua localização, ou finalize e combinamos a entrega pelo WhatsApp.';
+    atualizarResumo();
+  });
+}
+$('btnLocal').addEventListener('click', function(){
+  var bt = $('btnLocal'), st = $('statusFrete');
+  if(!navigator.geolocation){ st.className = 'status-frete ruim'; st.textContent = 'Seu aparelho não informa a localização. Preencha o endereço.'; return; }
+  bt.disabled = true; bt.textContent = 'Buscando sua localização...';
+  navigator.geolocation.getCurrentPosition(function(pos){
+    bt.disabled = false; bt.textContent = '📍 Usar minha localização';
+    localGps = { lat:pos.coords.latitude, lng:pos.coords.longitude, gps:true, porRua:true };
+    evento('usar_localizacao');
+    // Preenche a rua pelo mapa se ainda estiver vazia (o cliente pode corrigir).
+    if(!$('rua').value.trim()){
+      fetch('https://nominatim.openstreetmap.org/reverse?format=json&zoom=17&lat=' + localGps.lat + '&lon=' + localGps.lng).then(function(r){ return r.json(); }).then(function(d){
+        var a = (d && d.address) || {};
+        if(a.road && !$('rua').value.trim()){ $('rua').value = a.road; salvarCliente(); }
+      }).catch(function(){});
+    }
+    calcularFrete();
+    $('numero').focus();
+  }, function(){
+    bt.disabled = false; bt.textContent = '📍 Usar minha localização';
+    st.className = 'status-frete ruim'; st.textContent = 'Não conseguimos sua localização. Preencha a rua e o bairro.';
+  }, { enableHighAccuracy:true, timeout:15000, maximumAge:60000 });
+});
+['rua','bairroOutro','cidade'].forEach(function(id){ $(id).addEventListener('input', function(){ localGps = null; agendarFrete(); }); });
+$('bairroSel').addEventListener('change', function(){ localGps = null; aplicarBairro(); salvarCliente(); });
 $('cep').addEventListener('input', function(ev){
   var v = ev.target.value.replace(/\D/g,'').slice(0,8);
   ev.target.value = v.length>5 ? v.slice(0,5)+'-'+v.slice(5) : v;
@@ -1364,7 +1452,7 @@ function buscarCep(cep){
 }
 
 /* ================= DADOS DO CLIENTE (ficam só no aparelho) ================= */
-var CAMPOS = ['nome','tel','cep','rua','numero','comp','bairroOutro'];
+var CAMPOS = ['nome','tel','cep','rua','numero','comp','bairroOutro','cidade'];
 function salvarCliente(){
   var o = { modo:modo(), pag:document.querySelector('input[name=pag]:checked').value, bairro:bairroDigitado(), bairroSel:$('bairroSel').value };
   CAMPOS.forEach(function(k){ o[k] = $(k).value; });
@@ -1465,9 +1553,9 @@ function mensagemZap(res){
   });
   linhas.push('', 'Itens: ' + brl(sub));
   if(e){
-    linhas.push('Entrega: ' + (comb ? 'a combinar' : (taxa>0 ? brl(taxa) : 'grátis')));
+    linhas.push('Entrega: ' + (comb ? 'a combinar' : (taxa>0 ? brl(taxa) : 'grátis')) + (frete.ok && frete.km != null ? ' (' + fmtKm(frete.km) + ')' : ''));
     linhas.push('Total: ' + brl(sub+taxa) + (comb ? ' + entrega' : ''));
-    linhas.push('', 'Endereço: ' + $('rua').value.trim() + ', ' + $('numero').value.trim() + ' - ' + bairro + ($('cep').value ? ' - CEP ' + $('cep').value : ''));
+    linhas.push('', 'Endereço: ' + $('rua').value.trim() + ', ' + $('numero').value.trim() + ' - ' + bairroComCidade() + ($('cep').value ? ' - CEP ' + $('cep').value : ''));
     if($('comp').value.trim()) linhas.push('Referência: ' + $('comp').value.trim());
   } else {
     linhas.push('Retirada no trailer', 'Total: ' + brl(sub));
@@ -1502,7 +1590,6 @@ $('btnEnviar').addEventListener('click', function(){
   if(!nome) erros.push('Informe seu nome.');
   if(telDigitos().length < 10) erros.push('Informe seu WhatsApp com DDD.');
   if(e){
-    if(!$('chkDistancia').checked) erros.push('Confirme que mora a até 5 km do trailer.');
     if(!$('rua').value.trim() || !$('numero').value.trim()) erros.push('Informe rua e número.');
     if(!bairro) erros.push('Informe o bairro.');
   }
@@ -1512,8 +1599,9 @@ $('btnEnviar').addEventListener('click', function(){
   var itensEnviados = carrinho.map(function(it){ return { id:it.id, nome:it.nome, qtd:it.qtd, inclusos:it.inclusos, caldas:it.caldas||[], extras:it.extras, unit:it.unit, sabor:it.sabor||'' }; });
   var payload = {
     nome:nome, telefone:telDigitos(), modo:modo(), pagamento:pag,
-    cep:e ? $('cep').value : '', rua:e ? $('rua').value.trim() : '', numero:e ? $('numero').value.trim() : '', bairro:e ? bairro : '',
-    complemento:e ? $('comp').value.trim() : '', obs:obsComSabores($('obs').value.trim(), itensEnviados), origem:origem, fora_horario:!aberto,
+    cep:e ? $('cep').value : '', rua:e ? $('rua').value.trim() : '', numero:e ? $('numero').value.trim() : '', bairro:e ? bairroComCidade() : '',
+    complemento:e ? $('comp').value.trim() : '', obs:obsComSabores(obsComDistancia($('obs').value.trim(), e), itensEnviados),
+    lat:(e && frete.ok) ? frete.lat : null, lng:(e && frete.ok) ? frete.lng : null, km:(e && frete.ok) ? frete.km : null, origem:origem, fora_horario:!aberto,
     itens: itensEnviados.map(function(it){ return { id:it.id, qtd:it.qtd, inclusos:it.inclusos, caldas:it.caldas||[], extras:it.extras }; })
   };
   var btn = $('btnEnviar'); btn.disabled = true; btn.textContent = 'Enviando pedido...'; $('erroPedido').textContent = '';
@@ -1721,6 +1809,7 @@ function saboresDe(p){
   return l && l.length ? l : null;
 }
 // O servidor guarda só o item; o sabor vai junto nas observações do pedido para aparecer no painel.
+function obsComDistancia(obs, e){ return (e && frete.ok && frete.km != null) ? ('Distância: ' + fmtKm(frete.km) + (obs ? ' | ' + obs : '')) : obs; }
 function obsComSabores(obs, itens){
   var s = itens.filter(function(i){ return i.sabor; }).map(function(i){ return i.qtd + 'x ' + i.nome + ': ' + i.sabor; }).join('; ');
   return s ? ('Sabores: ' + s + (obs ? ' | ' + obs : '')).slice(0, 300) : obs;

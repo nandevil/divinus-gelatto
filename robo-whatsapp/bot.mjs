@@ -163,7 +163,7 @@ async function respHorario() {
   return `${situ}\nHorário: ${faixa}.\nPedidos pelo site: ${SITE_URL}`;
 }
 const respEntrega = () =>
-  `A entrega é feita pelo motoboy parceiro do iFood e da 99Food.\nTaxa: R$ 8,00 até 5 km do trailer. Acima disso, combinamos o valor por aqui.\nRetirada no trailer é grátis.\nPeça pelo site: ${SITE_URL}`;
+  `A entrega é feita pelo nosso motoboy.\nTaxa: R$ 8,00 até 5 km do trailer e R$ 10,00 acima de 5 km (até 15 km). No site a taxa é calculada pelo seu endereço. Mais longe que isso, combinamos por aqui.\nRetirada no trailer é grátis.\nPeça pelo site: ${SITE_URL}`;
 const respEndereco = () => `Estamos na ${ENDERECO}.`;
 const respPagamento = () =>
   `No site você paga com *Pix* ou *cartão de crédito* (o cartão tem um pequeno acréscimo da taxa). A confirmação é automática.\nPeça aqui: ${SITE_URL}`;
