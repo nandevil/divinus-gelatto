@@ -701,7 +701,7 @@ var CONFIG = {
     'Cascão (baunilha, açaí ou mista)': { foto:'img/produto2.jpg', descricao:'Baunilha, açaí ou mista.' },
     'Casquinha recheada': { foto:'', descricao:'Escolha o sabor do recheio.' },
     'Cascão recheado': { foto:'', descricao:'Escolha o sabor do recheio.' },
-    'Sundae': { foto:'', descricao:'Baunilha, açaí ou misto, com amendoim ou confete e até 2 caldas.' }
+    'Sundae': { foto:'', descricao:'Copo de 145 ml. Baunilha, açaí ou misto, com amendoim ou confete e até 2 caldas.' }
   },
   // Quantos complementos inclusos cada categoria pode escolher (sem a categoria aqui, vale o número do painel).
   LIMITE_COMPLEMENTOS: { 'Sundae': 1 },
@@ -1825,7 +1825,7 @@ function montarCard(area, base, prods, pre){
     [['inc','incluso',limiteInclusos,fotoIncluso,'Inc'],['cal','calda',limiteCaldas,fotoCalda,'Cal']].forEach(function(x){
       var g = q(x[0]), lista = sel.p ? complementosDe(sel.p, x[1]) : [], lim = sel.p ? x[2](sel.p) : 0, alvo = sel[x[0]];
       g.innerHTML = '';
-      q('passo'+x[4]).hidden = !lista.length || !lim;
+      q('passo'+x[4]).dataset.vazio = (!lista.length || !lim) ? '1' : '';
       q('dica'+x[4]).textContent = x[1]==='calda' ? 'Até ' + lim + ' caldas, grátis.' : (lim===1 ? 'Escolha 1, incluso no preço.' : 'Até ' + lim + ' inclusos no preço.');
       lista.forEach(function(c,k){
         var id = pre+'_'+x[0]+k, d = el('div',{class:'opc'}, '');
@@ -1852,6 +1852,11 @@ function montarCard(area, base, prods, pre){
   }
   function precisaSabor(){ return !!(sel.p && saboresDe(sel.p)); }
   function atualizar(){
+    // complementos e caldas só aparecem depois que o cliente escolhe o sabor
+    if(temComp){
+      var espera = !sel.p || (precisaSabor() && !sel.sabor);
+      ['Inc','Cal'].forEach(function(k){ var ps = q('passo'+k); ps.hidden = espera || ps.dataset.vazio === '1'; });
+    }
     q('qtd').textContent = sel.qtd;
     q('preco').textContent = brl(sel.p ? sel.p.preco * sel.qtd : 0);
     var falta = !sel.p ? 'Escolha o tamanho.' : (precisaSabor() && !sel.sabor ? 'Escolha o sabor.' : '');
