@@ -1817,6 +1817,12 @@ function montarCard(area, base, prods, pre){
       d.innerHTML = '<input type="radio" name="'+pre+'_sab" id="'+id+'" value="'+esc(n)+'"'+(n===sel.sabor?' checked':'')+'><label for="'+id+'"><b>'+esc(n)+'</b></label>';
       g.appendChild(d);
       d.querySelector('input').addEventListener('change', function(ev){ sel.sabor = ev.target.value; atualizar(); });
+      // clicar de novo no sabor já marcado desmarca: complementos e caldas somem e as escolhas deles são limpas
+      d.querySelector('input').addEventListener('click', function(ev){
+        if(sel.sabor !== ev.target.value) return;
+        ev.target.checked = false; sel.sabor = '';
+        desenharComp(); atualizar();
+      });
     });
   }
   function desenharComp(){
