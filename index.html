@@ -701,10 +701,10 @@ var CONFIG = {
     'Cascão (baunilha, açaí ou mista)': { foto:'img/produto2.jpg', descricao:'Baunilha, açaí ou mista.' },
     'Casquinha recheada': { foto:'', descricao:'Escolha o sabor do recheio.' },
     'Cascão recheado': { foto:'', descricao:'Escolha o sabor do recheio.' },
-    'Sundae': { foto:'', descricao:'Baunilha, açaí ou misto, com complementos e caldas.' }
+    'Sundae': { foto:'', descricao:'Baunilha, açaí ou misto, com amendoim ou confete e até 2 caldas.' }
   },
-  // Produtos que usam os mesmos complementos e caldas de outra categoria (o servidor confere pela coluna complementos_de).
-  COMPLEMENTOS_DE: { 'Sundae': 'Açaí no copo' },
+  // Quantos complementos inclusos cada categoria pode escolher (sem a categoria aqui, vale o número do painel).
+  LIMITE_COMPLEMENTOS: { 'Sundae': 1 },
   FOTOS_PRODUTOS: [
     { arquivo: 'img/produto1.jpg', descricao: 'Copo de açaí da Divinus Gelatto com morango, amendoim e confeitos coloridos' },
     { arquivo: 'img/produto2.jpg', descricao: 'Sorvetes de casquinha da Divinus Gelatto: chocolate, baunilha e mista' },
@@ -733,7 +733,7 @@ var PREVIA = {
     { id:'P007', nome:'Cascão (baunilha, açaí ou mista)', categoria:'Sorvete', preco:6, disponivel:true, online:false },
     { id:'P008', nome:'Casquinha recheada', categoria:'Sorvete', preco:6, disponivel:true, online:false },
     { id:'P009', nome:'Cascão recheado', categoria:'Sorvete', preco:8, disponivel:true, online:false },
-    { id:'P010', nome:'Sundae', categoria:'Sorvete', preco:7, disponivel:true, online:true },
+    { id:'P010', nome:'Sundae', categoria:'Sundae', preco:9, disponivel:true, online:true },
     { id:'P011', nome:'Milkshake 400 ml', categoria:'Milkshake', preco:14, disponivel:true, online:true },
     { id:'P012', nome:'Milkshake 500 ml', categoria:'Milkshake', preco:15, disponivel:true, online:true },
     { id:'P013', nome:'Milkshake 700 ml', categoria:'Milkshake', preco:18, disponivel:true, online:true },
@@ -991,9 +991,8 @@ function abrirMontador(tipo){
   if(tipo){ (tipo==='copo' ? pc : pg).appendChild(m); m.hidden = false; } else m.hidden = true;
 }
 
-function catComplementos(p){ return p.complementos_de || (CONFIG.COMPLEMENTOS_DE || {})[p.nome] || p.categoria; }
 function complementosDe(prod, grupo){
-  var cat = norm(catComplementos(prod));
+  var cat = norm(prod.categoria);
   return DADOS.complementos.filter(function(c){
     if(c.grupo!==grupo) return false;
     if(grupo==='opcional' && !(c.preco>0)) return false;
@@ -1001,7 +1000,7 @@ function complementosDe(prod, grupo){
   });
 }
 function limiteCaldas(prod){ return Math.min(LIM_CALDAS, complementosDe(prod,'calda').length); }
-function limiteInclusos(prod){ return Math.min(DADOS.inclusos, complementosDe(prod,'incluso').length); }
+function limiteInclusos(prod){ var l = (CONFIG.LIMITE_COMPLEMENTOS || {})[prod.categoria]; return Math.min(l || DADOS.inclusos, complementosDe(prod,'incluso').length); }
 // Antes de escolher o tamanho, os passos mostram as opções do copo, desativadas.
 function categoriaPadrao(){
   var l = itensOnline(), c = l.filter(function(p){ return /copo/i.test(p.categoria); })[0] || l[0];
@@ -1776,7 +1775,7 @@ function montarCard(area, base, prods, pre){
   var titulo = base.replace(/\s*\([^)]*\)\s*$/, '');
   var desc = descDoCard(base) || (base !== titulo ? base.slice(titulo.length).replace(/[()]/g,'').trim().replace(/^./, function(c){ return c.toUpperCase(); }) : '');
   var temSabor = prods.some(function(p){ return saboresDe(p); });
-  var temComp = prods.some(function(p){ return catComplementos(p) !== p.categoria; });
+  var temComp = prods.some(function(p){ return complementosDe(p,'incluso').length || complementosDe(p,'calda').length; });
   var box = el('article',{class:'card-prod'}, '');
   box.innerHTML =
       '<div class="card-topo"><div class="card-foto"></div><div class="card-txt"><h3>'+esc(titulo)+'</h3>'
@@ -1827,7 +1826,7 @@ function montarCard(area, base, prods, pre){
       var g = q(x[0]), lista = sel.p ? complementosDe(sel.p, x[1]) : [], lim = sel.p ? x[2](sel.p) : 0, alvo = sel[x[0]];
       g.innerHTML = '';
       q('passo'+x[4]).hidden = !lista.length || !lim;
-      q('dica'+x[4]).textContent = x[1]==='calda' ? 'Até ' + lim + ' caldas, grátis.' : 'Até ' + lim + ' inclusos no preço.';
+      q('dica'+x[4]).textContent = x[1]==='calda' ? 'Até ' + lim + ' caldas, grátis.' : (lim===1 ? 'Escolha 1, incluso no preço.' : 'Até ' + lim + ' inclusos no preço.');
       lista.forEach(function(c,k){
         var id = pre+'_'+x[0]+k, d = el('div',{class:'opc'}, '');
         d.innerHTML = '<input type="checkbox" id="'+id+'" value="'+esc(c.nome)+'"><label for="'+id+'">'+x[3](c.nome)+'<b>'+esc(c.nome)+'</b></label>';
