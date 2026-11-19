@@ -1879,8 +1879,8 @@ function montarCard(area, base, prods, pre){
     + (temSabor ? '<div class="passo" data-g="passoSabor"><h3>Escolha o sabor</h3><div class="grade" data-g="sab"></div></div>' : '')
     + (temComp ? '<div class="passo" data-g="passoInc"><h3>Escolha seus complementos</h3><p class="dica"><span data-g="dicaInc"></span> <span class="contador" data-g="contInc" aria-live="polite"></span></p><div class="grade" data-g="inc"></div></div>'
       + '<div class="passo" data-g="passoCal"><h3>Escolha suas caldas</h3><p class="dica"><span data-g="dicaCal"></span> <span class="contador" data-g="contCal" aria-live="polite"></span></p><div class="grade" data-g="cal"></div></div>' : '')
-    + '<div class="qtd-linha"><span>Quantos iguais?</span><div class="qtd"><button type="button" data-g="menos" aria-label="Tirar um">−</button><span data-g="qtd" aria-live="polite">1</span><button type="button" data-g="mais" aria-label="Mais um">+</button></div></div>'
-    + '<div class="add-linha"><div><div class="preco-item" data-g="preco">R$ 0,00</div><div class="msg-info" data-g="info" aria-live="polite"></div></div>'
+    + '<div class="qtd-linha" data-g="qtdBox"><span>Quantos iguais?</span><div class="qtd"><button type="button" data-g="menos" aria-label="Tirar um">−</button><span data-g="qtd" aria-live="polite">1</span><button type="button" data-g="mais" aria-label="Mais um">+</button></div></div>'
+    + '<div class="add-linha" data-g="addBox"><div><div class="preco-item" data-g="preco">R$ 0,00</div><div class="msg-info" data-g="info" aria-live="polite"></div></div>'
     + '<button class="btn" type="button" data-g="add" disabled>Adicionar ao pedido</button></div>'
     + '</div>';
   var q = function(k){ return box.querySelector('[data-g="'+k+'"]'); };
@@ -1954,6 +1954,9 @@ function montarCard(area, base, prods, pre){
       var espera = !sel.p || (precisaSabor() && !sel.sabor);
       ['Inc','Cal'].forEach(function(k){ var ps = q('passo'+k); ps.hidden = espera || ps.dataset.vazio === '1'; });
     }
+    // quantidade, preço e botão só aparecem depois do sabor escolhido
+    var semSabor = !sel.p || (precisaSabor() && !sel.sabor);
+    q('qtdBox').hidden = semSabor; q('addBox').hidden = semSabor;
     q('qtd').textContent = sel.qtd;
     q('preco').textContent = brl(sel.p ? sel.p.preco * sel.qtd : 0);
     var falta = !sel.p ? 'Escolha o tamanho.' : (precisaSabor() && !sel.sabor ? 'Escolha o sabor.' : '');
