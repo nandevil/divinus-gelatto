@@ -1438,7 +1438,7 @@ $('cep').addEventListener('input', function(ev){
 function buscarCep(cep){
   var st = $('statusFrete'); st.className = 'status-frete'; st.textContent = 'Procurando seu endereço...';
   fetch('https://viacep.com.br/ws/'+cep+'/json/').then(function(r){ return r.json(); }).then(function(d){
-    if(d.erro){ st.className='status-frete ruim'; st.textContent = 'CEP não encontrado. Confira os números ou escolha o bairro na lista.'; return; }
+    if(d.erro){ agendarFrete(); return; } // CEP geral da cidade (ex.: 28970-000): segue pelo endereço digitado
     if(d.logradouro) $('rua').value = d.logradouro;
     var b = norm(d.bairro||''), idx = -1;
     DADOS.entrega.forEach(function(x,i){ if(idx<0 && b && (norm(x.bairro)===b || norm(semParenteses(x.bairro))===b)) idx = i; });
@@ -1448,7 +1448,7 @@ function buscarCep(cep){
     aplicarBairro(); salvarCliente();
     if(!d.bairro && idx<0){ st.className='status-frete'; st.textContent = 'Esse CEP não informa o bairro. Escolha o seu bairro na lista.'; }
     $('numero').focus();
-  }).catch(function(){ st.className='status-frete ruim'; st.textContent = 'Não consegui consultar o CEP agora. Escolha o bairro na lista e preencha a rua.'; });
+  }).catch(function(){ agendarFrete(); });
 }
 
 /* ================= DADOS DO CLIENTE (ficam só no aparelho) ================= */
