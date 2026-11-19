@@ -304,7 +304,29 @@ section.bloco{padding:34px 0;border-top:2px solid var(--creme-2)}
 .aviso-trailer a{display:inline-block;margin-top:10px;background:var(--ouro);color:var(--choco);border-radius:999px;padding:7px 16px;font-weight:700;font-size:15px;text-decoration:none}
 @media(max-width:480px){.aviso-trailer{flex-direction:column;align-items:center;text-align:center}}
 .cat-tag{display:block;width:max-content;margin-left:auto;margin-right:auto;background:var(--ouro);color:var(--choco);border-radius:999px;font-size:12px;font-weight:700;padding:2px 10px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
-.bloco-gelado+.bloco-gelado{margin-top:34px;padding-top:26px;border-top:3px dashed var(--choco-2)}
+/* cards de produto: foto à esquerda, tamanhos em botões pequenos, opções abrem dentro do card */
+.cards{display:flex;flex-direction:column;gap:16px}
+.card-prod{background:#fff;border:2px solid var(--choco);border-radius:var(--raio);padding:12px;box-shadow:0 3px 0 var(--choco-2);text-align:left}
+.card-topo{display:flex;gap:14px;align-items:flex-start}
+.card-foto{flex:none;width:112px;height:112px;border-radius:12px;overflow:hidden;background:var(--creme-2)}
+.card-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.card-foto.sem img{object-fit:contain;padding:14px}
+.card-txt{min-width:0;flex:1}
+.card-txt h3{font-size:20px;margin:2px 0 4px;line-height:1.2}
+.card-desc{margin:0 0 6px;color:var(--choco-2);font-size:14.5px;line-height:1.35}
+.card-preco{margin:0;font-weight:700;font-size:16px}
+@media(min-width:760px){.card-prod{padding:16px}.card-foto{width:150px;height:150px}.card-txt h3{font-size:23px}}
+.tams{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.tams>.opc{flex:1 1 64px;max-width:120px}
+.tams .opc label{min-height:0;padding:8px 4px;align-items:center;text-align:center}
+.tams .opc label .valor{font-size:14px}
+.tams>p{margin:4px 0}
+.card-painel{margin-top:12px;border-top:2px dashed var(--choco-2)}
+.card-painel .passo{border:0;background:none;padding:14px 0 4px;margin:0;border-radius:0}
+.card-painel .passo+.passo{border-top:1px dashed var(--creme-2)}
+.card-painel .copo-box{margin:12px auto 0}
+.card-painel .add-linha{padding-bottom:6px}
+.card-painel [data-g="sab"] .opc label{min-height:44px;padding:8px}
 .cat li.li-add{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end;padding:2px 0 10px}
 .cat li.li-add select{flex:1 1 140px;min-width:0;font:inherit;font-size:14px;padding:7px 8px;border:2px solid var(--choco-2);border-radius:10px;background:#fff;color:var(--choco)}
 .cat li.li-add button{flex:none;font:inherit;font-weight:700;font-size:14px;padding:8px 14px;border-radius:999px;border:2px solid var(--choco);background:var(--ouro);color:var(--choco);cursor:pointer}
@@ -387,100 +409,107 @@ body.com-barra{padding-bottom:64px}
     <h2>Monte seu açaí</h2>
     <p class="sub" id="subMonte">Escolha o tamanho, os complementos e as caldas.</p>
 
-    <div id="areaMonte" class="monte">
-      <div class="copo-box">
-        <svg id="copo" viewBox="0 0 200 250" role="img" aria-label="Copo de açaí com os complementos escolhidos">
-          <defs>
-            <clipPath id="recorte"><path d="M34 70 L166 70 L150 228 Q148 238 138 238 L62 238 Q52 238 50 228 Z"/></clipPath>
-          </defs>
-          <g id="copoG">
-          <ellipse cx="100" cy="244" rx="64" ry="6" fill="#4A2E22" opacity=".15"/>
-          <g clip-path="url(#recorte)">
-            <rect x="0" y="0" width="200" height="250" fill="#FBF7EC"/>
-            <rect id="nivelAcai" x="0" y="190" width="200" height="60" fill="#5B2A86"/>
-            <ellipse id="topoAcai" cx="100" cy="190" rx="70" ry="9" fill="#7A3FA8"/>
-          </g>
-          <g id="coberturas"></g>
-          <path d="M34 70 L166 70 L150 228 Q148 238 138 238 L62 238 Q52 238 50 228 Z" fill="none" stroke="#4A2E22" stroke-width="5" stroke-linejoin="round"/>
-          <rect x="26" y="62" width="148" height="12" rx="6" fill="#F2EBD9" stroke="#4A2E22" stroke-width="5"/>
-          <ellipse cx="100" cy="30" rx="26" ry="7" fill="none" stroke="#C9922E" stroke-width="5"/>
-          </g>
-          <g id="garrafaG" style="display:none">
-            <defs><clipPath id="recorteGarrafa"><path d="M86 62 L114 62 Q114 76 130 90 Q141 100 141 118 L141 222 Q141 237 126 238 L74 238 Q59 237 59 222 L59 118 Q59 100 70 90 Q86 76 86 62 Z"/></clipPath></defs>
-            <ellipse cx="100" cy="244" rx="46" ry="5" fill="#4A2E22" opacity=".15"/>
-            <g clip-path="url(#recorteGarrafa)">
+    <div id="areaMonte" class="monte cards">
+      <article class="card-prod" id="cardCopo">
+        <div class="card-topo">
+          <div class="card-foto" data-card="Açaí no copo"></div>
+          <div class="card-txt"><h3>Açaí no copo</h3><p class="card-desc" data-desc="Açaí no copo"></p><p class="card-preco" id="aPartirCopo"></p></div>
+        </div>
+        <div class="tams" id="gradeTamanhos" role="radiogroup" aria-label="Tamanho do copo"><p class="carregando">Carregando o cardápio...</p></div>
+        <div class="card-painel" id="painelCopo" hidden></div>
+      </article>
+      <article class="card-prod" id="passoGarrafa" hidden>
+        <div class="card-topo">
+          <div class="card-foto" data-card="Açaí na garrafa"></div>
+          <div class="card-txt"><h3>Açaí na garrafa</h3><p class="card-desc" data-desc="Açaí na garrafa"></p><p class="card-preco" id="aPartirGar"></p></div>
+        </div>
+        <div class="tams" id="gradeGarrafa" aria-label="Tamanho da garrafa"></div>
+        <div class="card-painel" id="painelGarrafa" hidden></div>
+      </article>
+      <div id="montador" hidden>
+        <div class="copo-box">
+          <svg id="copo" viewBox="0 0 200 250" role="img" aria-label="Copo de açaí com os complementos escolhidos">
+            <defs>
+              <clipPath id="recorte"><path d="M34 70 L166 70 L150 228 Q148 238 138 238 L62 238 Q52 238 50 228 Z"/></clipPath>
+            </defs>
+            <g id="copoG">
+            <ellipse cx="100" cy="244" rx="64" ry="6" fill="#4A2E22" opacity=".15"/>
+            <g clip-path="url(#recorte)">
               <rect x="0" y="0" width="200" height="250" fill="#FBF7EC"/>
-              <rect x="0" y="82" width="200" height="170" fill="#D98BA6"/>
-              <ellipse cx="100" cy="82" rx="42" ry="6" fill="#E7A9BF"/>
-              <path d="M60 96 C78 104 70 124 88 134 C106 146 92 168 108 182 C122 196 112 214 128 238 L141 238 L141 96 Z" fill="#F7EEDF" opacity=".95"/>
-              <path d="M59 150 C72 156 74 176 66 196 C62 212 70 226 74 238 L59 238 Z" fill="#F7EEDF" opacity=".9"/>
-              <path d="M100 90 C108 106 100 122 112 140 C120 156 114 172 122 190" fill="none" stroke="#F7EEDF" stroke-width="7" stroke-linecap="round" opacity=".9"/>
-              <path d="M82 100 C90 116 84 132 94 150 C100 164 96 184 90 204" fill="none" stroke="#B9577A" stroke-width="5" stroke-linecap="round" opacity=".55"/>
-              <path d="M126 112 C122 130 130 148 124 168 C120 186 128 204 126 224" fill="none" stroke="#B9577A" stroke-width="4" stroke-linecap="round" opacity=".5"/>
-              <g id="garrafaExtras"></g>
-              <rect x="66" y="96" width="9" height="128" rx="4.5" fill="#fff" opacity=".28"/>
+              <rect id="nivelAcai" x="0" y="190" width="200" height="60" fill="#5B2A86"/>
+              <ellipse id="topoAcai" cx="100" cy="190" rx="70" ry="9" fill="#7A3FA8"/>
             </g>
-            <path d="M86 62 L114 62 Q114 76 130 90 Q141 100 141 118 L141 222 Q141 237 126 238 L74 238 Q59 237 59 222 L59 118 Q59 100 70 90 Q86 76 86 62 Z" fill="none" stroke="#4A2E22" stroke-width="5" stroke-linejoin="round"/>
-            <rect x="82" y="26" width="36" height="24" rx="5" fill="#5B2A86" stroke="#4A2E22" stroke-width="4"/>
-            <path d="M89 30v16M96 30v16M104 30v16M111 30v16" stroke="#7A3FA8" stroke-width="2" stroke-linecap="round"/>
-            <rect x="84" y="50" width="32" height="6" rx="2" fill="#F2EBD9" stroke="#4A2E22" stroke-width="3"/>
-            <circle cx="100" cy="168" r="23" fill="#F2C4D6" stroke="#4A2E22" stroke-width="2"/>
-            <path d="M94.5 160 L100 175.5 L105.5 160 Z" fill="#C98A4B" stroke="#4A2E22" stroke-width="1.4" stroke-linejoin="round"/>
-            <path d="M95 160 Q94.6 151.5 100 150.8 Q105.4 151.5 105 160 Z" fill="#F7EEDF" stroke="#4A2E22" stroke-width="1.4" stroke-linejoin="round"/>
-            <ellipse cx="100" cy="147" rx="6" ry="1.6" fill="none" stroke="#C9922E" stroke-width="1.4"/>
-            <text x="100" y="185" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="5.6" fill="#4A2E22">DIVINUS</text>
-            <ellipse cx="100" cy="14" rx="20" ry="5.5" fill="none" stroke="#C9922E" stroke-width="4"/>
-          </g>
-        </svg>
-        <div class="copo-legenda" id="legendaCopo" aria-live="polite">Escolha o tamanho e veja o copo encher</div>
-      </div>
-     <div class="passos">
-      <div class="passo" id="passoCopo">
-        <h3><span class="num">1</span>Escolha seu açaí no copo</h3>
-        <div class="grade" id="gradeTamanhos"><p class="carregando">Carregando o cardápio...</p></div>
+            <g id="coberturas"></g>
+            <path d="M34 70 L166 70 L150 228 Q148 238 138 238 L62 238 Q52 238 50 228 Z" fill="none" stroke="#4A2E22" stroke-width="5" stroke-linejoin="round"/>
+            <rect x="26" y="62" width="148" height="12" rx="6" fill="#F2EBD9" stroke="#4A2E22" stroke-width="5"/>
+            <ellipse cx="100" cy="30" rx="26" ry="7" fill="none" stroke="#C9922E" stroke-width="5"/>
+            </g>
+            <g id="garrafaG" style="display:none">
+              <defs><clipPath id="recorteGarrafa"><path d="M86 62 L114 62 Q114 76 130 90 Q141 100 141 118 L141 222 Q141 237 126 238 L74 238 Q59 237 59 222 L59 118 Q59 100 70 90 Q86 76 86 62 Z"/></clipPath></defs>
+              <ellipse cx="100" cy="244" rx="46" ry="5" fill="#4A2E22" opacity=".15"/>
+              <g clip-path="url(#recorteGarrafa)">
+                <rect x="0" y="0" width="200" height="250" fill="#FBF7EC"/>
+                <rect x="0" y="82" width="200" height="170" fill="#D98BA6"/>
+                <ellipse cx="100" cy="82" rx="42" ry="6" fill="#E7A9BF"/>
+                <path d="M60 96 C78 104 70 124 88 134 C106 146 92 168 108 182 C122 196 112 214 128 238 L141 238 L141 96 Z" fill="#F7EEDF" opacity=".95"/>
+                <path d="M59 150 C72 156 74 176 66 196 C62 212 70 226 74 238 L59 238 Z" fill="#F7EEDF" opacity=".9"/>
+                <path d="M100 90 C108 106 100 122 112 140 C120 156 114 172 122 190" fill="none" stroke="#F7EEDF" stroke-width="7" stroke-linecap="round" opacity=".9"/>
+                <path d="M82 100 C90 116 84 132 94 150 C100 164 96 184 90 204" fill="none" stroke="#B9577A" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+                <path d="M126 112 C122 130 130 148 124 168 C120 186 128 204 126 224" fill="none" stroke="#B9577A" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+                <g id="garrafaExtras"></g>
+                <rect x="66" y="96" width="9" height="128" rx="4.5" fill="#fff" opacity=".28"/>
+              </g>
+              <path d="M86 62 L114 62 Q114 76 130 90 Q141 100 141 118 L141 222 Q141 237 126 238 L74 238 Q59 237 59 222 L59 118 Q59 100 70 90 Q86 76 86 62 Z" fill="none" stroke="#4A2E22" stroke-width="5" stroke-linejoin="round"/>
+              <rect x="82" y="26" width="36" height="24" rx="5" fill="#5B2A86" stroke="#4A2E22" stroke-width="4"/>
+              <path d="M89 30v16M96 30v16M104 30v16M111 30v16" stroke="#7A3FA8" stroke-width="2" stroke-linecap="round"/>
+              <rect x="84" y="50" width="32" height="6" rx="2" fill="#F2EBD9" stroke="#4A2E22" stroke-width="3"/>
+              <circle cx="100" cy="168" r="23" fill="#F2C4D6" stroke="#4A2E22" stroke-width="2"/>
+              <path d="M94.5 160 L100 175.5 L105.5 160 Z" fill="#C98A4B" stroke="#4A2E22" stroke-width="1.4" stroke-linejoin="round"/>
+              <path d="M95 160 Q94.6 151.5 100 150.8 Q105.4 151.5 105 160 Z" fill="#F7EEDF" stroke="#4A2E22" stroke-width="1.4" stroke-linejoin="round"/>
+              <ellipse cx="100" cy="147" rx="6" ry="1.6" fill="none" stroke="#C9922E" stroke-width="1.4"/>
+              <text x="100" y="185" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="5.6" fill="#4A2E22">DIVINUS</text>
+              <ellipse cx="100" cy="14" rx="20" ry="5.5" fill="none" stroke="#C9922E" stroke-width="4"/>
+            </g>
+          </svg>
+          <div class="copo-legenda" id="legendaCopo" aria-live="polite">Escolha o tamanho e veja o copo encher</div>
+        </div>
+        <div class="passos">
+        <div class="passo" id="passoInclusos">
+          <h3><span class="num">2</span>Escolha seus complementos</h3>
+          <p class="dica"><span id="dicaInclusos">Escolha o tamanho primeiro.</span> <span class="contador" id="contInclusos" aria-live="polite"></span></p>
+          <div class="grade" id="gradeInclusos"></div>
+        </div>
+  
+        <div class="passo" id="passoCaldas">
+          <h3><span class="num" id="numCaldas">3</span>Escolha suas caldas</h3>
+          <p class="dica"><span id="dicaCaldas">Escolha o tamanho primeiro.</span> <span class="contador" id="contCaldas" aria-live="polite"></span></p>
+          <div class="grade" id="gradeCaldas"></div>
+        </div>
+  
+        <div class="passo" id="passoExtras">
+          <h3><span class="num" id="numExtras">3</span>Quer um adicional?</h3>
+          <p class="dica" id="dicaExtras">Cobrados à parte. Pode pular.</p>
+          <div class="grade" id="gradeExtras"></div>
+        </div>
+  
+        <div class="passo" id="passoExtrasG" hidden>
+          <h3><span class="num">2</span>Quer um adicional?</h3>
+          <p class="dica">Cobrados à parte. Pode pular.</p>
+          <div class="grade" id="gradeExtrasG"></div>
+        </div>
+  
+        <div class="passo" id="passoSabor" hidden>
+          <h3><span class="num" id="numSabor">4</span>Sabor da garrafa</h3>
+          <p class="dica">O sabor já vem no pedido. Se quiser, acrescente Ovomaltine nos adicionais acima.</p>
+          <div class="sabores" id="gradeSabor"></div>
+        </div>
+        </div>
         <div class="qtd-linha" id="qtdCopoBox" hidden><span>Quantos copos iguais?</span><div class="qtd"><button type="button" id="qCopoMenos" aria-label="Tirar um">−</button><span id="qCopoVal" aria-live="polite">1</span><button type="button" id="qCopoMais" aria-label="Mais um">+</button></div></div>
-      </div>
-
-      <div class="passo" id="passoGarrafa" hidden>
-        <h3>Açaí na garrafa</h3>
-        <div class="grade" id="gradeGarrafa"></div>
         <div class="qtd-linha" id="qtdGarBox" hidden><span>Quantas garrafas iguais?</span><div class="qtd"><button type="button" id="qGarMenos" aria-label="Tirar um">−</button><span id="qGarVal" aria-live="polite">1</span><button type="button" id="qGarMais" aria-label="Mais um">+</button></div></div>
-      </div>
-
-      <div class="passo" id="passoInclusos">
-        <h3><span class="num">2</span>Escolha seus complementos</h3>
-        <p class="dica"><span id="dicaInclusos">Escolha o tamanho primeiro.</span> <span class="contador" id="contInclusos" aria-live="polite"></span></p>
-        <div class="grade" id="gradeInclusos"></div>
-      </div>
-
-      <div class="passo" id="passoCaldas">
-        <h3><span class="num" id="numCaldas">3</span>Escolha suas caldas</h3>
-        <p class="dica"><span id="dicaCaldas">Escolha o tamanho primeiro.</span> <span class="contador" id="contCaldas" aria-live="polite"></span></p>
-        <div class="grade" id="gradeCaldas"></div>
-      </div>
-
-      <div class="passo" id="passoExtras">
-        <h3><span class="num" id="numExtras">3</span>Quer um adicional?</h3>
-        <p class="dica" id="dicaExtras">Cobrados à parte. Pode pular.</p>
-        <div class="grade" id="gradeExtras"></div>
-      </div>
-
-      <div class="passo" id="passoExtrasG" hidden>
-        <h3><span class="num">1</span>Quer um adicional?</h3>
-        <p class="dica">Cobrados à parte. Pode pular.</p>
-        <div class="grade" id="gradeExtrasG"></div>
-      </div>
-
-      <div class="passo" id="passoSabor" hidden>
-        <h3><span class="num" id="numSabor">4</span>Sabor da garrafa</h3>
-        <p class="dica">O sabor já vem no pedido. Se quiser, acrescente Ovomaltine nos adicionais acima.</p>
-        <div class="sabores" id="gradeSabor"></div>
-      </div>
-     </div>
-
-      <div class="add-linha">
-        <div><div class="preco-item" id="precoItem">R$ 0,00</div><div class="msg-info" id="infoMontagem" aria-live="polite"></div></div>
-        <button class="btn" type="button" id="btnAdd" disabled>Adicionar ao pedido</button>
+        <div class="add-linha">
+          <div><div class="preco-item" id="precoItem">R$ 0,00</div><div class="msg-info" id="infoMontagem" aria-live="polite"></div></div>
+          <button class="btn" type="button" id="btnAdd" disabled>Adicionar ao pedido</button>
+        </div>
       </div>
     </div>
 
@@ -495,7 +524,7 @@ body.com-barra{padding-bottom:64px}
   <div class="wrap">
     <h2>Milk-shakes</h2>
     <p class="sub">Escolha o tamanho e depois o sabor.</p>
-    <div class="monte" id="areaMilk"></div>
+    <div class="monte cards" id="areaMilk"></div>
   </div>
 </section>
 
@@ -503,7 +532,7 @@ body.com-barra{padding-bottom:64px}
   <div class="wrap">
     <h2>Sorvetes</h2>
     <p class="sub">Casquinhas, cascões e sundae.</p>
-    <div class="monte" id="areaSorv"></div>
+    <div class="monte cards" id="areaSorv"></div>
   </div>
 </section>
 </div>
@@ -657,6 +686,19 @@ var CONFIG = {
     'Cascão (baunilha, açaí ou mista)': ['Baunilha','Açaí','Mista'],
     'Casquinha recheada': ['Morango','Ninho','Prestígio','Nutella','Galak com Negresco'],
     'Cascão recheado': ['Morango','Ninho','Prestígio','Nutella','Galak com Negresco']
+  },
+  // Cards do cardápio: foto (arquivo em img/ ou link https) e descrição curta de cada produto.
+  // Sem foto, o card mostra o logo. A foto cadastrada no painel (campo foto do produto) tem prioridade.
+  CARDS: {
+    'Açaí no copo': { foto:'img/produto1.jpg', descricao:'Escolha o tamanho e monte com complementos, caldas e cremes.' },
+    'Açaí na garrafa': { foto:'img/sabor-garrafa.jpg', descricao:'Açaí batido com leite condensado e leite em pó.' },
+    'Milkshake': { foto:'', descricao:'Escolha o tamanho e o sabor.' },
+    'Milkshake com polpa': { foto:'', descricao:'Escolha o tamanho e o sabor da polpa.' },
+    'Casquinha (baunilha, açaí ou mista)': { foto:'img/produto2.jpg', descricao:'Baunilha, açaí ou mista.' },
+    'Cascão (baunilha, açaí ou mista)': { foto:'img/produto2.jpg', descricao:'Baunilha, açaí ou mista.' },
+    'Casquinha recheada': { foto:'', descricao:'Escolha o sabor do recheio.' },
+    'Cascão recheado': { foto:'', descricao:'Escolha o sabor do recheio.' },
+    'Sundae': { foto:'', descricao:'' }
   },
   FOTOS_PRODUTOS: [
     { arquivo: 'img/produto1.jpg', descricao: 'Copo de açaí da Divinus Gelatto com morango, amendoim e confeitos coloridos' },
@@ -892,24 +934,58 @@ function desenharTamanhos(){
   var lista = itensOnline();
   if(!lista.length){ g.innerHTML = '<p class="vazio">Nenhum açaí disponível para pedido online agora. Chame a gente no WhatsApp.</p>'; return; }
   lista.forEach(function(p){
-    var d = el('div',{class:'opc'}), id = 'tam_'+p.id, foto = fotoUrl(p.foto), esgot = p.disponivel===false;
+    var d = el('div',{class:'opc'}), id = 'tam_'+p.id, esgot = p.disponivel===false;
     var nomeCurto = p.nome.replace(/^Açaí (no copo|na garrafa) /i,'');
     var ehG = /garrafa/i.test(p.categoria);
     d.innerHTML = '<input type="'+(ehG?'checkbox':'radio')+'" name="'+(ehG?'tamG':'tam')+'" id="'+esc(id)+'" value="'+esc(p.id)+'"'+(esgot?' disabled':'')+'>'
-      + '<label for="'+esc(id)+'">'
-      + (foto ? '<img class="foto" src="'+esc(foto)+'" alt="" loading="lazy" referrerpolicy="no-referrer">' : '')
-      + '<b>'+esc(nomeCurto)+'</b><small>'+(/garrafa/i.test(p.categoria)?'Na garrafa':'No copo')+'</small><span class="valor">'+brl(p.preco)+'</span>'
+      + '<label for="'+esc(id)+'"><b>'+esc(nomeCurto)+'</b><span class="valor">'+brl(p.preco)+'</span>'
       + (esgot ? '<span class="esgotado">Esgotado hoje</span>' : '')
       + '</label>';
-    var img = d.querySelector('img'); if(img) img.addEventListener('error', function(){ img.remove(); });
-    (/garrafa/i.test(p.categoria) ? gg : g).appendChild(d);
+    (ehG ? gg : g).appendChild(d);
     d.querySelector('input').addEventListener('change', function(ev){
       if(ehG && !ev.target.checked) limparGarrafa(); else escolherProduto(p.id);
     });
   });
-  $('passoGarrafa').hidden = !gg.children.length;
-  if(!g.children.length) g.innerHTML = '<p class="vazio">Escolha a opção na garrafa abaixo.</p>';
+  var copos = lista.filter(function(p){ return !/garrafa/i.test(p.categoria); }), garr = lista.filter(function(p){ return /garrafa/i.test(p.categoria); });
+  $('cardCopo').hidden = !copos.length;
+  $('passoGarrafa').hidden = !garr.length;
+  $('aPartirCopo').textContent = aPartir(copos);
+  $('aPartirGar').textContent = aPartir(garr);
+  document.querySelectorAll('#areaMonte [data-card]').forEach(function(f){
+    var cat = f.getAttribute('data-card'), prods = lista.filter(function(p){ return p.categoria===cat; });
+    pintarFoto(f, fotoDoCard(cat, prods), cat);
+  });
+  document.querySelectorAll('#areaMonte [data-desc]').forEach(function(d){ d.textContent = descDoCard(d.getAttribute('data-desc')); });
 }
+/* ================= CARDS ================= */
+function aPartir(prods){
+  var ps = prods.map(function(p){ return p.preco; });
+  if(!ps.length) return '';
+  var m = Math.min.apply(null, ps);
+  return (ps.length > 1 && ps.some(function(v){ return v!==m; }) ? 'A partir de ' : '') + brl(m);
+}
+function fotoDoCard(nome, prods){
+  var dele = (prods || []).map(function(p){ return fotoUrl(p.foto); }).filter(Boolean)[0];
+  var c = (CONFIG.CARDS || {})[nome] || {};
+  return dele || fotoUrl(c.foto) || (/^img\//.test(String(c.foto||'')) ? c.foto : '');
+}
+function descDoCard(nome){ return ((CONFIG.CARDS || {})[nome] || {}).descricao || ''; }
+function pintarFoto(box, src, alt){
+  box.innerHTML = ''; box.classList.remove('sem');
+  var img = document.createElement('img');
+  img.alt = alt || ''; img.loading = 'lazy'; img.referrerPolicy = 'no-referrer'; img.width = 150; img.height = 150;
+  var logo = function(){ box.classList.add('sem'); img.alt = ''; img.src = 'img/logo.jpg'; };
+  img.addEventListener('error', function(){ if(!box.classList.contains('sem')) logo(); });
+  if(src) img.src = src; else logo();
+  box.appendChild(img);
+}
+// O montador (complementos, caldas, adicionais, quantidade) abre dentro do card escolhido.
+function abrirMontador(tipo){
+  var m = $('montador'), pc = $('painelCopo'), pg = $('painelGarrafa');
+  pc.hidden = tipo!=='copo'; pg.hidden = tipo!=='garrafa';
+  if(tipo){ (tipo==='copo' ? pc : pg).appendChild(m); m.hidden = false; } else m.hidden = true;
+}
+
 function complementosDe(prod, grupo){
   var cat = norm(prod.categoria);
   return DADOS.complementos.filter(function(c){
@@ -933,12 +1009,8 @@ function prepararPassos(){
   TEM_INC = temInc; TEM_EXT = temExt;
   TEM_CAL = DADOS.complementos.some(function(c){ return c.grupo==='calda'; });
   // Ordem fixa: copo → (complementos, adicional do copo) → garrafa → (adicional, sabor da garrafa)
-  $('passoCopo').after($('passoInclusos'));
-  $('passoInclusos').after($('passoCaldas'));
-  $('passoCaldas').after($('passoExtras'));
-  $('passoExtras').after($('passoGarrafa'));
-  $('passoGarrafa').after($('passoExtrasG'));
-  $('passoExtrasG').after($('passoSabor'));
+  var caixa = $('montador').querySelector('.passos');
+  ['passoInclusos','passoCaldas','passoExtras','passoExtrasG','passoSabor'].forEach(function(id){ caixa.appendChild($(id)); });
   desenharCopoPassos(null);
   desenharExtrasGarrafa(null);
   desenharSabores(null);
@@ -1016,7 +1088,7 @@ function desenharSabores(p){
   var garrafa = !!(p && /garrafa/i.test(p.categoria)) && lista.length > 0;
   box.hidden = !garrafa;
   if(!garrafa) return;
-  $('numSabor').textContent = $('passoExtrasG').hidden ? '1' : '2';
+  $('numSabor').textContent = $('passoExtrasG').hidden ? '2' : '3';
   var g = $('gradeSabor'); g.innerHTML = '';
   lista.forEach(function(sb){
     var foto = sb.foto ? '<span class="sabor-foto com-foto"><img src="'+esc(sb.foto)+'" alt="'+esc(sb.nome)+'" loading="lazy"></span>'
@@ -1027,11 +1099,21 @@ function desenharSabores(p){
 function escolherProduto(id){
   var p = produto(id);
   if(/garrafa/i.test(p.categoria)){
+    mCopo = { produto:null, inclusos:[], caldas:[], extras:[], qtd:1 };
+    document.querySelectorAll('input[name=tam]').forEach(function(x){ x.checked = false; });
+    desenharCopoPassos(null);
     mGar = { produto:p, inclusos:[], caldas:[], extras:[], qtd:1 }; ultimo = 'garrafa';
     desenharExtrasGarrafa(p); desenharSabores(p);
+    abrirMontador('garrafa');
   } else {
+    if(mGar.produto){
+      mGar = { produto:null, inclusos:[], caldas:[], extras:[], qtd:1 };
+      document.querySelectorAll('input[name=tamG]').forEach(function(x){ x.checked = false; });
+      desenharExtrasGarrafa(null); desenharSabores(null);
+    }
     mCopo = { produto:p, inclusos:[], caldas:[], extras:[], qtd:1 }; ultimo = 'copo';
     desenharCopoPassos(p);
+    abrirMontador('copo');
   }
   evento('escolher_tamanho', {item_name:p.nome, value:p.preco, currency:'BRL'});
   atualizarMontagem();
@@ -1040,6 +1122,7 @@ function limparGarrafa(){
   mGar = { produto:null, inclusos:[], caldas:[], extras:[], qtd:1 };
   desenharExtrasGarrafa(null); desenharSabores(null);
   if(ultimo === 'garrafa') ultimo = 'copo';
+  abrirMontador(mCopo.produto ? 'copo' : null);
   atualizarMontagem();
 }
 function alternar(lista, nome, marcado, limite, input){
@@ -1142,7 +1225,7 @@ $('btnAdd').addEventListener('click', function(){
   });
   mCopo = { produto:null, inclusos:[], caldas:[], extras:[], qtd:1 }; mGar = { produto:null, inclusos:[], caldas:[], extras:[], qtd:1 }; ultimo = 'copo';
   document.querySelectorAll('input[name=tam], input[name=tamG]').forEach(function(i){ i.checked=false; });
-  desenharCopoPassos(null); desenharExtrasGarrafa(null); desenharSabores(null);
+  desenharCopoPassos(null); desenharExtrasGarrafa(null); desenharSabores(null); abrirMontador(null);
   atualizarMontagem(); desenharCarrinho();
   location.hash = '#finalizar';
 });
@@ -1642,64 +1725,78 @@ function adicionarGelado(p, sabor, qtd){
   evento('adicionar_item', {item_name:it.nome, value:it.unit, currency:'BRL', complementos:0, adicionais:0});
   desenharCarrinho();
 }
+function baseGelado(p){ return p.nome.replace(/\s+\d+(?:[.,]\d+)?\s*(?:ml|l)\b.*$/i, '').trim(); }
 function desenharTrailer(){
-  var cats = {}, ordem = [];
+  var grupos = {}, ordem = [];
   DADOS.produtos.forEach(function(p){
     if(ehAcai(p) || !p.online || !(p.preco>0)) return;
-    if(!cats[p.categoria]){ cats[p.categoria]=[]; ordem.push(p.categoria); }
-    cats[p.categoria].push(p);
+    var b = baseGelado(p);
+    if(!grupos[b]){ grupos[b] = { milk:/milk/i.test(p.categoria), prods:[] }; ordem.push(b); }
+    grupos[b].prods.push(p);
   });
-  var milk = ordem.filter(function(c){ return /milk/i.test(c); }), sorv = ordem.filter(function(c){ return !/milk/i.test(c); });
   $('areaMilk').innerHTML = ''; $('areaSorv').innerHTML = '';
-  milk.forEach(function(c,k){ montarBloco($('areaMilk'), c, cats[c], 'mk'+k); });
-  sorv.forEach(function(c,k){ montarBloco($('areaSorv'), sorv.length>1 ? c : '', cats[c], 'sv'+k); });
-  $('milkshakes').hidden = !milk.length;
-  $('sorvetes').hidden = !sorv.length;
-}
-function nomeCurtoGelado(p){
-  var n = p.nome, c = p.categoria;
-  return n.toLowerCase().indexOf(c.toLowerCase()+' ')===0 ? n.slice(c.length+1) : n;
-}
-function montarBloco(area, titulo, prods, pre){
-  var sel = { p:null, sabor:'', qtd:1 };
-  var box = el('div',{class:'bloco-gelado'}, '');
-  var temSabor = prods.some(function(p){ return saboresDe(p); });
-  box.innerHTML =
-      '<div class="passo">'
-    + '<h3><span class="num">1</span>' + (titulo ? esc(titulo) + ': escolha o tamanho' : 'Escolha o sorvete') + '</h3>'
-    + '<div class="grade" data-g="tam"></div>'
-    + '</div>'
-    + (temSabor ? '<div class="passo" data-g="passoSabor"><h3><span class="num">2</span>Escolha o sabor</h3><p class="dica" data-g="dicaSabor">Escolha o tamanho primeiro.</p><div class="grade" data-g="sab"></div></div>' : '')
-    + '<div class="qtd-linha" data-g="qtdBox" hidden><span>Quantos iguais?</span><div class="qtd"><button type="button" data-g="menos" aria-label="Tirar um">−</button><span data-g="qtd" aria-live="polite">1</span><button type="button" data-g="mais" aria-label="Mais um">+</button></div></div>'
-    + '<div class="add-linha"><div><div class="preco-item" data-g="preco">R$ 0,00</div><div class="msg-info" data-g="info" aria-live="polite"></div></div>'
-    + '<button class="btn" type="button" data-g="add" disabled>Adicionar ao pedido</button></div>';
-  var q = function(k){ return box.querySelector('[data-g="'+k+'"]'); };
-  var gTam = q('tam');
-  prods.forEach(function(p){
-    var id = pre+'_'+p.id, esg = p.disponivel===false, d = el('div',{class:'opc'}, '');
-    d.innerHTML = '<input type="radio" name="'+pre+'_tam" id="'+esc(id)+'" value="'+esc(p.id)+'"'+(esg?' disabled':'')+'>'
-      + '<label for="'+esc(id)+'"><b>'+esc(nomeCurtoGelado(p))+'</b><span class="valor">'+brl(p.preco)+'</span>'+(esg?'<span class="esgotado">Esgotado hoje</span>':'')+'</label>';
-    gTam.appendChild(d);
-    d.querySelector('input').addEventListener('change', function(){ sel.p = p; sel.sabor = ''; desenharSab(); atualizar(); });
+  var nMilk = 0, nSorv = 0;
+  ordem.forEach(function(b, k){
+    var g = grupos[b];
+    montarCard(g.milk ? $('areaMilk') : $('areaSorv'), b, g.prods, 'g'+k);
+    if(g.milk) nMilk++; else nSorv++;
   });
+  $('milkshakes').hidden = !nMilk;
+  $('sorvetes').hidden = !nSorv;
+}
+function montarCard(area, base, prods, pre){
+  var unico = prods.length === 1;
+  var sel = { p: unico ? prods[0] : null, sabor:'', qtd:1 };
+  if(unico && prods[0].disponivel===false) sel.p = null;
+  var titulo = base.replace(/\s*\([^)]*\)\s*$/, '');
+  var desc = descDoCard(base) || (base !== titulo ? base.slice(titulo.length).replace(/[()]/g,'').trim().replace(/^./, function(c){ return c.toUpperCase(); }) : '');
+  var temSabor = prods.some(function(p){ return saboresDe(p); });
+  var box = el('article',{class:'card-prod'}, '');
+  box.innerHTML =
+      '<div class="card-topo"><div class="card-foto"></div><div class="card-txt"><h3>'+esc(titulo)+'</h3>'
+    + (desc ? '<p class="card-desc">'+esc(desc)+'</p>' : '')
+    + '<p class="card-preco">'+esc(aPartir(prods))+'</p>'
+    + (unico && prods[0].disponivel===false ? '<span class="esgotado">Esgotado hoje</span>' : '')
+    + '</div></div>'
+    + (unico ? '' : '<div class="tams" data-g="tam" role="radiogroup" aria-label="Tamanho de '+esc(titulo)+'"></div>')
+    + '<div class="card-painel" data-g="painel"'+(sel.p ? '' : ' hidden')+'>'
+    + (temSabor ? '<div class="passo" data-g="passoSabor"><h3>Escolha o sabor</h3><div class="grade" data-g="sab"></div></div>' : '')
+    + '<div class="qtd-linha"><span>Quantos iguais?</span><div class="qtd"><button type="button" data-g="menos" aria-label="Tirar um">−</button><span data-g="qtd" aria-live="polite">1</span><button type="button" data-g="mais" aria-label="Mais um">+</button></div></div>'
+    + '<div class="add-linha"><div><div class="preco-item" data-g="preco">R$ 0,00</div><div class="msg-info" data-g="info" aria-live="polite"></div></div>'
+    + '<button class="btn" type="button" data-g="add" disabled>Adicionar ao pedido</button></div>'
+    + '</div>';
+  var q = function(k){ return box.querySelector('[data-g="'+k+'"]'); };
+  pintarFoto(box.querySelector('.card-foto'), fotoDoCard(base, prods), titulo);
+  if(!unico){
+    prods.forEach(function(p){
+      var id = pre+'_'+p.id, esg = p.disponivel===false, d = el('div',{class:'opc'}, '');
+      var curto = p.nome.slice(base.length).trim() || p.nome;
+      d.innerHTML = '<input type="radio" name="'+pre+'_tam" id="'+esc(id)+'" value="'+esc(p.id)+'"'+(esg?' disabled':'')+'>'
+        + '<label for="'+esc(id)+'"><b>'+esc(curto)+'</b><span class="valor">'+brl(p.preco)+'</span>'+(esg?'<span class="esgotado">Esgotado</span>':'')+'</label>';
+      q('tam').appendChild(d);
+      d.querySelector('input').addEventListener('change', function(){
+        sel.p = p; desenharSab(); q('painel').hidden = false; atualizar();
+      });
+    });
+  }
   function desenharSab(){
     if(!temSabor) return;
     var g = q('sab'), lista = sel.p ? (saboresDe(sel.p) || []) : [];
+    if(sel.sabor && lista.indexOf(sel.sabor) < 0) sel.sabor = '';
     g.innerHTML = '';
-    q('passoSabor').hidden = !!(sel.p && !lista.length);
-    q('dicaSabor').textContent = sel.p ? 'Escolha 1 sabor.' : 'Escolha o tamanho primeiro.';
+    q('passoSabor').hidden = !lista.length;
     lista.forEach(function(n,k){
       var id = pre+'_s'+k, d = el('div',{class:'opc'}, '');
-      d.innerHTML = '<input type="radio" name="'+pre+'_sab" id="'+id+'" value="'+esc(n)+'"><label for="'+id+'"><b>'+esc(n)+'</b></label>';
+      d.innerHTML = '<input type="radio" name="'+pre+'_sab" id="'+id+'" value="'+esc(n)+'"'+(n===sel.sabor?' checked':'')+'><label for="'+id+'"><b>'+esc(n)+'</b></label>';
       g.appendChild(d);
       d.querySelector('input').addEventListener('change', function(ev){ sel.sabor = ev.target.value; atualizar(); });
     });
   }
   function precisaSabor(){ return !!(sel.p && saboresDe(sel.p)); }
   function atualizar(){
-    q('qtdBox').hidden = !sel.p; q('qtd').textContent = sel.qtd;
+    q('qtd').textContent = sel.qtd;
     q('preco').textContent = brl(sel.p ? sel.p.preco * sel.qtd : 0);
-    var falta = !sel.p ? 'Escolha o tamanho para começar.' : (precisaSabor() && !sel.sabor ? 'Agora escolha o sabor.' : '');
+    var falta = !sel.p ? 'Escolha o tamanho.' : (precisaSabor() && !sel.sabor ? 'Escolha o sabor.' : '');
     q('info').textContent = falta;
     q('add').disabled = !!falta;
   }
@@ -1708,7 +1805,8 @@ function montarBloco(area, titulo, prods, pre){
   q('add').addEventListener('click', function(){
     if(!sel.p || (precisaSabor() && !sel.sabor)) return;
     adicionarGelado(sel.p, sel.sabor, sel.qtd);
-    sel = { p:null, sabor:'', qtd:1 };
+    sel.sabor = ''; sel.qtd = 1;
+    if(!unico){ sel.p = null; q('painel').hidden = true; }
     box.querySelectorAll('input').forEach(function(x){ x.checked = false; });
     desenharSab(); atualizar();
     location.hash = '#finalizar';
