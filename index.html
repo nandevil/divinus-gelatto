@@ -349,6 +349,8 @@ footer .mapa{display:inline-block;margin-top:6px;font-weight:600}
 @media(min-width:900px){.barra-fixa{display:none!important}}
 body.com-barra{padding-bottom:64px}
 @media(min-width:900px){body.com-barra{padding-bottom:0}}
+/* com a barra do carrinho aberta, o botão do WhatsApp sobe para não cobrir o "Ver carrinho" */
+@media(max-width:899px){body.com-barra .zap-flutuante{bottom:calc(76px + env(safe-area-inset-bottom))}}
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 @keyframes cai{from{transform:translateY(-14px);opacity:0}to{transform:none;opacity:1}}
