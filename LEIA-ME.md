@@ -192,7 +192,7 @@ https://SEUSITE/?utm_source=qrcode&utm_campaign=trailer
 
 ## Cardápio de delivery (estado em 15/10/2026)
 - **Só açaí vai por delivery** (copo 400/500/700 ml e 1 L; garrafa 500 ml). Sorvetes e milkshakes: só no trailer (`online=false`).
-- **Entrega:** taxa fixa de R$ 7,00 até 5 km; o cliente confirma "moro a até 5 km" no pedido. Acima disso, combinar pelo WhatsApp.
+- **Entrega:** taxa fixa de R$ 8,00 até 5 km; o cliente confirma "moro a até 5 km" no pedido. Acima disso, combinar pelo WhatsApp.
 - **Complementos do copo:** 9 grátis (até 3), **8 caldas grátis (até 2, grupo `calda`)** e 7 cremes pagos de R$ 2,50. Fotos em `img/complementos/`, `img/cremes/` e `img/caldas/`.
 - **Caldas:** `supabase/caldas.sql` (grupo `calda` + validação em `criar_pedido` + leitura em `cardapio()`). No painel, em Complementos, o campo Grupo aceita `calda`.
 - **Cliente que volta:** `supabase/cliente.sql` (nome + código de pedido anterior) e aba Clientes no painel.
