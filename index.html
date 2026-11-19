@@ -687,7 +687,8 @@ var CONFIG = {
     'Casquinha (baunilha, açaí ou mista)': ['Baunilha','Açaí','Mista'],
     'Cascão (baunilha, açaí ou mista)': ['Baunilha','Açaí','Mista'],
     'Casquinha recheada': ['Morango','Ninho','Prestígio','Nutella','Galak com Negresco'],
-    'Cascão recheado': ['Morango','Ninho','Prestígio','Nutella','Galak com Negresco']
+    'Cascão recheado': ['Morango','Ninho','Prestígio','Nutella','Galak com Negresco'],
+    'Sundae': ['Baunilha','Açaí','Misto']
   },
   // Cards do cardápio: foto (arquivo em img/ ou link https) e descrição curta de cada produto.
   // Sem foto, o card mostra o logo. A foto cadastrada no painel (campo foto do produto) tem prioridade.
@@ -700,8 +701,10 @@ var CONFIG = {
     'Cascão (baunilha, açaí ou mista)': { foto:'img/produto2.jpg', descricao:'Baunilha, açaí ou mista.' },
     'Casquinha recheada': { foto:'', descricao:'Escolha o sabor do recheio.' },
     'Cascão recheado': { foto:'', descricao:'Escolha o sabor do recheio.' },
-    'Sundae': { foto:'', descricao:'' }
+    'Sundae': { foto:'', descricao:'Baunilha, açaí ou misto, com complementos e caldas.' }
   },
+  // Produtos que usam os mesmos complementos e caldas de outra categoria (o servidor confere pela coluna complementos_de).
+  COMPLEMENTOS_DE: { 'Sundae': 'Açaí no copo' },
   FOTOS_PRODUTOS: [
     { arquivo: 'img/produto1.jpg', descricao: 'Copo de açaí da Divinus Gelatto com morango, amendoim e confeitos coloridos' },
     { arquivo: 'img/produto2.jpg', descricao: 'Sorvetes de casquinha da Divinus Gelatto: chocolate, baunilha e mista' },
@@ -988,8 +991,9 @@ function abrirMontador(tipo){
   if(tipo){ (tipo==='copo' ? pc : pg).appendChild(m); m.hidden = false; } else m.hidden = true;
 }
 
+function catComplementos(p){ return p.complementos_de || (CONFIG.COMPLEMENTOS_DE || {})[p.nome] || p.categoria; }
 function complementosDe(prod, grupo){
-  var cat = norm(prod.categoria);
+  var cat = norm(catComplementos(prod));
   return DADOS.complementos.filter(function(c){
     if(c.grupo!==grupo) return false;
     if(grupo==='opcional' && !(c.preco>0)) return false;
@@ -1720,11 +1724,11 @@ function obsComSabores(obs, itens){
   var s = itens.filter(function(i){ return i.sabor; }).map(function(i){ return i.qtd + 'x ' + i.nome + ': ' + i.sabor; }).join('; ');
   return s ? ('Sabores: ' + s + (obs ? ' | ' + obs : '')).slice(0, 300) : obs;
 }
-function adicionarGelado(p, sabor, qtd){
-  var it = { id:p.id, nome:p.nome, inclusos:[], caldas:[], extras:[], sabor:sabor||'', unit:p.preco, qtd:Math.max(1, Math.min(20, qtd||1)) };
+function adicionarGelado(p, sabor, qtd, inclusos, caldas){
+  var it = { id:p.id, nome:p.nome, inclusos:(inclusos||[]).slice(), caldas:(caldas||[]).slice(), extras:[], sabor:sabor||'', unit:p.preco, qtd:Math.max(1, Math.min(20, qtd||1)) };
   var ja = carrinho.filter(function(x){ return chave(x)===chave(it); })[0];
   if(ja) ja.qtd = Math.min(20, ja.qtd + it.qtd); else carrinho.push(it);
-  evento('adicionar_item', {item_name:it.nome, value:it.unit, currency:'BRL', complementos:0, adicionais:0});
+  evento('adicionar_item', {item_name:it.nome, value:it.unit, currency:'BRL', complementos:it.inclusos.length, adicionais:0});
   desenharCarrinho();
 }
 function baseGelado(p){ return p.nome.replace(/\s+\d+(?:[.,]\d+)?\s*(?:ml|l)\b.*$/i, '').trim(); }
@@ -1767,11 +1771,12 @@ function montarCard(area, base, prods, pre){
   if(!online.length){ cardTrailer(area, base, prods); return; }
   prods = online;
   var unico = prods.length === 1;
-  var sel = { p: unico ? prods[0] : null, sabor:'', qtd:1 };
+  var sel = { p: unico ? prods[0] : null, sabor:'', qtd:1, inc:[], cal:[] };
   if(unico && prods[0].disponivel===false) sel.p = null;
   var titulo = base.replace(/\s*\([^)]*\)\s*$/, '');
   var desc = descDoCard(base) || (base !== titulo ? base.slice(titulo.length).replace(/[()]/g,'').trim().replace(/^./, function(c){ return c.toUpperCase(); }) : '');
   var temSabor = prods.some(function(p){ return saboresDe(p); });
+  var temComp = prods.some(function(p){ return catComplementos(p) !== p.categoria; });
   var box = el('article',{class:'card-prod'}, '');
   box.innerHTML =
       '<div class="card-topo"><div class="card-foto"></div><div class="card-txt"><h3>'+esc(titulo)+'</h3>'
@@ -1782,6 +1787,8 @@ function montarCard(area, base, prods, pre){
     + (unico ? '' : '<div class="tams" data-g="tam" role="radiogroup" aria-label="Tamanho de '+esc(titulo)+'"></div>')
     + '<div class="card-painel" data-g="painel"'+(sel.p ? '' : ' hidden')+'>'
     + (temSabor ? '<div class="passo" data-g="passoSabor"><h3>Escolha o sabor</h3><div class="grade" data-g="sab"></div></div>' : '')
+    + (temComp ? '<div class="passo" data-g="passoInc"><h3>Escolha seus complementos</h3><p class="dica"><span data-g="dicaInc"></span> <span class="contador" data-g="contInc" aria-live="polite"></span></p><div class="grade" data-g="inc"></div></div>'
+      + '<div class="passo" data-g="passoCal"><h3>Escolha suas caldas</h3><p class="dica"><span data-g="dicaCal"></span> <span class="contador" data-g="contCal" aria-live="polite"></span></p><div class="grade" data-g="cal"></div></div>' : '')
     + '<div class="qtd-linha"><span>Quantos iguais?</span><div class="qtd"><button type="button" data-g="menos" aria-label="Tirar um">−</button><span data-g="qtd" aria-live="polite">1</span><button type="button" data-g="mais" aria-label="Mais um">+</button></div></div>'
     + '<div class="add-linha"><div><div class="preco-item" data-g="preco">R$ 0,00</div><div class="msg-info" data-g="info" aria-live="polite"></div></div>'
     + '<button class="btn" type="button" data-g="add" disabled>Adicionar ao pedido</button></div>'
@@ -1796,7 +1803,7 @@ function montarCard(area, base, prods, pre){
         + '<label for="'+esc(id)+'"><b>'+esc(curto)+'</b><span class="valor">'+brl(p.preco)+'</span>'+(esg?'<span class="esgotado">Esgotado</span>':'')+'</label>';
       q('tam').appendChild(d);
       d.querySelector('input').addEventListener('change', function(){
-        sel.p = p; desenharSab(); q('painel').hidden = false; atualizar();
+        sel.p = p; desenharSab(); desenharComp(); q('painel').hidden = false; atualizar();
       });
     });
   }
@@ -1813,6 +1820,37 @@ function montarCard(area, base, prods, pre){
       d.querySelector('input').addEventListener('change', function(ev){ sel.sabor = ev.target.value; atualizar(); });
     });
   }
+  function desenharComp(){
+    if(!temComp) return;
+    sel.inc = []; sel.cal = [];
+    [['inc','incluso',limiteInclusos,fotoIncluso,'Inc'],['cal','calda',limiteCaldas,fotoCalda,'Cal']].forEach(function(x){
+      var g = q(x[0]), lista = sel.p ? complementosDe(sel.p, x[1]) : [], lim = sel.p ? x[2](sel.p) : 0, alvo = sel[x[0]];
+      g.innerHTML = '';
+      q('passo'+x[4]).hidden = !lista.length || !lim;
+      q('dica'+x[4]).textContent = x[1]==='calda' ? 'Até ' + lim + ' caldas, grátis.' : 'Até ' + lim + ' inclusos no preço.';
+      lista.forEach(function(c,k){
+        var id = pre+'_'+x[0]+k, d = el('div',{class:'opc'}, '');
+        d.innerHTML = '<input type="checkbox" id="'+id+'" value="'+esc(c.nome)+'"><label for="'+id+'">'+x[3](c.nome)+'<b>'+esc(c.nome)+'</b></label>';
+        g.appendChild(d);
+        d.querySelector('input').addEventListener('change', function(ev){
+          var j = alvo.indexOf(c.nome);
+          if(ev.target.checked){ if(alvo.length >= lim){ ev.target.checked = false; return; } if(j<0) alvo.push(c.nome); }
+          else if(j>=0) alvo.splice(j,1);
+          contarComp();
+        });
+      });
+    });
+    contarComp();
+  }
+  function contarComp(){
+    if(!temComp || !sel.p) return;
+    [['inc',limiteInclusos,'Inc',' escolhidos'],['cal',limiteCaldas,'Cal',' escolhidas']].forEach(function(x){
+      var lim = x[1](sel.p), n = sel[x[0]].length, c = q('cont'+x[2]);
+      c.textContent = lim ? n + ' de ' + lim + x[3] : '';
+      c.className = 'contador' + (lim && n===lim ? ' cheio' : '');
+      q(x[0]).querySelectorAll('input').forEach(function(inp){ inp.disabled = !inp.checked && n >= lim; });
+    });
+  }
   function precisaSabor(){ return !!(sel.p && saboresDe(sel.p)); }
   function atualizar(){
     q('qtd').textContent = sel.qtd;
@@ -1825,14 +1863,14 @@ function montarCard(area, base, prods, pre){
   q('mais').addEventListener('click', function(){ if(sel.qtd<20){ sel.qtd++; atualizar(); } });
   q('add').addEventListener('click', function(){
     if(!sel.p || (precisaSabor() && !sel.sabor)) return;
-    adicionarGelado(sel.p, sel.sabor, sel.qtd);
+    adicionarGelado(sel.p, sel.sabor, sel.qtd, sel.inc, sel.cal);
     sel.sabor = ''; sel.qtd = 1;
     if(!unico){ sel.p = null; q('painel').hidden = true; }
     box.querySelectorAll('input').forEach(function(x){ x.checked = false; });
-    desenharSab(); atualizar();
+    desenharSab(); desenharComp(); atualizar();
     location.hash = '#finalizar';
   });
-  desenharSab(); atualizar();
+  desenharSab(); desenharComp(); atualizar();
   area.appendChild(box);
 }
 
