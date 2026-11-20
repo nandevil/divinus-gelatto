@@ -1,4 +1,4 @@
--- Entrega por distância (motoboy próprio): R$ 8,00 até 5 km do trailer, R$ 10,00 acima, até 15 km.
+-- Entrega por distância (motoboy próprio): R$ 8,00 até 5 km do trailer, R$ 10,00 acima, até 8 km.
 -- O site manda a localização do endereço (lat/lng) e a distância de carro (km); o servidor confere:
 -- usa o maior valor entre o km enviado e a distância em linha reta calculada aqui, e cobra pela regra.
 -- Pode rodar mais de uma vez.
@@ -8,7 +8,7 @@ alter table public.config add column if not exists trailer_lng        double pre
 alter table public.config add column if not exists entrega_km_base    numeric(6,2)     default 5;
 alter table public.config add column if not exists entrega_taxa_base  numeric(10,2)    default 8;
 alter table public.config add column if not exists entrega_taxa_extra numeric(10,2)    default 10;
-alter table public.config add column if not exists entrega_km_max     numeric(6,2)     default 15;
+alter table public.config add column if not exists entrega_km_max     numeric(6,2)     default 8;
 
 create or replace function public.km_entrega(p jsonb, c public.config) returns numeric
 language plpgsql immutable set search_path = public as $$
@@ -44,7 +44,7 @@ begin
       'select \* into b from bairros where lower\(bairro\) = lower\(v_bairro\) and atende limit 1;\s*v_achou := found;\s*if v_achou then v_taxa := public\.taxa_bairro\(b, c\); end if;',
       $r$v_km := public.km_entrega(p, c);
     if v_km is not null then
-      v_achou := v_km <= coalesce(c.entrega_km_max, 15);
+      v_achou := v_km <= coalesce(c.entrega_km_max, 8);
       v_taxa := case when not v_achou then null
                      when v_km <= coalesce(c.entrega_km_base, 5) then coalesce(c.entrega_taxa_base, 8)
                      else coalesce(c.entrega_taxa_extra, 10) end;
@@ -72,3 +72,6 @@ end $fn$;
 select (cardapio()::jsonb)->'frete_km' as regra,
        position('km_entrega' in pg_get_functiondef('public.criar_pedido(jsonb)'::regprocedure)) > 0 as pedido_ok,
        public.km_entrega('{"lat":-22.8678,"lng":-42.3375,"km":1}'::jsonb, (select c from public.config c where id = 1)) as teste_km;
+
+-- 20/11/2026: o limite da entrega própria passou de 15 km para 8 km (R$ 10,00 de 5 a 8 km).
+update public.config set entrega_km_max = 8 where id = 1;
