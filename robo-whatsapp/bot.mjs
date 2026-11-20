@@ -163,7 +163,7 @@ async function respHorario() {
   return `${situ}\nHorário: ${faixa}.\nPedidos pelo site: ${SITE_URL}`;
 }
 const respEntrega = () =>
-  `A entrega é feita pelo nosso motoboy.\nTaxa: R$ 8,00 até 5 km do trailer e R$ 10,00 acima de 5 km (até 15 km). No site a taxa é calculada pelo seu endereço. Mais longe que isso, combinamos por aqui.\nRetirada no trailer é grátis.\nPeça pelo site: ${SITE_URL}`;
+  `A entrega é feita pelo nosso motoboy.\nTaxa: R$ 8,00 até 5 km do trailer e R$ 10,00 acima de 5 km (até 15 km). No site a taxa é calculada pelo seu endereço. Mais longe que isso, combinamos por aqui.\nRetirada no trailer é grátis.\nVocê pode pedir pelo site: ${SITE_URL}\nOu pelo *iFood* ou pela *99Food*, é só procurar por Divinus Gelatto.`;
 const respEndereco = () => `Estamos na ${ENDERECO}.`;
 const respPagamento = () =>
   `No site você paga com *Pix* ou *cartão de crédito* (o cartão tem um pequeno acréscimo da taxa). A confirmação é automática.\nPeça aqui: ${SITE_URL}`;
@@ -181,13 +181,15 @@ async function chamarAtendente(ids, numero, aviso, motivo) {
 async function decidir(texto, ids, numero, aviso) {
   const t = norm(texto).trim();
   if (!t) return null;
+  // quem oferece trabalho (ex.: "vi que vcs estão precisando de motoboy") não recebe resposta automática
+  if (/(precis|procurand|vaga|emprego|curriculo|contrat)[a-z ]*(motoboy|entregador|funcionari|atendente|ajudante)|(motoboy|entregador)[a-z ]*(vaga|disponivel|para trabalhar)|quero trabalhar|trabalhar (pra|para|com) (vcs|voces|voce)/.test(t)) return null;
   if (/(mais|acima) de 5 ?km/.test(t)) {
     await chamarAtendente(ids, numero, aviso, 'Cliente quer entrega acima de 5 km');
     return 'Recebido! Para mais de 5 km a gente combina o valor da entrega por aqui. O atendente já foi avisado e responde em seguida. 🙂';
   }
   if (/^1$|card[a-z]*pio|preco|valor|quanto|sabor|menu|tamanho/.test(t)) return respCardapio();
   if (/^2$|horario|abre|fecha|aberto|hora/.test(t)) return respHorario();
-  if (/^3$|entrega|frete|taxa|motoboy|delivery/.test(t)) return respEntrega();
+  if (/^3$|entrega|frete|taxa|delivery/.test(t)) return respEntrega();
   if (/^4$|endereco|onde|local|chegar|rua/.test(t)) return respEndereco();
   if (/^5$|pagamento|pix|cartao|pagar|dinheiro/.test(t)) return respPagamento();
   if (/^6$|atendente|humano|pessoa|dono|falar com|ligar/.test(t)) {
